@@ -25,6 +25,7 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.xwiki.component.annotation.Component;
+import org.xwiki.contrib.translator.TranslatorException;
 import org.xwiki.contrib.translator.internal.AbstractTranslator;
 import org.xwiki.text.StringUtils;
 
@@ -44,7 +45,7 @@ public class DeeplTranslator extends AbstractTranslator
     static final String NAME = "DeepL";
 
     @Override
-    public String translate(String content, Locale from, Locale to, boolean html) throws Exception
+    public String translate(String content, Locale from, Locale to, boolean html) throws TranslatorException
     {
         if (StringUtils.isEmpty(content)) {
             return content;
@@ -55,9 +56,19 @@ public class DeeplTranslator extends AbstractTranslator
         if (html) {
             options.setTagHandling("html");
         }
-        TextResult result =
-            translator.translateText(content, from.toString(), normalizeLocale(to),
+        TextResult result = null;
+        try {
+            result = translator.translateText(content, from.toString(), normalizeLocale(to),
                 options);
+        } catch (InterruptedException e) {
+            String abbr = StringUtils.abbreviate(content, 100);
+            logger.debug("Error when translating [{}]", abbr);
+            throw new TranslatorException(String.format("Interrupt exception when translating [%s]", abbr), e);
+        } catch (DeepLException e) {
+            String abbr = StringUtils.abbreviate(content, 100);
+            logger.debug("Error when translating [{}]", abbr);
+            throw new TranslatorException(String.format("DeepL exception when translating [%s]", abbr), e);
+        }
         return result.getText();
     }
 

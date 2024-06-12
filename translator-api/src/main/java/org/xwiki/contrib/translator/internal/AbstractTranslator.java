@@ -19,8 +19,6 @@
  */
 package org.xwiki.contrib.translator.internal;
 
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -38,13 +36,17 @@ import org.slf4j.Logger;
 import org.xwiki.contrib.translator.TranslationSet;
 import org.xwiki.contrib.translator.Translator;
 import org.xwiki.contrib.translator.TranslatorConfiguration;
+import org.xwiki.contrib.translator.TranslatorException;
 import org.xwiki.contrib.translator.TranslatorManager;
 import org.xwiki.localization.LocaleUtils;
+import org.xwiki.model.EntityType;
 import org.xwiki.model.reference.DocumentReference;
 import org.xwiki.model.reference.DocumentReferenceResolver;
 import org.xwiki.model.reference.EntityReference;
+import org.xwiki.model.reference.EntityReferenceProvider;
 import org.xwiki.model.reference.EntityReferenceSerializer;
 import org.xwiki.model.reference.LocalDocumentReference;
+import org.xwiki.model.reference.SpaceReference;
 import org.xwiki.model.script.ModelScriptService;
 import org.xwiki.model.validation.EntityNameValidationManager;
 import org.xwiki.query.Query;
@@ -102,6 +104,9 @@ public abstract class AbstractTranslator implements Translator
     private EntityNameValidationManager entityNameValidationManager;
 
     @Inject
+    private EntityReferenceProvider defaultEntityReferenceProvider;
+
+    @Inject
     private TranslatorManager translatorManager;
 
     static LocalDocumentReference TRANSLATION_CLASS_REFERENCE =
@@ -113,7 +118,7 @@ public abstract class AbstractTranslator implements Translator
     protected TranslatorConfiguration translatorConfiguration;
 
     @Override
-    public void translate(EntityReference reference, Locale toLocale) throws Exception
+    public void translate(EntityReference reference, Locale toLocale) throws TranslatorException
     {
         try {
             XWikiContext xcontext = xcontextProvider.get();
@@ -208,28 +213,45 @@ public abstract class AbstractTranslator implements Translator
             xwiki.saveDocument(translationPage, "Translation from " + fromLocale.getLanguage(), xcontext);
         } catch (Exception e) {
             logger.error("Translation error {[]}", e);
+            throw new TranslatorException(e);
         }
     }
 
     @Override
-    public DocumentReference computeTranslationReference(DocumentReference reference, String title, Locale locale)
-        throws XWikiException
+    public DocumentReference computeTranslationReference(DocumentReference originalDocument, String translationTitle,
+        Locale translationLocale) throws TranslatorException
     {
-        String translationName =
-            entityNameValidationManager.getEntityReferenceNameStrategy().transform(title);
-        if (!isSameNameTranslationNamingStrategy(reference)) {
-            String[] array = new String[] { locale.toString(), translationName };
-            // TODO: use resolver
-            // TODO: do not hardcode WebHome
-            return getModelScriptService().createDocumentReference(reference.getWikiReference().getName(),
-                Arrays.asList(array), "WebHome");
+        LocalDocumentReference localReference = new LocalDocumentReference(originalDocument);
+        String translationName = translationTitle;
+        if (StringUtils.isNotEmpty(translationTitle)) {
+            translationName = entityNameValidationManager.getEntityReferenceNameStrategy().transform(translationTitle);
+        }
+        if (!isSameNameTranslationNamingStrategy(originalDocument)) {
+            SpaceReference localeSpaceReference =
+                new SpaceReference(translationLocale.toString(), originalDocument.getWikiReference());
+
+            EntityReference target = localReference.appendParent(localeSpaceReference);
+            if (StringUtils.isEmpty(translationName)) {
+                return new DocumentReference(target);
+            }
+
+            String defaultDocumentName =
+                this.defaultEntityReferenceProvider.getDefaultReference(EntityType.DOCUMENT).getName();
+
+            if (!target.getName().equals(defaultDocumentName)) {
+                return new DocumentReference(translationName, target.getParent(), null);
+            } else {
+                target = target.replaceParent(target.getParent(),
+                    new SpaceReference(translationName, target.getParent().getParent()));
+                return new DocumentReference(target);
+            }
         } else {
-            return reference;
+            return originalDocument;
         }
     }
 
     @Override
-    public void translate(EntityReference reference, Locale[] toLocales, boolean html) throws Exception
+    public void translate(EntityReference reference, Locale[] toLocales, boolean html) throws TranslatorException
     {
         XWikiContext xcontext = xcontextProvider.get();
         XWiki xwiki = xcontext.getWiki();
@@ -248,99 +270,112 @@ public abstract class AbstractTranslator implements Translator
             }
         } catch (XWikiException e) {
             logger.error("Exception", e);
+            throw new TranslatorException(String.format("Failed to load document [%s]", reference), e);
         }
-    }
-
-    @Override
-    public OutputStream translate(InputStreamReader reader, Locale from, Locale to, boolean html)
-    {
-        return null;
     }
 
     /**
      * Gets all existing translations of passed reference as a {@link TranslationSet}
      */
     @Override
-    public TranslationSet getTranslations(EntityReference reference) throws XWikiException, QueryException
+    public TranslationSet getTranslations(EntityReference reference) throws TranslatorException
     {
-        XWikiContext xcontext = xcontextProvider.get();
-        XWiki xwiki = xcontext.getWiki();
-        XWikiDocument doc = xwiki.getDocument(reference, xcontext);
-        BaseObject translationObj = doc.getXObject(TRANSLATION_CLASS_REFERENCE);
-        String originalPageName = null;
-        StringBuilder hql = new StringBuilder();
-        List<String[]> entries = new ArrayList<>();
-
-        if (isSameNameTranslationNamingStrategy(reference)) {
-            List<Locale> locales = doc.getTranslationLocales(xcontext);
-            Map<Locale, List<Object>> map = new HashMap<>();
-            map.put(doc.getDefaultLocale(),
-                Arrays.asList(doc.getDocumentReference(), doc.getTitle(), doc.getDefaultLocale()));
-            for (Locale locale : locales) {
-                XWikiDocument translatedDocument = doc.getTranslatedDocument(locale, xcontext);
-                map.put(locale,
-                    Arrays.asList(translatedDocument.getDocumentReference(), translatedDocument.getTitle(),
-                        locale));
-            }
-            return new TranslationSet(doc.getDocumentReference(), doc.getTitle(),
-                doc.getDefaultLocale(), map);
-        }
-
-        /** Either the current page is already a translation or it is the original document */
-        if (translationObj != null) {
-            // 1) First case: the current page is a translation
-            originalPageName = translationObj.getStringValue("originalPage");
-            hql.append("select doc.fullName, doc.title, doc.language from XWikiDocument as doc, ");
-            hql.append("BaseObject as obj where doc.fullName = :originalPage and obj.name = doc.fullName");
-            hql.append(" and obj.className = :class order by doc.language");
-            Query query = queryManager.createQuery(hql.toString(), Query.HQL);
-            query.bindValue("class", entityReferenceSerializer.serialize(TRANSLATION_CLASS_REFERENCE));
-            query.bindValue("originalPage", originalPageName);
-            entries = query.execute();
-            XWikiDocument originalPage =
-                xwiki.getDocument(referenceResolver.resolve(originalPageName), xcontext);
-            entries.add(
-                new String[] { originalPageName, originalPage.getTitle(), originalPage.getRealLocale().toString() });
-        } else {
-            // 2) Second case: the current page is the original one
-            originalPageName = entityReferenceSerializer.serialize(reference);
-        }
-
-        hql = new StringBuilder("select doc.fullName, doc.title, doc.defaultLanguage from XWikiDocument as doc, ");
-        hql.append("BaseObject as obj, StringProperty as prop where obj.name = doc.fullName and obj.className = ");
-        hql.append(":class and prop.id.id = obj.id and prop.id.name = :prop and prop.value = :originalPage and ");
-        hql.append("doc.fullName <> :currentDoc");
-        Query query = queryManager.createQuery(hql.toString(), Query.HQL);
-        query.bindValue("class", entityReferenceSerializer.serialize(TRANSLATION_CLASS_REFERENCE));
-        query.bindValue("originalPage", originalPageName);
-        query.bindValue("prop", "originalPage");
-        query.bindValue("currentDoc", entityReferenceSerializer.serialize(reference));
-        entries.addAll(query.execute());
-        Map<Locale, List<Object>> map = new HashMap<>();
-        for (Object[] obj : entries) {
-            map.put(LocaleUtils.toLocale(obj[2].toString()),
-                Arrays.asList(referenceResolver.resolve(obj[0].toString()), obj[1],
-                    LocaleUtils.toLocale(obj[2].toString())));
-        }
-        DocumentReference originalDocumentReference = referenceResolver.resolve(originalPageName);
-        XWikiDocument originalPage = xwiki.getDocument(originalDocumentReference, xcontext);
-        return new TranslationSet(originalDocumentReference, originalPage.getTitle(),
-            originalPage.getDefaultLocale(), map);
-    }
-
-    @Override
-    public boolean isTranslatable(EntityReference reference)
-    {
-        String targetClasses = translatorConfiguration.getTargetClasses();
-        if (StringUtils.isEmpty(targetClasses)) {
-            return true;
-        }
-        List<String> xclasses = List.of(targetClasses.split(","));
         XWikiContext xcontext = xcontextProvider.get();
         XWiki xwiki = xcontext.getWiki();
         try {
             XWikiDocument doc = xwiki.getDocument(reference, xcontext);
-            for (String xclass : xclasses) {
+            BaseObject translationObj = doc.getXObject(TRANSLATION_CLASS_REFERENCE);
+            String originalPageName = null;
+            StringBuilder hql = new StringBuilder();
+            List<String[]> entries = new ArrayList<>();
+
+            if (isSameNameTranslationNamingStrategy(reference)) {
+                List<Locale> locales = doc.getTranslationLocales(xcontext);
+                Map<Locale, List<Object>> map = new HashMap<>();
+
+                map.put(doc.getDefaultLocale(),
+                    Arrays.asList(doc.getDocumentReference(), doc.getTitle(), doc.getDefaultLocale()));
+                for (Locale locale : locales) {
+                    if (xwiki.getAvailableLocales(xcontext).contains(locale)) {
+                        XWikiDocument translatedDocument = doc.getTranslatedDocument(locale, xcontext);
+                        map.put(locale,
+                            Arrays.asList(translatedDocument.getDocumentReference(), translatedDocument.getTitle(),
+                                locale));
+                    }
+                }
+                return new TranslationSet(doc.getDocumentReference(), doc.getTitle(),
+                    doc.getDefaultLocale(), map);
+            }
+
+            /** Either the current page is already a translation or it is the original document */
+            if (translationObj != null) {
+                // 1) First case: the current page is a translation
+                originalPageName = translationObj.getStringValue("originalPage");
+                hql.append("select doc.fullName, doc.title, doc.language from XWikiDocument as doc, ");
+                hql.append("BaseObject as obj where doc.fullName = :originalPage and obj.name = doc.fullName");
+                hql.append(" and obj.className = :class order by doc.language");
+                Query query = queryManager.createQuery(hql.toString(), Query.HQL);
+                query.bindValue("class", entityReferenceSerializer.serialize(TRANSLATION_CLASS_REFERENCE));
+                query.bindValue("originalPage", originalPageName);
+                entries = query.execute();
+                XWikiDocument originalPage =
+                    xwiki.getDocument(referenceResolver.resolve(originalPageName), xcontext);
+                entries.add(
+                    new String[] { originalPageName, originalPage.getTitle(),
+                        originalPage.getRealLocale().toString() });
+            } else {
+                // 2) Second case: the current page is the original one
+                originalPageName = entityReferenceSerializer.serialize(reference);
+            }
+
+            hql = new StringBuilder("select doc.fullName, doc.title, doc.defaultLanguage from XWikiDocument as doc, ");
+            hql.append("BaseObject as obj, StringProperty as prop where obj.name = doc.fullName and obj.className = ");
+            hql.append(":class and prop.id.id = obj.id and prop.id.name = :prop and prop.value = :originalPage and ");
+            hql.append("doc.fullName <> :currentDoc");
+            Query query = queryManager.createQuery(hql.toString(), Query.HQL);
+            query.bindValue("class", entityReferenceSerializer.serialize(TRANSLATION_CLASS_REFERENCE));
+            query.bindValue("originalPage", originalPageName);
+            query.bindValue("prop", "originalPage");
+            query.bindValue("currentDoc", entityReferenceSerializer.serialize(reference));
+            entries.addAll(query.execute());
+            Map<Locale, List<Object>> map = new HashMap<>();
+            for (Object[] obj : entries) {
+                Locale locale = LocaleUtils.toLocale(obj[2].toString());
+                if (xwiki.getAvailableLocales(xcontext).contains(locale)) {
+                    map.put(locale, Arrays.asList(referenceResolver.resolve(obj[0].toString()), obj[1], locale));
+                }
+            }
+            DocumentReference originalDocumentReference = referenceResolver.resolve(originalPageName);
+            XWikiDocument originalPage = xwiki.getDocument(originalDocumentReference, xcontext);
+            return new TranslationSet(originalDocumentReference, originalPage.getTitle(),
+                originalPage.getDefaultLocale(), map);
+        } catch (XWikiException | QueryException e) {
+            throw new TranslatorException(String.format("Failed to get translations for [%s]", reference), e);
+        }
+    }
+
+    @Override
+    public boolean isTranslatable(DocumentReference reference) throws TranslatorException
+    {
+        XWikiContext xcontext = xcontextProvider.get();
+        XWiki xwiki = xcontext.getWiki();
+
+        if (!xwiki.isMultiLingual(xcontext)) {
+            return false;
+        }
+
+        try {
+            XWikiDocument doc = xwiki.getDocument(reference, xcontext);
+            if (doc.getRealLocale() == Locale.ROOT) {
+                return false;
+            }
+
+            String targetClasses = translatorConfiguration.getTargetClasses();
+            if (StringUtils.isEmpty(targetClasses)) {
+                return true;
+            }
+
+            for (String xclass : toList(targetClasses)) {
                 if (StringUtils.isNotEmpty(xclass)) {
                     DocumentReference classReference = referenceResolver.resolve(xclass);
                     List<BaseObject> objects = doc.getXObjects(classReference);
@@ -350,9 +385,38 @@ public abstract class AbstractTranslator implements Translator
                 }
             }
         } catch (XWikiException e) {
-            logger.error("Exception", e);
+            throw new TranslatorException(String.format("Failed to check if [%s] is translatable", reference), e);
         }
         return false;
+    }
+
+    @Override
+    public boolean canTranslate(DocumentReference reference) throws TranslatorException
+    {
+        if (!isTranslatable(reference)) {
+            return false;
+        }
+
+        XWikiContext xcontext = xcontextProvider.get();
+        XWiki xwiki = xcontext.getWiki();
+
+        for (Locale locale : xwiki.getAvailableLocales(xcontext)) {
+            if (canTranslate(reference, locale)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean canTranslate(DocumentReference reference, Locale toLocale) throws TranslatorException
+    {
+        if (!isTranslatable(reference)) {
+            return false;
+        }
+
+        DocumentReference translationReference = computeTranslationReference(reference, null, toLocale);
+        return authorizationManager.hasAccess(Right.EDIT, translationReference);
     }
 
     /**
@@ -363,7 +427,7 @@ public abstract class AbstractTranslator implements Translator
     public List<EntityReference> getTargetProperties()
     {
         String targetProperties = translatorConfiguration.getTargetProperties();
-        List<String> properties = List.of(targetProperties.split(","));
+        List<String> properties = toList(targetProperties);
         List<EntityReference> references = new ArrayList<>();
         // TODO: return only properties of type String or LargeString
         for (String property : properties) {
@@ -407,7 +471,7 @@ public abstract class AbstractTranslator implements Translator
     }
 
     @Override
-    public boolean isSameNameTranslationNamingStrategy(EntityReference reference) throws XWikiException
+    public boolean isSameNameTranslationNamingStrategy(EntityReference reference) throws TranslatorException
     {
         if (translatorConfiguration.isSameNameTranslationNamingStrategy()) {
             return true;
@@ -415,15 +479,19 @@ public abstract class AbstractTranslator implements Translator
             String sameNameTranslationClasses = translatorConfiguration.getSameNameTranslationClasses();
             XWikiContext xcontext = xcontextProvider.get();
             XWiki xwiki = xcontext.getWiki();
-            XWikiDocument doc = xwiki.getDocument(reference, xcontext);
+            try {
+                XWikiDocument doc = xwiki.getDocument(reference, xcontext);
 
-            for (String xclass : toList(sameNameTranslationClasses)) {
-                if (StringUtils.isNotEmpty(xclass)) {
-                    List<BaseObject> objects = doc.getXObjects(referenceResolver.resolve(xclass));
-                    if (!objects.isEmpty()) {
-                        return true;
+                for (String xclass : toList(sameNameTranslationClasses)) {
+                    if (StringUtils.isNotEmpty(xclass)) {
+                        List<BaseObject> objects = doc.getXObjects(referenceResolver.resolve(xclass));
+                        if (!objects.isEmpty()) {
+                            return true;
+                        }
                     }
                 }
+            } catch (XWikiException e) {
+                throw new TranslatorException(String.format("Failed to load document [%s]", reference), e);
             }
 
             return false;

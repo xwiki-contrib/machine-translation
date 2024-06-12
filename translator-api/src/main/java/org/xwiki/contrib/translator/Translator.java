@@ -31,7 +31,7 @@ import org.xwiki.query.QueryException;
 import com.xpn.xwiki.XWikiException;
 
 // TODO: AdminGroup view TranslatorConfiguration but this is local group -> check
-// TODO: not hasEdit but hasEdit on target space
+// TODO: check rights in Java
 // OK: Check that current user has edit right in the target space
 // TODO: Check what happens when language is not set (empty)
 // TODO: check if creating a Translator is time consuming (-> do not recreate) or not
@@ -40,29 +40,32 @@ import com.xpn.xwiki.XWikiException;
 // TODO: check what happens if the original page itself is translated natively (same name)
 // TODO: Introduce TranslatorException
 // TODO: review TranslationSet
-// TODO: compute full reference
+// TODO: use glossary on translation when available
 
 @Role
 public interface Translator
 {
-    void translate(EntityReference reference, Locale locale) throws Exception;
+    void translate(EntityReference reference, Locale locale) throws TranslatorException;
 
-    DocumentReference computeTranslationReference(DocumentReference reference, String title, Locale locale)
-        throws XWikiException;
+    DocumentReference computeTranslationReference(DocumentReference originalDocument, String translationTitle,
+        Locale translationLocale) throws TranslatorException;
 
-    void translate(EntityReference reference, Locale[] toLocales, boolean html) throws Exception;
+    void translate(EntityReference reference, Locale[] toLocales, boolean html) throws TranslatorException;
 
-    String translate(String content, Locale from, Locale to, boolean html) throws Exception;
+    String translate(String content, Locale from, Locale to, boolean html) throws TranslatorException;
 
-    OutputStream translate(InputStreamReader reader, Locale from, Locale to, boolean html);
 
-    boolean isTranslatable(EntityReference reference);
+    boolean isTranslatable(DocumentReference reference) throws TranslatorException;
 
-    TranslationSet getTranslations(EntityReference reference) throws XWikiException, QueryException;
+    boolean canTranslate(DocumentReference reference, Locale toLocale) throws TranslatorException;
+
+    boolean canTranslate(DocumentReference reference) throws TranslatorException;
+
+    TranslationSet getTranslations(EntityReference reference) throws TranslatorException;
 
     String normalizeLocale(Locale locale);
 
     String getName();
 
-    boolean isSameNameTranslationNamingStrategy(EntityReference reference) throws XWikiException;
+    boolean isSameNameTranslationNamingStrategy(EntityReference reference) throws TranslatorException;
 }

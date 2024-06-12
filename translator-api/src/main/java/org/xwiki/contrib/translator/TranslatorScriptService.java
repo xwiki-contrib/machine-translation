@@ -54,8 +54,7 @@ public class TranslatorScriptService implements ScriptService
     @Inject
     private ContextualAuthorizationManager authorizationManager;
 
-    public TranslationSet getTranslations(DocumentReference reference) throws XWikiException,
-        QueryException
+    public TranslationSet getTranslations(DocumentReference reference) throws TranslatorException
     {
         Translator translator = translatorManager.getTranslator();
         if (translator == null) {
@@ -64,7 +63,7 @@ public class TranslatorScriptService implements ScriptService
         return translator.getTranslations(reference);
     }
 
-    public boolean isTranslatable(EntityReference reference)
+    public boolean isTranslatable(DocumentReference reference) throws TranslatorException
     {
         Translator translator = translatorManager.getTranslator();
         if (translator == null) {
@@ -73,7 +72,25 @@ public class TranslatorScriptService implements ScriptService
         return translatorManager.getTranslator().isTranslatable(reference);
     }
 
-    public boolean isSameNameTranslationNamingStrategy(EntityReference reference) throws XWikiException
+    public boolean canTranslate(DocumentReference reference) throws TranslatorException
+    {
+        Translator translator = translatorManager.getTranslator();
+        if (translator == null) {
+            return false;
+        }
+        return translatorManager.getTranslator().canTranslate(reference);
+    }
+
+    public boolean canTranslate(DocumentReference reference, Locale toLocale) throws TranslatorException
+    {
+        Translator translator = translatorManager.getTranslator();
+        if (translator == null) {
+            return false;
+        }
+        return translatorManager.getTranslator().canTranslate(reference, toLocale);
+    }
+
+    public boolean isSameNameTranslationNamingStrategy(EntityReference reference) throws TranslatorException
     {
         Translator translator = translatorManager.getTranslator();
         if (translator == null) {
@@ -119,7 +136,6 @@ public class TranslatorScriptService implements ScriptService
 
     public Set<String> getAvailableTranslators()
     {
-
         return translatorManager.getAvailableTranslators();
     }
 
@@ -130,5 +146,15 @@ public class TranslatorScriptService implements ScriptService
             return "";
         }
         return translator.getName();
+    }
+
+    public DocumentReference computeTranslationReference(DocumentReference originalDocument, String translationTitle,
+        Locale translationLocale) throws TranslatorException
+    {
+        Translator translator = translatorManager.getTranslator();
+        if (translator == null) {
+            return originalDocument;
+        }
+        return translator.computeTranslationReference(originalDocument, translationTitle, translationLocale);
     }
 }
