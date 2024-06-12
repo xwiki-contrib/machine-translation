@@ -84,7 +84,7 @@ public class DeeplTranslator extends AbstractTranslator
         }
     }
 
-    private Translator getTranslator()
+    public Translator getTranslator()
     {
         String apiKey = translatorConfiguration.getApiKey();
         return new Translator(apiKey);
