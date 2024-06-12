@@ -31,9 +31,6 @@ import org.xwiki.query.QueryException;
 import com.xpn.xwiki.XWikiException;
 
 // TODO: AdminGroup view TranslatorConfiguration but this is local group -> check
-// TODO: rename targetProperties and targetClasses since we have targetLocation
-// TODO: Use Locale type everywhere in API
-// forXProperties forXClasses
 // TODO: not hasEdit but hasEdit on target space
 // OK: Check that current user has edit right in the target space
 // TODO: Check what happens when language is not set (empty)
@@ -43,7 +40,7 @@ import com.xpn.xwiki.XWikiException;
 // TODO: check what happens if the original page itself is translated natively (same name)
 // TODO: Introduce TranslatorException
 // TODO: review TranslationSet
-// TODO: see also EntityNamingStrategy / multiple component configuration in same section + naming
+// TODO: compute full reference
 
 @Role
 public interface Translator

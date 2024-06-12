@@ -30,8 +30,6 @@ import org.slf4j.Logger;
 import org.xwiki.component.annotation.Component;
 import org.xwiki.model.reference.DocumentReference;
 import org.xwiki.model.reference.EntityReference;
-import org.xwiki.model.validation.EntityNameValidationConfiguration;
-import org.xwiki.model.validation.EntityNameValidationManager;
 import org.xwiki.query.QueryException;
 import org.xwiki.script.service.ScriptService;
 import org.xwiki.security.authorization.ContextualAuthorizationManager;

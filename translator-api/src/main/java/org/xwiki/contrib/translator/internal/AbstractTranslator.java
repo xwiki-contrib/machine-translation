@@ -33,10 +33,8 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
-import javax.inject.Singleton;
 
 import org.slf4j.Logger;
-import org.xwiki.component.annotation.Component;
 import org.xwiki.contrib.translator.TranslationSet;
 import org.xwiki.contrib.translator.Translator;
 import org.xwiki.contrib.translator.TranslatorConfiguration;

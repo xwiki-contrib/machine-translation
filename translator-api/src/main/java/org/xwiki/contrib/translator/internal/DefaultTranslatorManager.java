@@ -32,7 +32,6 @@ import org.xwiki.component.manager.ComponentManager;
 import org.xwiki.contrib.translator.Translator;
 import org.xwiki.contrib.translator.TranslatorConfiguration;
 import org.xwiki.contrib.translator.TranslatorManager;
-import org.xwiki.model.validation.EntityNameValidation;
 
 /**
  * Default manager for translators.
