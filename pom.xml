@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.xwiki.contrib</groupId>
+    <artifactId>parent-platform</artifactId>
+    <version>14.10</version>
+  </parent>
+  <groupId>org.xwiki.contrib.translator</groupId>
+  <artifactId>translator-parent</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <name>Translator Extension - Parent POM</name>
+  <packaging>pom</packaging>
+  <scm>
+    <connection>scm:git:git://github.com/xwiki-contrib/translator.git</connection>
+    <developerConnection>scm:git:git@github.com:xwiki-contrib/translator.git</developerConnection>
+    <url>https://github.com/xwiki-contrib/translator</url>
+    <tag>HEAD</tag>
+  </scm>
+  <developers>
+    <developer>
+      <id>slauriere</id>
+      <name>slauriere</name>
+    </developer>
+  </developers>
+  <organization>
+    <name>XWiki SAS</name>
+    <url>http://xwiki.com</url>
+  </organization>
+  <properties>
+    <xwiki.release.jira.skip>true</xwiki.release.jira.skip>
+    <xwiki.issueManagement.jira.id>TRANSLATOR</xwiki.issueManagement.jira.id>
+    <deepl.java.version>1.4.0</deepl.java.version>
+    <platform.version>14.10</platform.version>
+    <xwiki.checkstyle.skip>true</xwiki.checkstyle.skip>
+    <xwiki.spoon.skip>true</xwiki.spoon.skip>
+    <xwiki.revapi.skip>true</xwiki.revapi.skip>
+  </properties>
+  <modules>
+    <module>translator-api</module>
+    <module>translator-ui</module>
+    <module>translator-deepl</module>
+  </modules>
+</project>
