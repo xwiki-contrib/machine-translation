@@ -121,6 +121,10 @@ public abstract class AbstractTranslator implements Translator
     public void translate(EntityReference reference, Locale toLocale) throws TranslatorException
     {
         try {
+            if (!authorizationManager.hasAccess(Right.VIEW, reference)) {
+                throw new TranslatorException(String.format("Denied view access on [%s]", reference));
+            }
+
             XWikiContext xcontext = xcontextProvider.get();
             XWiki xwiki = xcontext.getWiki();
             XWikiDocument doc = xwiki.getDocument(reference, xcontext).clone();
@@ -129,13 +133,13 @@ public abstract class AbstractTranslator implements Translator
             logger.info("Original page: {} {}", doc.getDocumentReference(), fromLocale);
             logger.info("Translation locale: {}", toLocale);
 
-            String translationTitle = translate(doc.getTitle(), fromLocale, toLocale, true);
+            String translationTitle = translate(doc.getTitle(), fromLocale, toLocale, false);
             // TODO: use reference resolver
             EntityReference translationReference =
                 computeTranslationReference(doc.getDocumentReference(), translationTitle, toLocale);
 
             if (!this.authorizationManager.hasAccess(Right.EDIT, translationReference)) {
-                throw new Exception("Edit right required");
+                throw new TranslatorException(String.format("Denied edit right on [%s]", translationReference));
             }
 
             XWikiDocument translationPage = null;
@@ -211,8 +215,8 @@ public abstract class AbstractTranslator implements Translator
             translationPage.getAuthors().setEffectiveMetadataAuthor(currentUserReference);
             translationPage.getAuthors().setOriginalMetadataAuthor(currentUserReference);
             xwiki.saveDocument(translationPage, "Translation from " + fromLocale.getLanguage(), xcontext);
-        } catch (Exception e) {
-            logger.error("Translation error {[]}", e);
+        } catch (XWikiException e) {
+            logger.error("Translator error {[]}", e);
             throw new TranslatorException(e);
         }
     }
@@ -251,26 +255,10 @@ public abstract class AbstractTranslator implements Translator
     }
 
     @Override
-    public void translate(EntityReference reference, Locale[] toLocales, boolean html) throws TranslatorException
+    public void translate(EntityReference reference, Locale[] toLocales) throws TranslatorException
     {
-        XWikiContext xcontext = xcontextProvider.get();
-        XWiki xwiki = xcontext.getWiki();
-        try {
-            XWikiDocument document = xwiki.getDocument(reference, xcontext).clone();
-
-            // If page is already a translation, get original document
-            BaseObject translationObj = document.getXObject(TRANSLATION_CLASS_REFERENCE);
-            if (translationObj != null) {
-                String originalDocumentName = translationObj.getStringValue("originalPage");
-                document = xwiki.getDocument(referenceResolver.resolve(originalDocumentName), xcontext).clone();
-            }
-
-            for (Locale toLocale : toLocales) {
-                translate(reference, toLocale);
-            }
-        } catch (XWikiException e) {
-            logger.error("Exception", e);
-            throw new TranslatorException(String.format("Failed to load document [%s]", reference), e);
+        for (Locale toLocale : toLocales) {
+            translate(reference, toLocale);
         }
     }
 
@@ -318,11 +306,13 @@ public abstract class AbstractTranslator implements Translator
                 query.bindValue("class", entityReferenceSerializer.serialize(TRANSLATION_CLASS_REFERENCE));
                 query.bindValue("originalPage", originalPageName);
                 entries = query.execute();
-                XWikiDocument originalPage =
-                    xwiki.getDocument(referenceResolver.resolve(originalPageName), xcontext);
-                entries.add(
-                    new String[] { originalPageName, originalPage.getTitle(),
-                        originalPage.getRealLocale().toString() });
+                DocumentReference originalPageReference = referenceResolver.resolve(originalPageName);
+                if (authorizationManager.hasAccess(Right.VIEW, originalPageReference)) {
+                    XWikiDocument originalPage = xwiki.getDocument(originalPageReference, xcontext);
+                    entries.add(
+                        new String[] { originalPageName, originalPage.getTitle(),
+                            originalPage.getRealLocale().toString() });
+                }
             } else {
                 // 2) Second case: the current page is the original one
                 originalPageName = entityReferenceSerializer.serialize(reference);
@@ -341,8 +331,11 @@ public abstract class AbstractTranslator implements Translator
             Map<Locale, List<Object>> map = new HashMap<>();
             for (Object[] obj : entries) {
                 Locale locale = LocaleUtils.toLocale(obj[2].toString());
-                if (xwiki.getAvailableLocales(xcontext).contains(locale)) {
-                    map.put(locale, Arrays.asList(referenceResolver.resolve(obj[0].toString()), obj[1], locale));
+                DocumentReference pageReference = referenceResolver.resolve(obj[0].toString());
+                if (xwiki.getAvailableLocales(xcontext).contains(locale) && authorizationManager.hasAccess(Right.VIEW,
+                    pageReference))
+                {
+                    map.put(locale, Arrays.asList(pageReference, obj[1], locale));
                 }
             }
             DocumentReference originalDocumentReference = referenceResolver.resolve(originalPageName);

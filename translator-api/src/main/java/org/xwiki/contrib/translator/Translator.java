@@ -47,13 +47,12 @@ public interface Translator
 {
     void translate(EntityReference reference, Locale locale) throws TranslatorException;
 
+    void translate(EntityReference reference, Locale[] toLocales) throws TranslatorException;
+
     DocumentReference computeTranslationReference(DocumentReference originalDocument, String translationTitle,
         Locale translationLocale) throws TranslatorException;
 
-    void translate(EntityReference reference, Locale[] toLocales, boolean html) throws TranslatorException;
-
     String translate(String content, Locale from, Locale to, boolean html) throws TranslatorException;
-
 
     boolean isTranslatable(DocumentReference reference) throws TranslatorException;
 

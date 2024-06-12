@@ -101,7 +101,6 @@ public class TranslatorScriptService implements ScriptService
 
     public void translate(EntityReference reference, Locale toLocale) throws Exception
     {
-
         translatorManager.getTranslator().translate(reference, toLocale);
     }
 
