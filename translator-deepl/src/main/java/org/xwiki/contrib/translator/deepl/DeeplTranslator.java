@@ -19,7 +19,12 @@
  */
 package org.xwiki.contrib.translator.deepl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -27,9 +32,13 @@ import javax.inject.Singleton;
 import org.xwiki.component.annotation.Component;
 import org.xwiki.contrib.translator.TranslatorException;
 import org.xwiki.contrib.translator.internal.AbstractTranslator;
+import org.xwiki.contrib.translator.model.GlossaryInfo;
+import org.xwiki.contrib.translator.model.GlossaryLocalePairs;
+import org.xwiki.contrib.translator.model.GlossaryUpdateEntry;
 import org.xwiki.text.StringUtils;
 
 import com.deepl.api.DeepLException;
+import com.deepl.api.GlossaryEntries;
 import com.deepl.api.TextResult;
 import com.deepl.api.TextTranslationOptions;
 import com.deepl.api.Translator;
@@ -43,6 +52,33 @@ public class DeeplTranslator extends AbstractTranslator
     static final String HINT = "deepl";
 
     static final String NAME = "DeepL";
+
+    private static List<String> getGlossariesByName(List<com.deepl.api.GlossaryInfo> deeplGlossaries,
+        String glossaryName)
+    {
+        List<String> glossaryIds = new ArrayList<>();
+        for (com.deepl.api.GlossaryInfo glossary : deeplGlossaries) {
+            if (glossary.getName().equals(glossaryName)) {
+                glossaryIds.add(glossary.getGlossaryId());
+            }
+        }
+        return glossaryIds;
+    }
+
+    private Optional<String> getGlossaryIdForLocales(Locale source, Locale destination)
+    {
+        Translator translator = getTranslator();
+        try {
+            String glossaryNamePrefix = getGlossaryNamePrefix();
+            String glossaryName = glossaryNamePrefix + "-" + source.toString() + "-" + destination.toString();
+            return translator.listGlossaries().stream()
+                .filter(entry -> entry.getName().equals(glossaryName))
+                .findFirst().map(com.deepl.api.GlossaryInfo::getGlossaryId);
+        } catch (Exception e) {
+            logger.error("Got unexpected error while synchronizing glossaries : [{}]", e.getMessage(), e);
+            return Optional.empty();
+        }
+    }
 
     @Override
     public String translate(String content, Locale from, Locale to, boolean html) throws TranslatorException
@@ -106,6 +142,81 @@ public class DeeplTranslator extends AbstractTranslator
         //TODO: check programming rights
         Translator translator = getTranslator();
         return translator.getUsage();
+    }
+
+    @Override
+    public List<GlossaryLocalePairs> getGlossaryLocalePairs()
+    {
+        Translator translator = getTranslator();
+        try {
+            return translator.getGlossaryLanguages().stream()
+                .map(item -> new GlossaryLocalePairs(item.getSourceLanguage(), item.getTargetLanguage()))
+                .collect(Collectors.toList());
+        } catch (Exception e) {
+            logger.error("Got unexpected error while synchronizing glossaries : [{}]", e.getMessage(), e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<GlossaryInfo> getGlossaries()
+    {
+        Translator translator = getTranslator();
+        try {
+            String glossaryNamePrefix = getGlossaryNamePrefix();
+            return translator.listGlossaries()
+                .stream()
+                .filter(entry -> entry.getName().startsWith(glossaryNamePrefix))
+                .map(item -> new GlossaryInfo(item.getGlossaryId(), item.getName(), item.isReady(),
+                    item.getSourceLang(), item.getTargetLang(), item.getEntryCount()))
+                .collect(Collectors.toList());
+        } catch (Exception e) {
+            logger.error("Got unexpected error while synchronizing glossaries : [{}]", e.getMessage(), e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Map<String, String> getGlossaryEntryDetails(String id)
+    {
+        Translator translator = getTranslator();
+        try {
+            return translator.getGlossaryEntries(id);
+        } catch (Exception e) {
+            logger.error("Got unexpected error while synchronizing glossaries : [{}]", e.getMessage(), e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void updateGlossaries(List<GlossaryUpdateEntry> entries)
+    {
+        try {
+            Translator translator = getTranslator();
+            List<com.deepl.api.GlossaryInfo> deeplGlossaries = translator.listGlossaries();
+
+            for (GlossaryUpdateEntry entry : entries) {
+                String glossaryName = getGlossaryName(entry.getSourceLanguage(), entry.getTargetLanguage());
+
+                // Check if the glossary exists. If it's the case, we need to delete it to re-create it
+                for (String glossaryId : getGlossariesByName(deeplGlossaries, glossaryName)) {
+                    logger.debug("Deleting glossary [{}] with ID [{}]", glossaryName, glossaryId);
+                    translator.deleteGlossary(glossaryId);
+                }
+
+                // Create (or re-create the glossary)
+                logger.debug("Creating glossary [{}]", glossaryName);
+                translator.createGlossary(
+                    glossaryName,
+                    normalizeLocale(entry.getSourceLanguage()),
+                    normalizeLocale(entry.getTargetLanguage()),
+                    new GlossaryEntries(entry.getEntry()));
+            }
+        } catch (Exception e) {
+            // TODO
+
+            throw new RuntimeException(e);
+        }
     }
 
     public String getName()

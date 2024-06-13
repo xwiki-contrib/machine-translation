@@ -161,6 +161,20 @@
         <validationRegExp/>
         <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
       </translator>
+      <translatorGlossaryNamePrefix>
+        <customDisplay/>
+        <disabled>0</disabled>
+        <hint/>
+        <name>translatorGlossaryNamePrefix</name>
+        <number>1</number>
+        <picker>0</picker>
+        <prettyName>Glossary name prefix</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <validationMessage/>
+        <validationRegExp/>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </translatorGlossaryNamePrefix>
     </class>
     <property>
       <apiKey/>
@@ -182,6 +196,9 @@
     </property>
     <property>
       <translator>deepl</translator>
+    </property>
+    <property>
+      <translatorGlossaryNamePrefix/>
     </property>
   </object>
   <object>

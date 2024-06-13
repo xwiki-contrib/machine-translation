@@ -19,7 +19,11 @@
  */
 package org.xwiki.contrib.translator;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -28,14 +32,13 @@ import javax.inject.Singleton;
 
 import org.slf4j.Logger;
 import org.xwiki.component.annotation.Component;
+import org.xwiki.contrib.translator.model.GlossaryInfo;
+import org.xwiki.contrib.translator.model.GlossaryLocalePairs;
 import org.xwiki.model.reference.DocumentReference;
 import org.xwiki.model.reference.EntityReference;
-import org.xwiki.query.QueryException;
 import org.xwiki.script.service.ScriptService;
 import org.xwiki.security.authorization.ContextualAuthorizationManager;
 import org.xwiki.security.authorization.Right;
-
-import com.xpn.xwiki.XWikiException;
 
 @Component
 @Named("translator")
@@ -155,5 +158,35 @@ public class TranslatorScriptService implements ScriptService
             return originalDocument;
         }
         return translator.computeTranslationReference(originalDocument, translationTitle, translationLocale);
+    }
+
+    public List<GlossaryInfo> getGlossaries()
+    {
+        Translator translator = translatorManager.getTranslator();
+        if (this.authorizationManager.hasAccess(Right.PROGRAM)) {
+            return translator.getGlossaries();
+        } else {
+            return new ArrayList<>(0);
+        }
+    }
+
+    public Map<String, String> getGlossaryEntryDetails(String id)
+    {
+        Translator translator = translatorManager.getTranslator();
+        if (this.authorizationManager.hasAccess(Right.PROGRAM)) {
+            return translator.getGlossaryEntryDetails(id);
+        } else {
+            return new HashMap<>(0);
+        }
+    }
+
+    public List<GlossaryLocalePairs> getGlossaryLanguagePairs()
+    {
+        Translator translator = translatorManager.getTranslator();
+        if (this.authorizationManager.hasAccess(Right.PROGRAM)) {
+            return translator.getGlossaryLocalePairs();
+        } else {
+            return new ArrayList<>(0);
+        }
     }
 }

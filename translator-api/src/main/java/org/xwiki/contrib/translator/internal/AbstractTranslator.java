@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -38,6 +39,8 @@ import org.xwiki.contrib.translator.Translator;
 import org.xwiki.contrib.translator.TranslatorConfiguration;
 import org.xwiki.contrib.translator.TranslatorException;
 import org.xwiki.contrib.translator.TranslatorManager;
+import org.xwiki.contrib.translator.model.GlossaryInfo;
+import org.xwiki.contrib.translator.model.GlossaryLocalePairs;
 import org.xwiki.localization.LocaleUtils;
 import org.xwiki.model.EntityType;
 import org.xwiki.model.reference.DocumentReference;
@@ -113,6 +116,9 @@ public abstract class AbstractTranslator implements Translator
         new LocalDocumentReference(Arrays.asList("XWiki", "Translator", "Translation"), "TranslationClass");
 
     static final String LIST_ITEM_SEPARATOR = ",";
+
+    @Inject
+    protected Provider<XWikiContext> xwikiContextProvider;
 
     @Inject
     protected TranslatorConfiguration translatorConfiguration;
@@ -490,4 +496,30 @@ public abstract class AbstractTranslator implements Translator
             return false;
         }
     }
+
+    public String getGlossaryName(Locale source, Locale target)
+    {
+        String prefix = getGlossaryNamePrefix();
+        return prefix + "-" + source.toString() + "-" + target.toString();
+    }
+
+    public String getGlossaryNamePrefix()
+    {
+        XWikiContext context = xwikiContextProvider.get();
+        String glossariesPrefix = translatorConfiguration.getGlossaryNamePrefix();
+
+        String wikiPrefix = context.getWikiId();
+
+        if (org.apache.commons.lang3.StringUtils.isNoneBlank(glossariesPrefix)) {
+            return wikiPrefix;
+        } else {
+            return glossariesPrefix + "-" + wikiPrefix;
+        }
+    }
+
+    public abstract List<GlossaryLocalePairs> getGlossaryLocalePairs();
+
+    public abstract List<GlossaryInfo> getGlossaries();
+
+    public abstract Map<String, String> getGlossaryEntryDetails(String id);
 }

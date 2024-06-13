@@ -19,16 +19,16 @@
  */
 package org.xwiki.contrib.translator;
 
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.xwiki.component.annotation.Role;
+import org.xwiki.contrib.translator.model.GlossaryInfo;
+import org.xwiki.contrib.translator.model.GlossaryLocalePairs;
+import org.xwiki.contrib.translator.model.GlossaryUpdateEntry;
 import org.xwiki.model.reference.DocumentReference;
 import org.xwiki.model.reference.EntityReference;
-import org.xwiki.query.QueryException;
-
-import com.xpn.xwiki.XWikiException;
 
 // TODO: AdminGroup view TranslatorConfiguration but this is local group -> check
 // TODO: check rights in Java
@@ -67,4 +67,41 @@ public interface Translator
     String getName();
 
     boolean isSameNameTranslationNamingStrategy(EntityReference reference) throws TranslatorException;
+
+    /**
+     * Get the glossary name for the specificed locales
+     *
+     * @param source locale for the source lang
+     * @param target locale for the target lang
+     * @return name of the glossary
+     */
+    String getGlossaryName(Locale source, Locale target);
+
+    /**
+     * @return the prefix name of the glossaries for this Wiki instance
+     */
+    String getGlossaryNamePrefix();
+
+    /**
+     * @return a list of all available language pair
+     */
+    List<GlossaryLocalePairs> getGlossaryLocalePairs();
+
+    /**
+     * @return a list of glossaries available on translator service
+     */
+    List<GlossaryInfo> getGlossaries();
+
+    /**
+     * @param id glossary id
+     * @return a map with source lang, target lang
+     */
+    Map<String, String> getGlossaryEntryDetails(String id);
+
+    /**
+     * Update the glossary entries on the translator provider
+     *
+     * @param entries the list of all glossaries with all entries to update
+     */
+    void updateGlossaries(List<GlossaryUpdateEntry> entries);
 }

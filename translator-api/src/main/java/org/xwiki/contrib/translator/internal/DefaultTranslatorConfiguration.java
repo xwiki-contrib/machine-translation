@@ -73,4 +73,10 @@ public class DefaultTranslatorConfiguration implements TranslatorConfiguration
     {
         return this.configurationSource.getProperty("sameTranslationNameClasses");
     }
+
+    @Override
+    public String getGlossaryNamePrefix()
+    {
+        return configurationSource.getProperty("translatorGlossaryNamePrefix");
+    }
 }

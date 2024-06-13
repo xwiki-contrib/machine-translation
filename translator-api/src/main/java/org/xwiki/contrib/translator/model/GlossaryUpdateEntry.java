@@ -17,31 +17,38 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.xwiki.contrib.translator;
+package org.xwiki.contrib.translator.model;
 
-import org.xwiki.component.annotation.Role;
+import java.util.Locale;
+import java.util.Map;
 
-/**
- * Define the configuration of the translator to be used.
- *
- */
-@Role
-public interface TranslatorConfiguration
+public class GlossaryUpdateEntry
 {
-    /**
-     * @return the name of the current {@link Translator} to be used.
-     */
-    String getTranslator();
+    private Map<String, String> entry;
 
-    boolean isSameNameTranslationNamingStrategy();
+    private Locale sourceLanguage;
 
-    String getTargetClasses();
+    private Locale targetLanguage;
 
-    String getTargetProperties();
+    public GlossaryUpdateEntry(Map<String, String> entry, Locale sourceLanguage, Locale targetLanguage)
+    {
+        this.entry = entry;
+        this.sourceLanguage = sourceLanguage;
+        this.targetLanguage = targetLanguage;
+    }
 
-    String getApiKey();
+    public Map<String, String> getEntry()
+    {
+        return entry;
+    }
 
-    String getGlossaryNamePrefix();
+    public Locale getSourceLanguage()
+    {
+        return sourceLanguage;
+    }
 
-    String getSameNameTranslationClasses();
+    public Locale getTargetLanguage()
+    {
+        return targetLanguage;
+    }
 }
