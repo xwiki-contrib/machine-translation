@@ -33,7 +33,7 @@ import javax.inject.Singleton;
 import org.slf4j.Logger;
 import org.xwiki.component.annotation.Component;
 import org.xwiki.contrib.translator.model.GlossaryInfo;
-import org.xwiki.contrib.translator.model.GlossaryLocalePairs;
+import org.xwiki.contrib.translator.model.LocalePairs;
 import org.xwiki.model.reference.DocumentReference;
 import org.xwiki.model.reference.EntityReference;
 import org.xwiki.script.service.ScriptService;
@@ -180,7 +180,7 @@ public class TranslatorScriptService implements ScriptService
         }
     }
 
-    public List<GlossaryLocalePairs> getGlossaryLanguagePairs() throws TranslatorException
+    public List<LocalePairs> getGlossaryLanguagePairs() throws TranslatorException
     {
         Translator translator = translatorManager.getTranslator();
         if (this.authorizationManager.hasAccess(Right.PROGRAM)) {

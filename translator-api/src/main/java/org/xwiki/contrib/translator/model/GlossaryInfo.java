@@ -19,6 +19,10 @@
  */
 package org.xwiki.contrib.translator.model;
 
+/**
+ * @version $Id$
+ * Struct used to describe a glossary for a translator.
+ */
 public class GlossaryInfo
 {
     private final String glossaryId;
@@ -44,31 +48,50 @@ public class GlossaryInfo
         this.entryCount = entryCount;
     }
 
+    /**
+     * @return the internal ID of the translator glossary.
+     */
     public String getGlossaryId()
     {
         return glossaryId;
     }
 
+    /**
+     * @return the name of the glossary.
+     */
     public String getName()
     {
         return name;
     }
 
+    /**
+     * @return the state of the translator glossary. Return 'true' if the glossary is ready to use into the translator.
+     * else it returns false.
+     */
     public boolean isReady()
     {
         return ready;
     }
 
+    /**
+     * @return the source lang of the glossary.
+     */
     public String getSourceLang()
     {
         return sourceLang;
     }
 
+    /**
+     * @return the target lang of the glossary.
+     */
     public String getTargetLang()
     {
         return targetLang;
     }
 
+    /**
+     * @return the number of item into this glossary.
+     */
     public long getEntryCount()
     {
         return entryCount;

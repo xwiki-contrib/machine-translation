@@ -22,19 +22,22 @@ package org.xwiki.contrib.translator.model;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ * Struct used to send data to update into the translator glossary.
+ */
 public class GlossaryUpdateEntry
 {
     private Map<String, String> entry;
 
-    private Locale sourceLanguage;
+    private Locale sourceLocale;
 
-    private Locale targetLanguage;
+    private Locale targetLocale;
 
-    public GlossaryUpdateEntry(Map<String, String> entry, Locale sourceLanguage, Locale targetLanguage)
+    public GlossaryUpdateEntry(Map<String, String> entry, Locale sourceLocale, Locale targetLocale)
     {
         this.entry = entry;
-        this.sourceLanguage = sourceLanguage;
-        this.targetLanguage = targetLanguage;
+        this.sourceLocale = sourceLocale;
+        this.targetLocale = targetLocale;
     }
 
     public Map<String, String> getEntry()
@@ -42,13 +45,19 @@ public class GlossaryUpdateEntry
         return entry;
     }
 
-    public Locale getSourceLanguage()
+    /**
+     * @return the source locale of the glossary to update.
+     */
+    public Locale getSourceLocale()
     {
-        return sourceLanguage;
+        return sourceLocale;
     }
 
-    public Locale getTargetLanguage()
+    /**
+     * @return the target locale of the glossary to update.
+     */
+    public Locale getTargetLocale()
     {
-        return targetLanguage;
+        return targetLocale;
     }
 }

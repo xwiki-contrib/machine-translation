@@ -39,7 +39,7 @@ import org.xwiki.contrib.translator.TranslatorConfiguration;
 import org.xwiki.contrib.translator.TranslatorException;
 import org.xwiki.contrib.translator.TranslatorManager;
 import org.xwiki.contrib.translator.model.GlossaryInfo;
-import org.xwiki.contrib.translator.model.GlossaryLocalePairs;
+import org.xwiki.contrib.translator.model.LocalePairs;
 import org.xwiki.localization.LocaleUtils;
 import org.xwiki.model.EntityType;
 import org.xwiki.model.reference.DocumentReference;
@@ -496,17 +496,20 @@ public abstract class AbstractTranslator implements Translator
         }
     }
 
+    @Override
     public String getGlossaryName(Locale source, Locale target)
     {
         String prefix = getGlossaryNamePrefix();
         return getGlossaryName(source, target, prefix);
     }
 
+    @Override
     public String getGlossaryName(Locale source, Locale target, String prefix)
     {
         return prefix + "-" + source.toString() + "-" + target.toString();
     }
 
+    @Override
     public String getGlossaryNamePrefix()
     {
         XWikiContext context = xwikiContextProvider.get();
@@ -521,9 +524,12 @@ public abstract class AbstractTranslator implements Translator
         }
     }
 
-    public abstract List<GlossaryLocalePairs> getGlossaryLocalePairs() throws TranslatorException;
+    @Override
+    public abstract List<LocalePairs> getGlossaryLocalePairs() throws TranslatorException;
 
+    @Override
     public abstract List<GlossaryInfo> getGlossaries() throws TranslatorException;
 
+    @Override
     public abstract Map<String, String> getGlossaryEntryDetails(String id) throws TranslatorException;
 }

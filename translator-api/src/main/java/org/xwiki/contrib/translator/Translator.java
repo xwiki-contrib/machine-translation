@@ -25,7 +25,7 @@ import java.util.Map;
 
 import org.xwiki.component.annotation.Role;
 import org.xwiki.contrib.translator.model.GlossaryInfo;
-import org.xwiki.contrib.translator.model.GlossaryLocalePairs;
+import org.xwiki.contrib.translator.model.LocalePairs;
 import org.xwiki.contrib.translator.model.GlossaryUpdateEntry;
 import org.xwiki.model.reference.DocumentReference;
 import org.xwiki.model.reference.EntityReference;
@@ -78,6 +78,18 @@ public interface Translator
     String getGlossaryName(Locale source, Locale target);
 
     /**
+     * Get the glossary name for the specificed locales
+     *
+     * @param source locale for the source lang
+     * @param target locale for the target lang
+     * @param prefix prefix to use for name calculation. Note that this is mostly used for performance, to avoid to
+     * retrieve many times the prefix in case of multiple call.
+     * @return name of the glossary
+     */
+    String getGlossaryName(Locale source, Locale target, String prefix);
+
+
+    /**
      * @return the prefix name of the glossaries for this Wiki instance
      */
     String getGlossaryNamePrefix();
@@ -85,7 +97,7 @@ public interface Translator
     /**
      * @return a list of all available language pair
      */
-    List<GlossaryLocalePairs> getGlossaryLocalePairs() throws TranslatorException;
+    List<LocalePairs> getGlossaryLocalePairs() throws TranslatorException;
 
     /**
      * @return a list of glossaries available on translator service

@@ -21,31 +21,41 @@ package org.xwiki.contrib.translator.model;
 
 import java.util.Locale;
 
-public class GlossaryLocalePairs
+/**
+ * @version $Id$
+ * Struct used to store a pair of Locale. Mostly used for the translator glossary.
+ */
+public class LocalePairs
 {
-    private final Locale sourceLanguage;
+    private final Locale sourceLocale;
 
-    private final Locale targetLanguage;
+    private final Locale targetLocale;
 
-    public GlossaryLocalePairs(String sourceLanguage, String destinationLanguage)
+    public LocalePairs(String sourceLocale, String destinationLocale)
     {
-        this.sourceLanguage = new Locale(sourceLanguage);
-        this.targetLanguage = new Locale(destinationLanguage);
+        this.sourceLocale = new Locale(sourceLocale);
+        this.targetLocale = new Locale(destinationLocale);
     }
 
-    public GlossaryLocalePairs(Locale sourceLanguage, Locale destinationLanguage)
+    public LocalePairs(Locale sourceLocale, Locale destinationLocale)
     {
-        this.sourceLanguage = sourceLanguage;
-        this.targetLanguage = destinationLanguage;
+        this.sourceLocale = sourceLocale;
+        this.targetLocale = destinationLocale;
     }
 
-    public Locale getSourceLanguage()
+    /**
+     * @return the source locale
+     */
+    public Locale getSourceLocale()
     {
-        return sourceLanguage;
+        return sourceLocale;
     }
 
-    public Locale getTargetLanguage()
+    /**
+     * @return the target locale
+     */
+    public Locale getTargetLocale()
     {
-        return targetLanguage;
+        return targetLocale;
     }
 }
