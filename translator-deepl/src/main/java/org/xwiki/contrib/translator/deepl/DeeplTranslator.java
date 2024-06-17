@@ -187,7 +187,7 @@ public class DeeplTranslator extends AbstractTranslator
     }
 
     @Override
-    public Map<String, String> getGlossaryEntryDetails(String id) throws TranslatorException
+    public Map<String, String> getGlossaryEntries(String id) throws TranslatorException
     {
         Translator translator = getTranslator();
         try {

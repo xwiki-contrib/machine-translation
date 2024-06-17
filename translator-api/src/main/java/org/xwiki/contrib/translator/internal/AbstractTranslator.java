@@ -531,5 +531,5 @@ public abstract class AbstractTranslator implements Translator
     public abstract List<GlossaryInfo> getGlossaries() throws TranslatorException;
 
     @Override
-    public abstract Map<String, String> getGlossaryEntryDetails(String id) throws TranslatorException;
+    public abstract Map<String, String> getGlossaryEntries(String id) throws TranslatorException;
 }

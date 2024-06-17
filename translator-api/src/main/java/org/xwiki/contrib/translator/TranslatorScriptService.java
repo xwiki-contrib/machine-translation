@@ -174,7 +174,7 @@ public class TranslatorScriptService implements ScriptService
     {
         Translator translator = translatorManager.getTranslator();
         if (this.authorizationManager.hasAccess(Right.PROGRAM)) {
-            return translator.getGlossaryEntryDetails(id);
+            return translator.getGlossaryEntries(id);
         } else {
             return new HashMap<>(0);
         }

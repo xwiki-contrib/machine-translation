@@ -108,7 +108,7 @@ public interface Translator
      * @param id glossary id
      * @return a map with source lang, target lang
      */
-    Map<String, String> getGlossaryEntryDetails(String id) throws TranslatorException;
+    Map<String, String> getGlossaryEntries(String id) throws TranslatorException;
 
     /**
      * Update the glossary entries on the translator provider
