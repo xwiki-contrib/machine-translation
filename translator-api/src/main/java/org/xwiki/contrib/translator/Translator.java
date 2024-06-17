@@ -85,23 +85,23 @@ public interface Translator
     /**
      * @return a list of all available language pair
      */
-    List<GlossaryLocalePairs> getGlossaryLocalePairs();
+    List<GlossaryLocalePairs> getGlossaryLocalePairs() throws TranslatorException;
 
     /**
      * @return a list of glossaries available on translator service
      */
-    List<GlossaryInfo> getGlossaries();
+    List<GlossaryInfo> getGlossaries() throws TranslatorException;
 
     /**
      * @param id glossary id
      * @return a map with source lang, target lang
      */
-    Map<String, String> getGlossaryEntryDetails(String id);
+    Map<String, String> getGlossaryEntryDetails(String id) throws TranslatorException;
 
     /**
      * Update the glossary entries on the translator provider
      *
      * @param entries the list of all glossaries with all entries to update
      */
-    void updateGlossaries(List<GlossaryUpdateEntry> entries);
+    void updateGlossaries(List<GlossaryUpdateEntry> entries) throws TranslatorException;
 }

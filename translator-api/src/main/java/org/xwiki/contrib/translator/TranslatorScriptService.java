@@ -160,7 +160,7 @@ public class TranslatorScriptService implements ScriptService
         return translator.computeTranslationReference(originalDocument, translationTitle, translationLocale);
     }
 
-    public List<GlossaryInfo> getGlossaries()
+    public List<GlossaryInfo> getGlossaries() throws TranslatorException
     {
         Translator translator = translatorManager.getTranslator();
         if (this.authorizationManager.hasAccess(Right.PROGRAM)) {
@@ -170,7 +170,7 @@ public class TranslatorScriptService implements ScriptService
         }
     }
 
-    public Map<String, String> getGlossaryEntryDetails(String id)
+    public Map<String, String> getGlossaryEntryDetails(String id) throws TranslatorException
     {
         Translator translator = translatorManager.getTranslator();
         if (this.authorizationManager.hasAccess(Right.PROGRAM)) {
@@ -180,7 +180,7 @@ public class TranslatorScriptService implements ScriptService
         }
     }
 
-    public List<GlossaryLocalePairs> getGlossaryLanguagePairs()
+    public List<GlossaryLocalePairs> getGlossaryLanguagePairs() throws TranslatorException
     {
         Translator translator = translatorManager.getTranslator();
         if (this.authorizationManager.hasAccess(Right.PROGRAM)) {

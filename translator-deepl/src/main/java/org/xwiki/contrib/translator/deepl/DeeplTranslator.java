@@ -144,21 +144,24 @@ public class DeeplTranslator extends AbstractTranslator
     }
 
     @Override
-    public List<GlossaryLocalePairs> getGlossaryLocalePairs()
+    public List<GlossaryLocalePairs> getGlossaryLocalePairs() throws TranslatorException
     {
         Translator translator = getTranslator();
         try {
             return translator.getGlossaryLanguages().stream()
                 .map(item -> new GlossaryLocalePairs(item.getSourceLanguage(), item.getTargetLanguage()))
                 .collect(Collectors.toList());
-        } catch (Exception e) {
-            logger.error("Got unexpected error while synchronizing glossaries : [{}]", e.getMessage(), e);
-            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            logger.debug("Error when getting glossary languages [{}]", e.getMessage(), e);
+            throw new TranslatorException("Interrupt exception getting glossary languages", e);
+        } catch (DeepLException e) {
+            logger.debug("Error when getting glossary languages [{}]", e.getMessage(), e);
+            throw new TranslatorException("DeepL exception when getting glossary languages", e);
         }
     }
 
     @Override
-    public List<GlossaryInfo> getGlossaries()
+    public List<GlossaryInfo> getGlossaries() throws TranslatorException
     {
         Translator translator = getTranslator();
         try {
@@ -169,34 +172,41 @@ public class DeeplTranslator extends AbstractTranslator
                 .map(item -> new GlossaryInfo(item.getGlossaryId(), item.getName(), item.isReady(),
                     item.getSourceLang(), item.getTargetLang(), item.getEntryCount()))
                 .collect(Collectors.toList());
-        } catch (Exception e) {
-            logger.error("Got unexpected error while synchronizing glossaries : [{}]", e.getMessage(), e);
-            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            logger.debug("Error when getting glossaries [{}]", e.getMessage(), e);
+            throw new TranslatorException("Interrupt exception when getting glossaries", e);
+        } catch (DeepLException e) {
+            logger.debug("Error when getting glossaries [{}]", e.getMessage(), e);
+            throw new TranslatorException("DeepL exception when getting glossaries", e);
         }
     }
 
     @Override
-    public Map<String, String> getGlossaryEntryDetails(String id)
+    public Map<String, String> getGlossaryEntryDetails(String id) throws TranslatorException
     {
         Translator translator = getTranslator();
         try {
             return translator.getGlossaryEntries(id);
-        } catch (Exception e) {
-            logger.error("Got unexpected error while synchronizing glossaries : [{}]", e.getMessage(), e);
-            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            logger.debug("Error when getting glossaries details [{}]", e.getMessage(), e);
+            throw new TranslatorException("Interrupt exception when getting glossaries details", e);
+        } catch (DeepLException e) {
+            logger.debug("Error when getting glossaries details [{}]", e.getMessage(), e);
+            throw new TranslatorException("DeepL exception when getting glossaries details", e);
         }
     }
 
     @Override
-    public void updateGlossaries(List<GlossaryUpdateEntry> entries)
+    public void updateGlossaries(List<GlossaryUpdateEntry> entries) throws TranslatorException
     {
+        Translator translator = getTranslator();
         try {
-            Translator translator = getTranslator();
             List<com.deepl.api.GlossaryInfo> deeplGlossaries = translator.listGlossaries();
             String glossaryNamePrefix = getGlossaryNamePrefix();
 
             for (GlossaryUpdateEntry entry : entries) {
-                String glossaryName = getGlossaryName(entry.getSourceLanguage(), entry.getTargetLanguage(), glossaryNamePrefix);
+                String glossaryName =
+                    getGlossaryName(entry.getSourceLanguage(), entry.getTargetLanguage(), glossaryNamePrefix);
 
                 // Check if the glossary exists. If it's the case, we need to delete it to re-create it
                 for (String glossaryId : getGlossariesByName(deeplGlossaries, glossaryName)) {
@@ -212,10 +222,12 @@ public class DeeplTranslator extends AbstractTranslator
                     normalizeLocale(entry.getTargetLanguage()),
                     new GlossaryEntries(entry.getEntry()));
             }
-        } catch (Exception e) {
-            // TODO
-
-            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            logger.debug("Error when synchronizing glossaries [{}]", e.getMessage(), e);
+            throw new TranslatorException("Interrupt exception when synchronizing glossaries", e);
+        } catch (DeepLException e) {
+            logger.debug("Error when synchronizing glossaries [{}]", e.getMessage(), e);
+            throw new TranslatorException("DeepL exception when synchronizing glossaries", e);
         }
     }
 
