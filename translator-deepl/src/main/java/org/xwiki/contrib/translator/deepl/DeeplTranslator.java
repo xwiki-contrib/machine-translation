@@ -69,8 +69,7 @@ public class DeeplTranslator extends AbstractTranslator
     {
         Translator translator = getTranslator();
         try {
-            String glossaryNamePrefix = getGlossaryNamePrefix();
-            String glossaryName = glossaryNamePrefix + "-" + source.toString() + "-" + destination.toString();
+            String glossaryName = getGlossaryName(source, destination);
             return translator.listGlossaries().stream()
                 .filter(entry -> entry.getName().equals(glossaryName))
                 .findFirst().map(com.deepl.api.GlossaryInfo::getGlossaryId);
@@ -194,9 +193,10 @@ public class DeeplTranslator extends AbstractTranslator
         try {
             Translator translator = getTranslator();
             List<com.deepl.api.GlossaryInfo> deeplGlossaries = translator.listGlossaries();
+            String glossaryNamePrefix = getGlossaryNamePrefix();
 
             for (GlossaryUpdateEntry entry : entries) {
-                String glossaryName = getGlossaryName(entry.getSourceLanguage(), entry.getTargetLanguage());
+                String glossaryName = getGlossaryName(entry.getSourceLanguage(), entry.getTargetLanguage(), glossaryNamePrefix);
 
                 // Check if the glossary exists. If it's the case, we need to delete it to re-create it
                 for (String glossaryId : getGlossariesByName(deeplGlossaries, glossaryName)) {

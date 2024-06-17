@@ -27,7 +27,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -500,6 +499,11 @@ public abstract class AbstractTranslator implements Translator
     public String getGlossaryName(Locale source, Locale target)
     {
         String prefix = getGlossaryNamePrefix();
+        return getGlossaryName(source, target, prefix);
+    }
+
+    public String getGlossaryName(Locale source, Locale target, String prefix)
+    {
         return prefix + "-" + source.toString() + "-" + target.toString();
     }
 
