@@ -91,6 +91,10 @@ public class DeeplTranslator extends AbstractTranslator
         if (html) {
             options.setTagHandling("html");
         }
+        Optional<String> glossaryId = getGlossaryIdForLocales(from, to);
+        if (glossaryId.isPresent()){
+            options.setGlossaryId(glossaryId.get());
+        }
         TextResult result = null;
         try {
             result = translator.translateText(content, from.toString(), normalizeLocale(to),
