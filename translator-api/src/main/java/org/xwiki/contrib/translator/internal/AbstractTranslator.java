@@ -514,7 +514,7 @@ public abstract class AbstractTranslator implements Translator
 
         String wikiPrefix = context.getWikiId();
 
-        if (org.apache.commons.lang3.StringUtils.isNoneBlank(glossariesPrefix)) {
+        if (org.apache.commons.lang3.StringUtils.isBlank(glossariesPrefix)) {
             return wikiPrefix;
         } else {
             return glossariesPrefix + "-" + wikiPrefix;
