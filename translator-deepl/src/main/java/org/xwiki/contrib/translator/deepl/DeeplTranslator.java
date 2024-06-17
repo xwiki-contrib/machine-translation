@@ -32,9 +32,10 @@ import javax.inject.Singleton;
 import org.xwiki.component.annotation.Component;
 import org.xwiki.contrib.translator.TranslatorException;
 import org.xwiki.contrib.translator.internal.AbstractTranslator;
+import org.xwiki.contrib.translator.model.Glossary;
 import org.xwiki.contrib.translator.model.GlossaryInfo;
-import org.xwiki.contrib.translator.model.LocalePairs;
-import org.xwiki.contrib.translator.model.GlossaryUpdateEntry;
+import org.xwiki.contrib.translator.model.LocalePair;
+import org.xwiki.localization.LocaleUtils;
 import org.xwiki.text.StringUtils;
 
 import com.deepl.api.DeepLException;
@@ -92,9 +93,7 @@ public class DeeplTranslator extends AbstractTranslator
             options.setTagHandling("html");
         }
         Optional<String> glossaryId = getGlossaryIdForLocales(from, to);
-        if (glossaryId.isPresent()){
-            options.setGlossaryId(glossaryId.get());
-        }
+        glossaryId.ifPresent(options::setGlossaryId);
         TextResult result = null;
         try {
             result = translator.translateText(content, from.toString(), normalizeLocale(to),
@@ -148,12 +147,12 @@ public class DeeplTranslator extends AbstractTranslator
     }
 
     @Override
-    public List<LocalePairs> getGlossaryLocalePairs() throws TranslatorException
+    public List<LocalePair> getGlossaryLocalePairs() throws TranslatorException
     {
         Translator translator = getTranslator();
         try {
             return translator.getGlossaryLanguages().stream()
-                .map(item -> new LocalePairs(item.getSourceLanguage(), item.getTargetLanguage()))
+                .map(item -> new LocalePair(item.getSourceLanguage(), item.getTargetLanguage()))
                 .collect(Collectors.toList());
         } catch (InterruptedException e) {
             logger.debug("Error when getting glossary languages [{}]", e.getMessage(), e);
@@ -174,7 +173,9 @@ public class DeeplTranslator extends AbstractTranslator
                 .stream()
                 .filter(entry -> entry.getName().startsWith(glossaryNamePrefix))
                 .map(item -> new GlossaryInfo(item.getGlossaryId(), item.getName(), item.isReady(),
-                    item.getSourceLang(), item.getTargetLang(), item.getEntryCount()))
+                    LocaleUtils.toLocale(item.getSourceLang()),
+                    LocaleUtils.toLocale(item.getTargetLang()),
+                    item.getEntryCount()))
                 .collect(Collectors.toList());
         } catch (InterruptedException e) {
             logger.debug("Error when getting glossaries [{}]", e.getMessage(), e);
@@ -201,16 +202,17 @@ public class DeeplTranslator extends AbstractTranslator
     }
 
     @Override
-    public void updateGlossaries(List<GlossaryUpdateEntry> entries) throws TranslatorException
+    public void updateGlossaries(List<Glossary> entries) throws TranslatorException
     {
         Translator translator = getTranslator();
         try {
             List<com.deepl.api.GlossaryInfo> deeplGlossaries = translator.listGlossaries();
             String glossaryNamePrefix = getGlossaryNamePrefix();
 
-            for (GlossaryUpdateEntry entry : entries) {
-                String glossaryName =
-                    getGlossaryName(entry.getSourceLocale(), entry.getTargetLocale(), glossaryNamePrefix);
+            for (Glossary entry : entries) {
+                String glossaryName = getGlossaryName(entry.getGlossaryInfo().getSourceLocale(),
+                    entry.getGlossaryInfo().getTargetLocale(),
+                    glossaryNamePrefix);
 
                 // Check if the glossary exists. If it's the case, we need to delete it to re-create it
                 for (String glossaryId : getGlossariesByName(deeplGlossaries, glossaryName)) {
@@ -222,8 +224,8 @@ public class DeeplTranslator extends AbstractTranslator
                 logger.debug("Creating glossary [{}]", glossaryName);
                 translator.createGlossary(
                     glossaryName,
-                    normalizeLocale(entry.getSourceLocale()),
-                    normalizeLocale(entry.getTargetLocale()),
+                    normalizeLocale(entry.getGlossaryInfo().getSourceLocale()),
+                    normalizeLocale(entry.getGlossaryInfo().getTargetLocale()),
                     new GlossaryEntries(entry.getEntry()));
             }
         } catch (InterruptedException e) {

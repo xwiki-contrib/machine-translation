@@ -20,41 +20,40 @@
 package org.xwiki.contrib.translator.model;
 
 import java.util.Locale;
+import java.util.Map;
 
 /**
- * @version $Id$
- * Struct used to store a pair of Locale. Mostly used for the translator glossary.
+ * Struct used to send data to update into the translator glossary.
  */
-public class LocalePairs
+public class Glossary
 {
-    private final Locale sourceLocale;
+    private Map<String, String> entry;
 
-    private final Locale targetLocale;
+    private GlossaryInfo glossaryInfo;
 
-    public LocalePairs(String sourceLocale, String destinationLocale)
+    private Locale sourceLocale;
+
+    private Locale targetLocale;
+
+    public Glossary(Map<String, String> entry, GlossaryInfo glossaryInfo)
     {
-        this(new Locale(sourceLocale), new Locale(destinationLocale));
-    }
-
-    public LocalePairs(Locale sourceLocale, Locale destinationLocale)
-    {
-        this.sourceLocale = sourceLocale;
-        this.targetLocale = destinationLocale;
-    }
-
-    /**
-     * @return the source locale
-     */
-    public Locale getSourceLocale()
-    {
-        return sourceLocale;
+        this.entry = entry;
+        this.glossaryInfo = glossaryInfo;
     }
 
     /**
-     * @return the target locale
+     * @return all entry of this glossary.
      */
-    public Locale getTargetLocale()
+    public Map<String, String> getEntry()
     {
-        return targetLocale;
+        return entry;
+    }
+
+    /**
+     * @return the glossary info of this glossary.
+     */
+    public GlossaryInfo getGlossaryInfo()
+    {
+        return glossaryInfo;
     }
 }

@@ -19,6 +19,8 @@
  */
 package org.xwiki.contrib.translator.model;
 
+import java.util.Locale;
+
 /**
  * @version $Id$
  * Struct used to describe a glossary for a translator.
@@ -31,20 +33,20 @@ public class GlossaryInfo
 
     private final boolean ready;
 
-    private final String sourceLang;
+    private final Locale sourceLocale;
 
-    private final String targetLang;
+    private final Locale targetLocale;
 
     private final long entryCount;
 
-    public GlossaryInfo(String glossaryId, String name, boolean ready, String sourceLang, String targetLang,
+    public GlossaryInfo(String glossaryId, String name, boolean ready, Locale sourceLocale, Locale targetLocale,
         long entryCount)
     {
         this.glossaryId = glossaryId;
         this.name = name;
         this.ready = ready;
-        this.sourceLang = sourceLang;
-        this.targetLang = targetLang;
+        this.sourceLocale = sourceLocale;
+        this.targetLocale = targetLocale;
         this.entryCount = entryCount;
     }
 
@@ -76,17 +78,17 @@ public class GlossaryInfo
     /**
      * @return the source lang of the glossary.
      */
-    public String getSourceLang()
+    public Locale getSourceLocale()
     {
-        return sourceLang;
+        return sourceLocale;
     }
 
     /**
      * @return the target lang of the glossary.
      */
-    public String getTargetLang()
+    public Locale getTargetLocale()
     {
-        return targetLang;
+        return targetLocale;
     }
 
     /**

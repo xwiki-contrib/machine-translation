@@ -39,7 +39,7 @@ import org.xwiki.contrib.translator.TranslatorConfiguration;
 import org.xwiki.contrib.translator.TranslatorException;
 import org.xwiki.contrib.translator.TranslatorManager;
 import org.xwiki.contrib.translator.model.GlossaryInfo;
-import org.xwiki.contrib.translator.model.LocalePairs;
+import org.xwiki.contrib.translator.model.LocalePair;
 import org.xwiki.localization.LocaleUtils;
 import org.xwiki.model.EntityType;
 import org.xwiki.model.reference.DocumentReference;
@@ -525,7 +525,7 @@ public abstract class AbstractTranslator implements Translator
     }
 
     @Override
-    public abstract List<LocalePairs> getGlossaryLocalePairs() throws TranslatorException;
+    public abstract List<LocalePair> getGlossaryLocalePairs() throws TranslatorException;
 
     @Override
     public abstract List<GlossaryInfo> getGlossaries() throws TranslatorException;

@@ -25,8 +25,8 @@ import java.util.Map;
 
 import org.xwiki.component.annotation.Role;
 import org.xwiki.contrib.translator.model.GlossaryInfo;
-import org.xwiki.contrib.translator.model.LocalePairs;
-import org.xwiki.contrib.translator.model.GlossaryUpdateEntry;
+import org.xwiki.contrib.translator.model.LocalePair;
+import org.xwiki.contrib.translator.model.Glossary;
 import org.xwiki.model.reference.DocumentReference;
 import org.xwiki.model.reference.EntityReference;
 
@@ -97,7 +97,7 @@ public interface Translator
     /**
      * @return a list of all available language pair
      */
-    List<LocalePairs> getGlossaryLocalePairs() throws TranslatorException;
+    List<LocalePair> getGlossaryLocalePairs() throws TranslatorException;
 
     /**
      * @return a list of glossaries available on translator service
@@ -115,5 +115,5 @@ public interface Translator
      *
      * @param entries the list of all glossaries with all entries to update
      */
-    void updateGlossaries(List<GlossaryUpdateEntry> entries) throws TranslatorException;
+    void updateGlossaries(List<Glossary> entries) throws TranslatorException;
 }

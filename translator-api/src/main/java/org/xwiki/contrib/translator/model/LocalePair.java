@@ -20,33 +20,31 @@
 package org.xwiki.contrib.translator.model;
 
 import java.util.Locale;
-import java.util.Map;
+
+import org.xwiki.localization.LocaleUtils;
 
 /**
- * Struct used to send data to update into the translator glossary.
+ * @version $Id$ Struct used to store a pair of Locale. Mostly used for the translator glossary.
  */
-public class GlossaryUpdateEntry
+public class LocalePair
 {
-    private Map<String, String> entry;
+    private final Locale sourceLocale;
 
-    private Locale sourceLocale;
+    private final Locale targetLocale;
 
-    private Locale targetLocale;
-
-    public GlossaryUpdateEntry(Map<String, String> entry, Locale sourceLocale, Locale targetLocale)
+    public LocalePair(String sourceLocale, String destinationLocale)
     {
-        this.entry = entry;
-        this.sourceLocale = sourceLocale;
-        this.targetLocale = targetLocale;
+        this(LocaleUtils.toLocale(sourceLocale), LocaleUtils.toLocale(destinationLocale));
     }
 
-    public Map<String, String> getEntry()
+    public LocalePair(Locale sourceLocale, Locale destinationLocale)
     {
-        return entry;
+        this.sourceLocale = sourceLocale;
+        this.targetLocale = destinationLocale;
     }
 
     /**
-     * @return the source locale of the glossary to update.
+     * @return the source locale
      */
     public Locale getSourceLocale()
     {
@@ -54,7 +52,7 @@ public class GlossaryUpdateEntry
     }
 
     /**
-     * @return the target locale of the glossary to update.
+     * @return the target locale
      */
     public Locale getTargetLocale()
     {
