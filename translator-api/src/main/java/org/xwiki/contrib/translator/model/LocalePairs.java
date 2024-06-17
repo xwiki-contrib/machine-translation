@@ -33,8 +33,7 @@ public class LocalePairs
 
     public LocalePairs(String sourceLocale, String destinationLocale)
     {
-        this.sourceLocale = new Locale(sourceLocale);
-        this.targetLocale = new Locale(destinationLocale);
+        this(new Locale(sourceLocale), new Locale(destinationLocale));
     }
 
     public LocalePairs(Locale sourceLocale, Locale destinationLocale)
