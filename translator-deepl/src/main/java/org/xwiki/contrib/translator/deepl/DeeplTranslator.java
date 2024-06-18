@@ -126,7 +126,8 @@ public class DeeplTranslator extends AbstractTranslator
 
             switch (type) {
                 case SOURCE_LANG:
-                case GLOSSARY:
+                case SOURCE_LANG_GLOSSARY:
+                case TARGET_LANG_GLOSSARY:
                     return locale.getLanguage();
                 case TARGET_LANG:
                     String name = locale.toString();
@@ -243,9 +244,9 @@ public class DeeplTranslator extends AbstractTranslator
                 translator.createGlossary(
                     glossaryName,
                     normalizeLocale(entry.getGlossaryInfo().getSourceLocale(),
-                        org.xwiki.contrib.translator.Translator.NormalisationType.GLOSSARY),
+                        NormalisationType.SOURCE_LANG_GLOSSARY),
                     normalizeLocale(entry.getGlossaryInfo().getTargetLocale(),
-                        org.xwiki.contrib.translator.Translator.NormalisationType.GLOSSARY),
+                        NormalisationType.TARGET_LANG_GLOSSARY),
                     new GlossaryEntries(entry.getEntries()));
             }
         } catch (InterruptedException e) {

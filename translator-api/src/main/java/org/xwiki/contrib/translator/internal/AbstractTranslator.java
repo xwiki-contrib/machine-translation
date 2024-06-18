@@ -38,7 +38,6 @@ import org.xwiki.contrib.translator.Translator;
 import org.xwiki.contrib.translator.TranslatorConfiguration;
 import org.xwiki.contrib.translator.TranslatorException;
 import org.xwiki.contrib.translator.TranslatorManager;
-import org.xwiki.contrib.translator.model.GlossaryInfo;
 import org.xwiki.contrib.translator.model.LocalePair;
 import org.xwiki.localization.LocaleUtils;
 import org.xwiki.model.EntityType;
@@ -408,7 +407,9 @@ public abstract class AbstractTranslator implements Translator
     }
 
     /**
-     * Create Query that will retrieve all translations of a given document, when they're located in different locations.
+     * Create Query that will retrieve all translations of a given document, when they're located in different
+     * locations.
+     *
      * @param reference A given document reference
      * @param originalDocument Reference of the original document
      * @return Query to be used to retrieve all translation documents
@@ -655,8 +656,8 @@ public abstract class AbstractTranslator implements Translator
                 if (sourceLanguage.equals(targetLanguage)) {
                     continue;
                 }
-                String translatorSrcLang = normalizeLocale(sourceLanguage, NormalisationType.GLOSSARY);
-                String translatorDstLang = normalizeLocale(targetLanguage, NormalisationType.GLOSSARY);
+                String translatorSrcLang = normalizeLocale(sourceLanguage, NormalisationType.SOURCE_LANG_GLOSSARY);
+                String translatorDstLang = normalizeLocale(targetLanguage, NormalisationType.TARGET_LANG_GLOSSARY);
 
                 boolean foundMatchingLocalePairs = translatorSupportedLocalePairs.stream()
                     .anyMatch(entry ->

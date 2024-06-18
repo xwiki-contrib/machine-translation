@@ -24,9 +24,9 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.xwiki.component.annotation.Role;
+import org.xwiki.contrib.translator.model.Glossary;
 import org.xwiki.contrib.translator.model.GlossaryInfo;
 import org.xwiki.contrib.translator.model.LocalePair;
-import org.xwiki.contrib.translator.model.Glossary;
 import org.xwiki.model.reference.DocumentReference;
 import org.xwiki.model.reference.EntityReference;
 
@@ -49,10 +49,33 @@ import org.xwiki.model.reference.EntityReference;
 @Role
 public interface Translator
 {
-    enum NormalisationType { SOURCE_LANG, TARGET_LANG, GLOSSARY }
+    /**
+     * Used to specify which type normalisation.
+     */
+    enum NormalisationType
+    {
+        /**
+         * Source language of the translator.
+         */
+        SOURCE_LANG,
+        /**
+         * Target language of the translator.
+         */
+        TARGET_LANG,
+        /**
+         * Source language for the glossary.
+         */
+        SOURCE_LANG_GLOSSARY,
+        /**
+         * Target language for the glossary.
+         */
+        TARGET_LANG_GLOSSARY,
+
+    }
 
     /**
      * Translates a given page into given locale.
+     *
      * @param reference A page reference
      * @param locale Destination language
      * @throws TranslatorException in case an error occurs
@@ -60,8 +83,8 @@ public interface Translator
     void translate(EntityReference reference, Locale locale) throws TranslatorException;
 
     /**
-     *
      * Translates a given page to a set of locales.
+     *
      * @param reference A page reference
      * @param toLocales Target lcoales
      * @throws TranslatorException in case an error occurs
@@ -130,16 +153,18 @@ public interface Translator
     TranslationSet getTranslations(EntityReference reference) throws TranslatorException;
 
     /**
-     * Normalizes the string representation of a given locale. Useful for instance for some translators supporting
-     * only language representation without the country, e.g "en" vs "en-GB".
+     * Normalizes the string representation of a given locale. Useful for instance for some translators supporting only
+     * language representation without the country, e.g "en" vs "en-GB".
      *
      * @param locale A given locale
+     * @param type the normalisation type to use.
      * @return normalized string representation
      */
     String normalizeLocale(Locale locale, NormalisationType type) throws TranslatorException;
 
     /**
      * Translator name.
+     *
      * @return name
      */
     String getName();
@@ -168,7 +193,7 @@ public interface Translator
      * @param source locale for the source lang
      * @param target locale for the target lang
      * @param prefix prefix to use for name calculation. Note that this is mostly used for performance, to avoid to
-     * retrieve many times the prefix in case of multiple call.
+     *     retrieve many times the prefix in case of multiple call.
      * @return name of the glossary
      */
     String getGlossaryName(Locale source, Locale target, String prefix);

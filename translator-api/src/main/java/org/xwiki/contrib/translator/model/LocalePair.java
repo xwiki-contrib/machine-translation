@@ -24,7 +24,9 @@ import java.util.Locale;
 import org.xwiki.localization.LocaleUtils;
 
 /**
- * @version $Id$ Struct used to store a pair of Locale. Mostly used for the translator glossary.
+ * Struct used to store a pair of Locale. Mostly used for the translator glossary.
+ *
+ * @version $Id$
  */
 public class LocalePair
 {
