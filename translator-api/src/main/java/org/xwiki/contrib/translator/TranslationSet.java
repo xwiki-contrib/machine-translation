@@ -28,17 +28,39 @@ import org.xwiki.model.reference.DocumentReference;
 /**
  * Inner class used to represent all translations of a given reference. The class contains: a document reference, the
  * title of that reference in its default locale, its default locale, a map of locales and title / references.
+ *
+ * @version $Id$
  */
 public class TranslationSet
 {
+    /**
+     * Original page reference.
+     */
     protected DocumentReference originalDocumentReference;
 
+    /**
+     * Original page title.
+     */
     protected String originalDocumentTitle;
 
+    /**
+     * Original page locale.
+     */
     protected Locale originalDocumentLocale;
 
+    /**
+     * Map whose keys are translation locales, and the values the translation reference and title.
+     */
     protected Map<Locale, List<Object>> translations;
 
+    /**
+     * Constructs a TranslationSet.
+     *
+     * @param originalDocumentReference A given page reference
+     * @param originalDocumentTitle Page title
+     * @param originalDocumentLocale Page locale
+     * @param translations List of translations of the passed page
+     */
     public TranslationSet(DocumentReference originalDocumentReference, String originalDocumentTitle,
         Locale originalDocumentLocale, Map<Locale, List<Object>> translations)
     {
@@ -48,21 +70,35 @@ public class TranslationSet
         this.translations = translations;
     }
 
+    /**
+     * @return original dpage reference
+     */
     public DocumentReference getOriginalDocumentReference()
     {
         return originalDocumentReference;
     }
 
+    /**
+     * @return original page title
+     */
     public String getOriginalDocumentTitle()
     {
         return originalDocumentTitle;
     }
 
+    /**
+     * @return original page locale
+     */
     public Locale getOriginalDocumentLocale()
     {
         return originalDocumentLocale;
     }
 
+    /**
+     * Map whose keys are existing translation locales, and values translation pages reference and title.
+     *
+     * @return map of existing translations
+     */
     public Map<Locale, List<Object>> getTranslations()
     {
         return translations;

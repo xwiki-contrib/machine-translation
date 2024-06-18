@@ -29,11 +29,16 @@ import org.xwiki.contrib.translator.TranslatorConfiguration;
 
 /**
  * Default configuration for translators.
+ *
+ * @version $Id$
  */
 @Component
 @Singleton
 public class DefaultTranslatorConfiguration implements TranslatorConfiguration
 {
+    /**
+     * Configuration source.
+     */
     @Inject
     @Named("translator")
     private ConfigurationSource configurationSource;

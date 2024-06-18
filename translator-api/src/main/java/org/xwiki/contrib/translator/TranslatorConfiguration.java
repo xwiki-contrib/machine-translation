@@ -24,24 +24,50 @@ import org.xwiki.component.annotation.Role;
 /**
  * Define the configuration of the translator to be used.
  *
+ * @version $Id$
  */
 @Role
 public interface TranslatorConfiguration
 {
     /**
+     * Retrieves name of the current Translator.
      * @return the name of the current {@link Translator} to be used.
      */
     String getTranslator();
 
+    /**
+     *
+     * @return true if the current strategy is "translation location is the same as the original document"
+     */
     boolean isSameNameTranslationNamingStrategy();
 
+    /**
+     *
+     * @return list of XClasses that can be translated as separated by a comma
+     */
     String getTargetClasses();
 
+    /**
+     *
+     * @return list of XProperties that should be translated, separated by a comma
+     */
     String getTargetProperties();
 
+    /**
+     *
+     * @return API key to be used when cmmmunicating with the remote API.
+     */
     String getApiKey();
 
+    /**
+     * Prefix to be used when creating or retrieving glossaries.
+     * @return prefix to be used
+     */
     String getGlossaryNamePrefix();
 
+    /**
+     * @return list of XClasses for which the translations should be at same location as the original document,
+     * whatever the translation name strategy.
+     */
     String getSameNameTranslationClasses();
 }
