@@ -66,14 +66,14 @@ public class DeeplTranslator extends AbstractTranslator
         return glossaryIds;
     }
 
-    private Optional<String> getGlossaryIdForLocales(Locale source, Locale destination)
+    private Optional<com.deepl.api.GlossaryInfo> getGlossaryForLocales(Locale source, Locale destination)
     {
         Translator translator = getTranslator();
         try {
             String glossaryName = getGlossaryName(source, destination);
             return translator.listGlossaries().stream()
                 .filter(entry -> entry.getName().equals(glossaryName))
-                .findFirst().map(com.deepl.api.GlossaryInfo::getGlossaryId);
+                .findFirst();
         } catch (Exception e) {
             logger.error("Got unexpected error while synchronizing glossaries : [{}]", e.getMessage(), e);
             return Optional.empty();
@@ -92,8 +92,10 @@ public class DeeplTranslator extends AbstractTranslator
         if (html) {
             options.setTagHandling("html");
         }
-        Optional<String> glossaryId = getGlossaryIdForLocales(from, to);
-        glossaryId.ifPresent(options::setGlossaryId);
+        Optional<com.deepl.api.GlossaryInfo> glossaryId = getGlossaryForLocales(from, to);
+        if (glossaryId.isPresent() && glossaryId.get().isReady()) {
+            options.setGlossaryId(glossaryId.get().getGlossaryId());
+        }
         TextResult result = null;
         try {
             result = translator.translateText(content, from.toString(), normalizeLocale(to),
@@ -145,6 +147,10 @@ public class DeeplTranslator extends AbstractTranslator
         Translator translator = getTranslator();
         return translator.getUsage();
     }
+
+    /*
+     * Glossary part
+     */
 
     @Override
     public List<LocalePair> getGlossaryLocalePairs() throws TranslatorException
