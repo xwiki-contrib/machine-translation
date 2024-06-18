@@ -53,7 +53,6 @@
     <xwiki.issueManagement.jira.id>TRANSLATOR</xwiki.issueManagement.jira.id>
     <deepl.java.version>1.4.0</deepl.java.version>
     <platform.version>14.10</platform.version>
-    <xwiki.checkstyle.skip>true</xwiki.checkstyle.skip>
     <xwiki.spoon.skip>true</xwiki.spoon.skip>
     <xwiki.revapi.skip>true</xwiki.revapi.skip>
   </properties>

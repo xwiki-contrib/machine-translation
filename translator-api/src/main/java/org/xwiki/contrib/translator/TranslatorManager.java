@@ -23,6 +23,11 @@ import java.util.Set;
 
 import org.xwiki.component.annotation.Role;
 
+/**
+ * Allows to retrieve existing translators and currently configured translator.
+ *
+ * @version $Id$
+ */
 @Role
 public interface TranslatorManager
 {

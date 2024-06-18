@@ -19,6 +19,10 @@
  */
 package org.xwiki.contrib.translator;
 
+/** Exception which can occur during translation operations.
+ *
+ * @version $Id$
+ */
 public class TranslatorException extends Exception
 {
     /**
@@ -26,16 +30,29 @@ public class TranslatorException extends Exception
      */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Constructs a new TranslatorException.
+     * @param source Source exception
+     */
     public TranslatorException(Throwable source)
     {
         super(source);
     }
 
+    /**
+     * Constructs a new TranslatorException with given message.
+     * @param message Exception message
+     */
     public TranslatorException(String message)
     {
         super(message);
     }
 
+    /**
+     * Constructs a new TranslatorException with message and source.
+     * @param message Exception message
+     * @param source Source exception
+     */
     public TranslatorException(String message, Throwable source)
     {
         super(message, source);

@@ -31,19 +31,29 @@ import org.xwiki.model.reference.DocumentReference;
 import org.xwiki.model.reference.LocalDocumentReference;
 
 /**
- * Define the configuration source document for translators.
+ * Defines the configuration source document for translators.
  *
+ * @version $Id$
  */
 @Component
 @Named("translator")
 @Singleton
 public class TranslatorConfigurationSource extends AbstractDocumentConfigurationSource
 {
+    /**
+     * Space where the configuration is located.
+     */
     private static final List<String> SPACE_NAMES = Arrays.asList("XWiki", "Translator");
 
+    /**
+     * Configuration class.
+     */
     private static final LocalDocumentReference CONFIGURATION_CLASS_REFERENCE =
         new LocalDocumentReference(SPACE_NAMES, "TranslatorConfigurationClass");
 
+    /**
+     * Configuration page.
+     */
     private static final LocalDocumentReference CONFIGURATION_REFERENCE =
         new LocalDocumentReference(SPACE_NAMES, "TranslatorConfiguration");
 

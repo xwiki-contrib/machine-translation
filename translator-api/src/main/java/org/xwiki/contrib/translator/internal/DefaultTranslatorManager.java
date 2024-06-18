@@ -35,19 +35,30 @@ import org.xwiki.contrib.translator.TranslatorManager;
 
 /**
  * Default manager for translators.
+ *
+ * @version $Id$
  */
 @Component
 @Singleton
 public class DefaultTranslatorManager implements TranslatorManager
 {
+    /**
+     * Translation configuration.
+     */
+    @Inject
+    protected TranslatorConfiguration translatorConfiguration;
+
+    /**
+     * Logging helper.
+     */
+    @Inject
+    protected Logger logger;
+
+    /**
+     * Component manager.
+     */
     @Inject
     private ComponentManager componentManager;
-
-    @Inject
-    private TranslatorConfiguration translatorConfiguration;
-
-    @Inject
-    private Logger logger;
 
     @Override
     public Translator getTranslator()
