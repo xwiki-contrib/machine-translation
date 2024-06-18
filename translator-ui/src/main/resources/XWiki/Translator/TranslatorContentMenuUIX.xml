@@ -290,13 +290,13 @@
     </property>
     <property>
       <content>{{velocity}}
-#if ($doc.getRealLocale().toString() == '' || !$xwiki.isMultiLingual() || !$services.translator.isTranslatable($doc.documentReference))
+#if (!$services.translator.isTranslatable($doc.documentReference))
   #stop()
 #end
 #set ($discard = $xwiki.ssx.use($uix.doc.fullName))
 {{html clean="false"}}
 &lt;div class="btn-group"&gt;
-  &lt;a class="btn btn-default" title="$services.localization.render('translator.translations')" href="" rel="nofollow"&gt;
+  &lt;a class="btn btn-default" title="$services.localization.render('translator.translations')" href="#translator-translate-modal" rel="nofollow" data-toggle="modal" data-target="#translator-translate-modal"&gt;
     $services.icon.renderHTML('translate')
     &lt;span class="btn-label"&gt;$services.localization.render('translator.translations')&lt;/span&gt;
   &lt;/a&gt;
@@ -330,7 +330,8 @@
         &lt;/li&gt;
       #end
     #end
-    #if ($hasEdit)
+    ## Check that current user has edit right at least on one target translation location
+    #if ($services.translator.canTranslate($doc.documentReference))
       #if ($translationSet.getTranslations().size() &gt; 0)
         &lt;li class="divider" role="separator"&gt;&lt;/li&gt;
       #end

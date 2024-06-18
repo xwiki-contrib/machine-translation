@@ -417,7 +417,7 @@
     </property>
     <property>
       <content>{{velocity}}
-#if ($doc.getRealLocale().toString() == '' || !$xwiki.isMultiLingual() || !$services.translator.isTranslatable($doc.documentReference))
+#if (!$services.translator.isTranslatable($doc.documentReference))
   #stop()
 #end
 ## NB: see also: https://www.linkedin.com/pulse/ux-nuances-loading-states-rashna-razdan/
@@ -446,7 +446,11 @@
           &lt;table class="translations"&gt;
             &lt;thead&gt;
               &lt;tr&gt;
-                &lt;th&gt;&lt;input type="checkbox" name="translate-all" class="translate-all"/&gt;&lt;/th&gt;
+                &lt;th&gt;
+                  #if ($services.translator.canTranslate($doc.documentReference, $locale))
+                    &lt;input type="checkbox" name="translate-all" class="translate-all"/&gt;
+                  #end
+                &lt;/th&gt;
                 &lt;th&gt;$services.localization.render('translator.translate.modal.translation.language')&lt;/th&gt;
                 &lt;th&gt;$services.localization.render('translator.translate.modal.translation.title')&lt;/th&gt;
                 &lt;th&gt;$services.localization.render('translator.translate.modal.translation.date')&lt;/th&gt;
@@ -457,7 +461,9 @@
                   #set ($checked = '')
                   &lt;tr class="translation"&gt;
                     &lt;td class="translate-check-td"&gt;
-                      &lt;input class="translate-check" type="checkbox" name="languages" value="$escapetool.xml($locale.toString())" $checked/&gt;
+                      #if ($services.translator.canTranslate($doc.documentReference, $locale))
+                        &lt;input class="translate-check" type="checkbox" name="languages" value="$escapetool.xml($locale.toString())" $checked/&gt;
+                      #end
                     &lt;/td&gt;
                     &lt;td class="translation-locale"&gt;
                       &lt;label&gt;
@@ -503,9 +509,11 @@
           &lt;button type="button" class="btn btn-default" data-dismiss="modal"&gt;
             $services.localization.render('translator.translate.modal.close')
           &lt;/button&gt;
-          &lt;button type="submit" class="btn btn-primary translate-submit" disabled&gt;
-            $escapetool.xml($services.localization.render('translator.translate.modal.translate'))
-          &lt;/button&gt;
+          #if ($services.translator.canTranslate($doc.documentReference))
+            &lt;button type="submit" class="btn btn-primary translate-submit" disabled&gt;
+              $escapetool.xml($services.localization.render('translator.translate.modal.translate'))
+            &lt;/button&gt;
+          #end
         &lt;/div&gt;
       &lt;/form&gt;
     &lt;/div&gt;
