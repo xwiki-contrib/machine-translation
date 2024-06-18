@@ -180,23 +180,26 @@ public interface Translator
 
     /**
      * @return list the glossary locale pairs supported by the translator.
-     * @throws TranslatorException
+     * @throws TranslatorException in case an error occurs
      */
     Map<LocalePair, Boolean> getGlossaryLocalePairSupport() throws TranslatorException;
 
     /**
      * @return a list of all available language pair.
+     * @throws TranslatorException in case an error occurs
      */
     List<LocalePair> getGlossaryLocalePairs() throws TranslatorException;
 
     /**
      * @return a list of glossaries available on translator service.
+     * @throws TranslatorException in case an error occurs
      */
     List<GlossaryInfo> getGlossaries() throws TranslatorException;
 
     /**
      * @param id glossary id
      * @return a map with source lang, target lang
+     * @throws TranslatorException in case an error occurs
      */
     Map<String, String> getGlossaryEntries(String id) throws TranslatorException;
 
@@ -204,6 +207,7 @@ public interface Translator
      * Update the glossary entries on the translator provider.
      *
      * @param entries the list of all glossaries with all entries to update
+     * @throws TranslatorException in case an error occurs
      */
     void updateGlossaries(List<Glossary> entries) throws TranslatorException;
 }
