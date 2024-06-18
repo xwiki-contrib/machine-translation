@@ -598,7 +598,7 @@ public abstract class AbstractTranslator implements Translator
     @Override
     public String getGlossaryName(Locale source, Locale target, String prefix)
     {
-        return prefix + "-" + source.toString() + "-" + target.toString();
+        return String.format("%s-%s-%s", prefix, source.toString(), target.toString());
     }
 
     @Override
@@ -612,7 +612,7 @@ public abstract class AbstractTranslator implements Translator
         if (org.apache.commons.lang3.StringUtils.isBlank(glossariesPrefix)) {
             return wikiPrefix;
         } else {
-            return glossariesPrefix + "-" + wikiPrefix;
+            return String.format("%s-%s", glossariesPrefix, wikiPrefix);
         }
     }
 

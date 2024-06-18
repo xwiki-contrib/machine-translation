@@ -39,6 +39,14 @@ public class GlossaryInfo
 
     private final long entryCount;
 
+    /**
+     * @param glossaryId Internal ID of the glossary (on translator side)
+     * @param name Name of the glossary
+     * @param ready If the glossary is ready to use by the translator
+     * @param sourceLocale The source locale of this glossary
+     * @param targetLocale The target locale of this glossary
+     * @param entryCount Number of entry into this glossary
+     */
     public GlossaryInfo(String glossaryId, String name, boolean ready, Locale sourceLocale, Locale targetLocale,
         long entryCount)
     {

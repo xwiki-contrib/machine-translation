@@ -32,15 +32,25 @@ public class LocalePair
 
     private final Locale targetLocale;
 
-    public LocalePair(String sourceLocale, String destinationLocale)
+    /**
+     * Create a LocalPair from 2 language string.
+     * @param sourceLocale source language
+     * @param targetLocale target language
+     */
+    public LocalePair(String sourceLocale, String targetLocale)
     {
-        this(LocaleUtils.toLocale(sourceLocale), LocaleUtils.toLocale(destinationLocale));
+        this(LocaleUtils.toLocale(sourceLocale), LocaleUtils.toLocale(targetLocale));
     }
 
-    public LocalePair(Locale sourceLocale, Locale destinationLocale)
+    /**
+     * Create a local pair from to locale.
+     * @param sourceLocale source language
+     * @param targetLocale target language
+     */
+    public LocalePair(Locale sourceLocale, Locale targetLocale)
     {
         this.sourceLocale = sourceLocale;
-        this.targetLocale = destinationLocale;
+        this.targetLocale = targetLocale;
     }
 
     /**
