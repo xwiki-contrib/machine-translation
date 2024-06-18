@@ -22,8 +22,9 @@ package org.xwiki.contrib.translator.model;
 import java.util.Locale;
 
 /**
- * @version $Id$
  * Struct used to describe a glossary for a translator.
+ *
+ * @version $Id$
  */
 public class GlossaryInfo
 {
@@ -40,12 +41,14 @@ public class GlossaryInfo
     private final long entryCount;
 
     /**
-     * @param glossaryId Internal ID of the glossary (on translator side)
-     * @param name Name of the glossary
-     * @param ready If the glossary is ready to use by the translator
-     * @param sourceLocale The source locale of this glossary
-     * @param targetLocale The target locale of this glossary
-     * @param entryCount Number of entry into this glossary
+     * Constructs a GlossaryInfo.
+     *
+     * @param glossaryId Glossary identifier
+     * @param name Glossary name
+     * @param ready Indicates whether the glossary is ready to be used
+     * @param sourceLocale Source locale
+     * @param targetLocale Target locale
+     * @param entryCount Number of glossary entries
      */
     public GlossaryInfo(String glossaryId, String name, boolean ready, Locale sourceLocale, Locale targetLocale,
         long entryCount)
@@ -59,7 +62,7 @@ public class GlossaryInfo
     }
 
     /**
-     * @return the internal ID of the translator glossary.
+     * @return the internal ID of the glossary.
      */
     public String getGlossaryId()
     {
@@ -76,7 +79,7 @@ public class GlossaryInfo
 
     /**
      * @return the state of the translator glossary. Return 'true' if the glossary is ready to use into the translator.
-     * else it returns false.
+     *     else it returns false.
      */
     public boolean isReady()
     {

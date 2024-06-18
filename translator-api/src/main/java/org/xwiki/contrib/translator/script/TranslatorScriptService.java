@@ -45,8 +45,7 @@ import org.xwiki.script.service.ScriptService;
 import org.xwiki.security.authorization.ContextualAuthorizationManager;
 import org.xwiki.security.authorization.Right;
 
-/**
- * Script service used to access the Translator service.
+/** Script service used to access the Translator service.
  *
  * @version $Id$
  */
@@ -242,7 +241,6 @@ public class TranslatorScriptService implements ScriptService
 
     /**
      * Computes the location of a translation based on the original document and the translation title.
-     *
      * @param originalDocument Reference of the original document
      * @param translationTitle Title of the translation
      * @param translationLocale Translation locale
@@ -261,7 +259,6 @@ public class TranslatorScriptService implements ScriptService
 
     /**
      * Returns list of existing glossaries.
-     *
      * @return list of glossaries
      * @throws TranslatorException in case an error occurs
      */
@@ -276,8 +273,7 @@ public class TranslatorScriptService implements ScriptService
     }
 
     /**
-     * Returns list of glossary entries for given glossary.
-     *
+     *  Returns list of glossary entries for given glossary.
      * @param id A given glossary identifier
      * @return List of glossary entries
      * @throws TranslatorException in case an error occurs
@@ -294,7 +290,6 @@ public class TranslatorScriptService implements ScriptService
 
     /**
      * Computes list of existing glossary locale pairs.
-     *
      * @return list of locale pairs
      * @throws TranslatorException in case an error occurs
      */

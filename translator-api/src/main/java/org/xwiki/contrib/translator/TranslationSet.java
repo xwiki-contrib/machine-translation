@@ -19,6 +19,7 @@
  */
 package org.xwiki.contrib.translator;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -55,11 +56,10 @@ public class TranslationSet
 
     /**
      * Constructs a TranslationSet.
-     *
-     * @param originalDocumentReference A given page reference
-     * @param originalDocumentTitle Page title
-     * @param originalDocumentLocale Page locale
-     * @param translations List of translations of the passed page
+     * @param originalDocumentReference Original document reference
+     * @param originalDocumentTitle Original document title
+     * @param originalDocumentLocale Original document locale
+     * @param translations Map of translations
      */
     public TranslationSet(DocumentReference originalDocumentReference, String originalDocumentTitle,
         Locale originalDocumentLocale, Map<Locale, List<Object>> translations)
@@ -68,6 +68,14 @@ public class TranslationSet
         this.originalDocumentTitle = originalDocumentTitle;
         this.originalDocumentLocale = originalDocumentLocale;
         this.translations = translations;
+    }
+
+    /**
+     * Constructs a TranslationSet with empty map of translations.
+     */
+    public TranslationSet()
+    {
+        this.translations = new HashMap<>();
     }
 
     /**
@@ -102,5 +110,32 @@ public class TranslationSet
     public Map<Locale, List<Object>> getTranslations()
     {
         return translations;
+    }
+
+    /**
+     * Sets original document reference.
+     * @param originalDocumentReference Original document reference
+     */
+    public void setOriginalDocumentReference(DocumentReference originalDocumentReference)
+    {
+        this.originalDocumentReference = originalDocumentReference;
+    }
+
+    /**
+     * Sets original document title.
+     * @param originalDocumentTitle Original document title
+     */
+    public void setOriginalDocumentTitle(String originalDocumentTitle)
+    {
+        this.originalDocumentTitle = originalDocumentTitle;
+    }
+
+    /**
+     * Sets original document locale.
+     * @param originalDocumentLocale Original document locale
+     */
+    public void setOriginalDocumentLocale(Locale originalDocumentLocale)
+    {
+        this.originalDocumentLocale = originalDocumentLocale;
     }
 }

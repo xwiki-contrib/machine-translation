@@ -23,11 +23,13 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * @version $Id$ Struct used to send data to update into the translator glossary.
+ * Structure representing a Glossary.
+ *
+ * @version $Id$
  */
 public class Glossary
 {
-    private Map<String, String> entry;
+    private Map<String, String> entries;
 
     private GlossaryInfo glossaryInfo;
 
@@ -36,23 +38,23 @@ public class Glossary
     private Locale targetLocale;
 
     /**
-     * Create a new glossary.
+     * Constructs a Glossary with its entries and GlossaryInfo.
      *
-     * @param entry all entries which should be in the glossary
-     * @param glossaryInfo The glossaryInfo
+     * @param entries Glossary entries
+     * @param glossaryInfo Glossary metadata
      */
-    public Glossary(Map<String, String> entry, GlossaryInfo glossaryInfo)
+    public Glossary(Map<String, String> entries, GlossaryInfo glossaryInfo)
     {
-        this.entry = entry;
+        this.entries = entries;
         this.glossaryInfo = glossaryInfo;
     }
 
     /**
      * @return all entry of this glossary.
      */
-    public Map<String, String> getEntry()
+    public Map<String, String> getEntries()
     {
-        return entry;
+        return entries;
     }
 
     /**
