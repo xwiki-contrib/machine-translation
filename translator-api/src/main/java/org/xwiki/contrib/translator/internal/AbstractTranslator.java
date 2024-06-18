@@ -521,43 +521,6 @@ public abstract class AbstractTranslator implements Translator
         }
     }
 
-    @Override
-    public String getGlossaryName(Locale source, Locale target)
-    {
-        String prefix = getGlossaryNamePrefix();
-        return getGlossaryName(source, target, prefix);
-    }
-
-    @Override
-    public String getGlossaryName(Locale source, Locale target, String prefix)
-    {
-        return prefix + "-" + source.toString() + "-" + target.toString();
-    }
-
-    @Override
-    public String getGlossaryNamePrefix()
-    {
-        XWikiContext context = xwikiContextProvider.get();
-        String glossariesPrefix = translatorConfiguration.getGlossaryNamePrefix();
-
-        String wikiPrefix = context.getWikiId();
-
-        if (org.apache.commons.lang3.StringUtils.isBlank(glossariesPrefix)) {
-            return wikiPrefix;
-        } else {
-            return glossariesPrefix + "-" + wikiPrefix;
-        }
-    }
-
-    @Override
-    public abstract List<LocalePair> getGlossaryLocalePairs() throws TranslatorException;
-
-    @Override
-    public abstract List<GlossaryInfo> getGlossaries() throws TranslatorException;
-
-    @Override
-    public abstract Map<String, String> getGlossaryEntries(String id) throws TranslatorException;
-
     /**
      * Gets list of XClass properties to be translated.
      *
@@ -642,5 +605,66 @@ public abstract class AbstractTranslator implements Translator
         page.getAuthors().setContentAuthor(currentUserReference);
         page.getAuthors().setEffectiveMetadataAuthor(currentUserReference);
         page.getAuthors().setOriginalMetadataAuthor(currentUserReference);
+    }
+
+    /*
+     * Glossary part
+     */
+
+    @Override
+    public String getGlossaryName(Locale source, Locale target)
+    {
+        String prefix = getGlossaryNamePrefix();
+        return getGlossaryName(source, target, prefix);
+    }
+
+    @Override
+    public String getGlossaryName(Locale source, Locale target, String prefix)
+    {
+        return String.format("%s-%s-%s", prefix, source.toString(), target.toString());
+    }
+
+    @Override
+    public String getGlossaryNamePrefix()
+    {
+        XWikiContext context = xwikiContextProvider.get();
+        String glossariesPrefix = translatorConfiguration.getGlossaryNamePrefix();
+
+        String wikiPrefix = context.getWikiId();
+
+        if (org.apache.commons.lang3.StringUtils.isBlank(glossariesPrefix)) {
+            return wikiPrefix;
+        } else {
+            return String.format("%s-%s", glossariesPrefix, wikiPrefix);
+        }
+    }
+
+    @Override
+    public Map<LocalePair, Boolean> getGlossaryLocalePairSupport() throws TranslatorException
+    {
+        XWikiContext context = xwikiContextProvider.get();
+        List<LocalePair> translatorSupportedLocalePairs = getGlossaryLocalePairs();
+        logger.debug("Fetched the list of supported glossary language combinations : [{}]",
+            translatorSupportedLocalePairs);
+
+        List<Locale> xwikiLanguages = xwikiContextProvider.get().getWiki().getAvailableLocales(context);
+        Map<LocalePair, Boolean> pairSupport = new HashMap<>();
+
+        for (Locale sourceLanguage : xwikiLanguages) {
+            for (Locale targetLanguage : xwikiLanguages) {
+                if (sourceLanguage.equals(targetLanguage)) {
+                    continue;
+                }
+                String translatorSrcLang = normalizeLocale(sourceLanguage, NormalisationType.GLOSSARY);
+                String translatorDstLang = normalizeLocale(targetLanguage, NormalisationType.GLOSSARY);
+
+                boolean foundMatchingLocalePairs = translatorSupportedLocalePairs.stream()
+                    .anyMatch(entry ->
+                        entry.getSourceLocale().toString().equals(translatorSrcLang)
+                            && entry.getTargetLocale().toString().equals(translatorDstLang));
+                pairSupport.put(new LocalePair(sourceLanguage, targetLanguage), foundMatchingLocalePairs);
+            }
+        }
+        return pairSupport;
     }
 }

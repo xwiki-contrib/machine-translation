@@ -49,6 +49,8 @@ import org.xwiki.model.reference.EntityReference;
 @Role
 public interface Translator
 {
+    enum NormalisationType { SOURCE_LANG, TARGET_LANG, GLOSSARY }
+
     /**
      * Translates a given page into given locale.
      * @param reference A page reference
@@ -134,7 +136,7 @@ public interface Translator
      * @param locale A given locale
      * @return normalized string representation
      */
-    String normalizeLocale(Locale locale);
+    String normalizeLocale(Locale locale, NormalisationType type) throws TranslatorException;
 
     /**
      * Translator name.
@@ -175,6 +177,12 @@ public interface Translator
      * @return the prefix name of the glossaries for this Wiki instance.
      */
     String getGlossaryNamePrefix();
+
+    /**
+     * @return list the glossary locale pairs supported by the translator.
+     * @throws TranslatorException
+     */
+    Map<LocalePair, Boolean> getGlossaryLocalePairSupport() throws TranslatorException;
 
     /**
      * @return a list of all available language pair.

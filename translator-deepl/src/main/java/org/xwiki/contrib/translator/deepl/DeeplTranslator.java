@@ -98,7 +98,9 @@ public class DeeplTranslator extends AbstractTranslator
         }
         TextResult result = null;
         try {
-            result = translator.translateText(content, from.toString(), normalizeLocale(to),
+            result = translator.translateText(content,
+                normalizeLocale(from, NormalisationType.SOURCE_LANG),
+                normalizeLocale(to, NormalisationType.TARGET_LANG),
                 options);
         } catch (InterruptedException e) {
             String abbr = StringUtils.abbreviate(content, 100);
@@ -118,20 +120,30 @@ public class DeeplTranslator extends AbstractTranslator
      * @param locale
      * @return normalized locale
      */
-    public String normalizeLocale(Locale locale)
+    public String normalizeLocale(Locale locale, NormalisationType type) throws TranslatorException
     {
         if (locale != null) {
-            String name = locale.toString();
-            if (name.equals("en")) {
-                return "en-GB";
-            } else if (name.equals("pt")) {
-                return "pt-BR";
-            } else {
-                return locale.toString();
+
+            switch (type) {
+                case SOURCE_LANG:
+                case GLOSSARY:
+                    return locale.getLanguage();
+                case TARGET_LANG:
+                    String name = locale.toString();
+                    if (name.equals("en")) {
+                        return "en-GB";
+                    } else if (name.equals("pt")) {
+                        return "pt-BR";
+                    } else {
+                        return locale.getLanguage();
+                    }
+                default:
+                    logger.error("Undefined NormalisationType: [{}]", type);
+                    throw new TranslatorException("Undefined NormalisationType: " + type);
             }
         } else {
             logger.error("Missing locale");
-            return null;
+            throw new TranslatorException("locale is null");
         }
     }
 
@@ -230,9 +242,11 @@ public class DeeplTranslator extends AbstractTranslator
                 logger.debug("Creating glossary [{}]", glossaryName);
                 translator.createGlossary(
                     glossaryName,
-                    normalizeLocale(entry.getGlossaryInfo().getSourceLocale()),
-                    normalizeLocale(entry.getGlossaryInfo().getTargetLocale()),
-                    new GlossaryEntries(entry.getEntries()));
+                    normalizeLocale(entry.getGlossaryInfo().getSourceLocale(),
+                        org.xwiki.contrib.translator.Translator.NormalisationType.GLOSSARY),
+                    normalizeLocale(entry.getGlossaryInfo().getTargetLocale(),
+                        org.xwiki.contrib.translator.Translator.NormalisationType.GLOSSARY),
+                    new GlossaryEntries(entry.getEntry()));
             }
         } catch (InterruptedException e) {
             logger.debug("Error when synchronizing glossaries [{}]", e.getMessage(), e);

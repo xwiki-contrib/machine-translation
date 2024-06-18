@@ -289,17 +289,18 @@ public class TranslatorScriptService implements ScriptService
     }
 
     /**
-     * Computes list of existing glossary locale pairs.
+     * List the glossary locale pairs supported by the translator.
+     *
      * @return list of locale pairs
      * @throws TranslatorException in case an error occurs
      */
-    public List<LocalePair> getGlossaryLanguagePairs() throws TranslatorException
+    public Map<LocalePair, Boolean> getGlossaryLocalePairSupport() throws TranslatorException
     {
         Translator translator = translatorManager.getTranslator();
         if (this.authorizationManager.hasAccess(Right.PROGRAM)) {
-            return translator.getGlossaryLocalePairs();
+            return translator.getGlossaryLocalePairSupport();
         } else {
-            return new ArrayList<>(0);
+            return new HashMap<>(0);
         }
     }
 }
