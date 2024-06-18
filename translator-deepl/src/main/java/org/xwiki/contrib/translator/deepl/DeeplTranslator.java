@@ -246,7 +246,7 @@ public class DeeplTranslator extends AbstractTranslator
                         org.xwiki.contrib.translator.Translator.NormalisationType.GLOSSARY),
                     normalizeLocale(entry.getGlossaryInfo().getTargetLocale(),
                         org.xwiki.contrib.translator.Translator.NormalisationType.GLOSSARY),
-                    new GlossaryEntries(entry.getEntry()));
+                    new GlossaryEntries(entry.getEntries()));
             }
         } catch (InterruptedException e) {
             logger.debug("Error when synchronizing glossaries [{}]", e.getMessage(), e);
