@@ -131,10 +131,14 @@ public class DeeplTranslator extends AbstractTranslator
                     return locale.getLanguage();
                 case TARGET_LANG:
                     String name = locale.toString();
-                    if (name.equals("en")) {
+                    if (name.equals("en") || name.equals("en_GB")) {
                         return "en-GB";
-                    } else if (name.equals("pt")) {
+                    } else if (name.equals("en_US")) {
+                        return "en-US";
+                    } else if (name.equals("pt") || name.equals("pt_BR")) {
                         return "pt-BR";
+                    } else if (name.equals("pt_PT")) {
+                        return "pt-PT";
                     } else {
                         return locale.getLanguage();
                     }
