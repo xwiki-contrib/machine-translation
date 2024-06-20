@@ -1,0 +1,81 @@
+<?xml version="1.1" encoding="UTF-8"?>
+
+<!--
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+-->
+
+<xwikidoc version="1.5" reference="XWiki.Translator.TranslatorTranslations" locale="fr">
+  <web>XWiki.Translator</web>
+  <name>TranslatorTranslations</name>
+  <language>fr</language>
+  <defaultLanguage>en</defaultLanguage>
+  <translation>1</translation>
+  <creator>xwiki:XWiki.Admin</creator>
+  <author>xwiki:XWiki.Admin</author>
+  <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
+  <version>1.1</version>
+  <title/>
+  <comment/>
+  <minorEdit>false</minorEdit>
+  <syntaxId>plain/1.0</syntaxId>
+  <hidden>true</hidden>
+  <content># Champs de classe
+XWiki.Translator.TranslatorClass_title=Title
+
+translator.translate=Traduction
+translator.translations=Traductions
+translator.availableTranslations=Traduction disponibles
+translator.actions=Actions
+translator.actions.translate=Traduire
+translator.translate.modal.title=Traductions
+translator.translate.modal.translate=Traduire
+translator.translate.modal.translate.inProgress=Traduction...
+translator.translate.modal.close=Fermer
+translator.translate.modal.originalDocument=Document original :
+translator.translate.modal.translation.language=Langue
+translator.translate.modal.translation.title=Titre
+translator.translate.modal.translation.date=Date
+
+admin.translator.translate=Traduire
+admin.translator.textToTranslate=Texte
+admin.translator.sourceLanguage=Langue source
+admin.translator.targetLanguage=Langue cible
+admin.translator.test=Test de traduction
+
+admin.translator=Service de traduction
+
+XWiki.Translator.TranslatorConfigurationClass_enabled=Activer le service de traduction
+XWiki.Translator.TranslatorConfigurationClass_enabled.hint=Activer la possibilité de traduire le contenu en utilisant un service de traduction automatique
+XWiki.Translator.Translator.TranslatorConfigurationClass_targetProperties=Propriétés à traduire
+XWiki.Translator.TranslatorConfigurationClass_targetProperties.hint=Liste des propriétés de la classe et des champs du document à traduire, séparés par une virgule. Exemple : doc.title,doc.content,XWiki.Movie.MovieClass^storyLine
+XWiki.Translator.TranslatorConfigurationClass_targetClasses=Documents à traduire
+XWiki.Translator.TranslatorConfigurationClass_targetClasses.hint=Liste de classes séparées par une virgule. Seuls les documents contenant au moins un objet de l'une de ces classes seront traduisibles. S'il est vide, tous les documents sont considérés comme traduisibles.
+XWiki.Translator.TranslatorConfigurationClass_translator=Service de traduction
+XWiki.Translator.TranslatorConfigurationClass_translator.hint=Nom du service de traduction
+XWiki.Translator.TranslatorConfigurationClass_translationNamingStrategy=Stratégie d'emplacement des documents de traduction
+XWiki.Translator.TranslatorConfigurationClass_translationNamingStrategy.hint=Définit comment l'emplacement d'une traduction générée est calculé : les traductions peuvent être stockées soit au même endroit que le document original, soit dans un espace nommé d'après leur langue (par exemple "/en/mon-document", "/fr/mon-document" etc).
+XWiki.Translator.TranslatorConfigurationClass_translationNamingStrategy_same=Même emplacement que le document original
+XWiki.Translator.TranslatorConfigurationClass_translationNamingStrategy_prefix=Dans un espace nommé d'après leur langue
+XWiki.Translator.TranslatorConfigurationClass_apiKey=Clé API du service de traduction
+XWiki.Translator.TranslatorConfigurationClass_apiKey.hint=Clé API à utiliser lors des opérations de traduction
+XWiki.Translator.TranslatorConfigurationClass_sameTranslationNameClasses=Documents dont les traductions doivent se trouver au même endroit
+XWiki.Translator.TranslatorConfigurationClass_sameTranslationNameClasses.hint=Liste de classes pour lesquelles les traductions doivent se trouver au même endroit que leur document original : ce champ remplace la stratégie d'emplacement de traduction par défaut définie ci-dessus.
+XWiki.Translator.TranslatorGlossaryConfigurationClass_translatorGlossaryNamePrefix=Préfixe du nom du glossaire
+XWiki.Translator.TranslatorGlossaryConfigurationClass_translatorGlossaryNamePrefix.hint=Préfixe du nom du glossaire dans le fournisseur du traducteur.</content>
+</xwikidoc>
