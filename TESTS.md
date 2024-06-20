@@ -11,9 +11,50 @@ Process:
 
 1. Create a new page with some text in english.
 2. Run the translator to these languages:
-    * en_US
-    * fr
-    * fr_CA
+    * FR
+    * FR_CA
+    * ES
+    * AR
+    * ZH
+    * DE
+    * RU
+3. Check the result on each pages
+
+### Document with style and macros
+
+1. Create a new page with some text in english, macros and images like this following:
+
+```
+{{info}}
+Info macro
+{{/info}}
+
+this is an image
+
+[[image:XWikiLogo.png]]
+
+{{warning}}
+Hello World
+{{/warning}}
+
+{{velocity}}
+This in into the velocity macro so it shouldn't be traducted
+
+#*
+This is a comment
+*#
+$doc.title
+{{velocity}}
+```
+
+2. Run the translator to these languages:
+    * FR
+    * FR_CA
+    * ES
+    * AR
+    * ZH
+    * DE
+    * RU
 3. Check the result on each pages
 
 ### Complex document with object
@@ -41,9 +82,9 @@ Process:
 
 ### Test matrix
 
-|              Test              | Location strategy: *Same location* | Location strategy: *specific space* |
+| Test                           | Location strategy: *Same location* | Location strategy: *specific space* |
 | ------------------------------ |------------------------------------|-------------------------------------|
-|         Basic document         |                                    |                                     |
+| Basic document                 |                                    |                                     |
 | Complexe document with object  |                                    |                                     |
 | Filtered translatable document |                                    |                                     |
 
@@ -58,18 +99,31 @@ In other side for DeepL, it doesn't support the translation to country specific 
 
 ## Translator glossary
 
+### Single wiki
+
 Process:
 
-1. Add a new entry into the glossary with a world not known into the dictionary. For example: 'forhele'.
-2. Add into this entry theses following translations:
-    * en_US: forheleus
-    * fr: hellofrensh
-    * fr_CA: hellofrca
-3. Add a new entry into the glossary with a world known into the dictionary. For example: 'city'.
-4. Add into this entry theses following translations:
-    * en_US: cityinus
-    * fr: villenfr
-    * fr_CA: villenfrca
-5. Create a new page with will contain these worlds: forhele, city
-6. Run the translation (to en_US, fr, fr_CA).
-7. Check the resulted pages.
+1. Add theses entries into the glossary:
+
+|EN_US  |FR      |FR_CA     |DE             |ES         |
+|-------|--------|----------|---------------|-----------|
+|forhele|moinconu|moinconuca|unerkannteswort|palabrconoc|
+|car    |carosse |camion    |Lastwagen      |camión     |
+|city   |villefr |villefrca |Stadtenx       |villalx    |
+
+2. Force the sychronisation.
+2. Create a new page with will contain these worlds: forhele, car, city
+3. Run the translation (to en_US, fr, fr_CA).
+4. Check the resulted pages.
+
+### Mulitple subwiki support
+
+Do the same process than for [Single wiki](#single-wiki) but on the second wiki use this glossary translation table:
+
+|EN_US  |FR           |FR_CA          |DE                  |ES              |
+|-------|-------------|---------------|--------------------|----------------|
+|forhele|wikibmoinconu|wikibmoinconuca|Wikibunerkannteswort|wikibpalabrconoc|
+|car    |wikibcarosse |wikibcamion    |Wikiblastwagen      |wikibcamión     |
+|city   |wikibvillefr |wikibvillefrca |Wikibstadtenx       |wikibvillalx    |
+
+Then check again the result page with the new glossary.
