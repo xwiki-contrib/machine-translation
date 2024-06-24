@@ -192,7 +192,7 @@
       <targetProperties>doc.title,doc.content</targetProperties>
     </property>
     <property>
-      <translationNamingStrategy>prefix</translationNamingStrategy>
+      <translationNamingStrategy>same</translationNamingStrategy>
     </property>
     <property>
       <translator>deepl</translator>
