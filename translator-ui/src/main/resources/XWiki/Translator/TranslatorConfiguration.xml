@@ -195,7 +195,7 @@
       <translationNamingStrategy>prefix</translationNamingStrategy>
     </property>
     <property>
-      <translator>deepl</translator>
+      <translator/>
     </property>
     <property>
       <translatorGlossaryNamePrefix/>

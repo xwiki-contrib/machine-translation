@@ -59,24 +59,24 @@ admin.translator.sourceLanguage=Langue source
 admin.translator.targetLanguage=Langue cible
 admin.translator.test=Test de traduction
 
-admin.translator=Service de traduction
+admin.translator=Traduction automatique
 
-XWiki.Translator.TranslatorConfigurationClass_enabled=Activer le service de traduction
+XWiki.Translator.TranslatorConfigurationClass_enabled=Activer le service de traduction automatique
 XWiki.Translator.TranslatorConfigurationClass_enabled.hint=Activer la possibilité de traduire le contenu en utilisant un service de traduction automatique
 XWiki.Translator.Translator.TranslatorConfigurationClass_targetProperties=Propriétés à traduire
-XWiki.Translator.TranslatorConfigurationClass_targetProperties.hint=Liste des propriétés de la classe et des champs du document à traduire, séparés par une virgule. Exemple : doc.title,doc.content,XWiki.Movie.MovieClass^storyLine
+XWiki.Translator.TranslatorConfigurationClass_targetProperties.hint=Liste de propriétés de classes et de champs de document à traduire, séparés par une virgule. Exemple : doc.title,doc.content,XWiki.Movie.MovieClass^storyLine
 XWiki.Translator.TranslatorConfigurationClass_targetClasses=Documents à traduire
-XWiki.Translator.TranslatorConfigurationClass_targetClasses.hint=Liste de classes séparées par une virgule. Seuls les documents contenant au moins un objet de l'une de ces classes seront traduisibles. S'il est vide, tous les documents sont considérés comme traduisibles.
+XWiki.Translator.TranslatorConfigurationClass_targetClasses.hint=Liste de classes séparées par une virgule. Seuls les documents contenant au moins un objet de l'une de ces classes seront traduisibles. Si ce champ est laissé vide, tous les documents sont considérés comme traduisibles.
 XWiki.Translator.TranslatorConfigurationClass_translator=Service de traduction
 XWiki.Translator.TranslatorConfigurationClass_translator.hint=Nom du service de traduction
 XWiki.Translator.TranslatorConfigurationClass_translationNamingStrategy=Stratégie d'emplacement des documents de traduction
-XWiki.Translator.TranslatorConfigurationClass_translationNamingStrategy.hint=Définit comment l'emplacement d'une traduction générée est calculé : les traductions peuvent être stockées soit au même endroit que le document original, soit dans un espace nommé d'après leur langue (par exemple "/en/mon-document", "/fr/mon-document" etc).
+XWiki.Translator.TranslatorConfigurationClass_translationNamingStrategy.hint=Définit comment l'emplacement d'une traduction est calculé : les traductions peuvent être stockées soit au même endroit que le document original, soit dans un espace nommé d'après leur langue (par exemple "/en/mon-document", "/fr/mon-document" etc).
 XWiki.Translator.TranslatorConfigurationClass_translationNamingStrategy_same=Même emplacement que le document original
-XWiki.Translator.TranslatorConfigurationClass_translationNamingStrategy_prefix=Dans un espace nommé d'après leur langue
-XWiki.Translator.TranslatorConfigurationClass_apiKey=Clé API du service de traduction
-XWiki.Translator.TranslatorConfigurationClass_apiKey.hint=Clé API à utiliser lors des opérations de traduction
+XWiki.Translator.TranslatorConfigurationClass_translationNamingStrategy_prefix=Dans un espace nommé d'après la langue
+XWiki.Translator.TranslatorConfigurationClass_apiKey=Clé d'API du service de traduction
+XWiki.Translator.TranslatorConfigurationClass_apiKey.hint=Clé d'API à utiliser lors des opérations de traduction
 XWiki.Translator.TranslatorConfigurationClass_sameTranslationNameClasses=Documents dont les traductions doivent se trouver au même endroit
 XWiki.Translator.TranslatorConfigurationClass_sameTranslationNameClasses.hint=Liste de classes pour lesquelles les traductions doivent se trouver au même endroit que leur document original : ce champ remplace la stratégie d'emplacement de traduction par défaut définie ci-dessus.
-XWiki.Translator.TranslatorGlossaryConfigurationClass_translatorGlossaryNamePrefix=Préfixe du nom du glossaire
-XWiki.Translator.TranslatorGlossaryConfigurationClass_translatorGlossaryNamePrefix.hint=Préfixe du nom du glossaire dans le fournisseur du traducteur.</content>
+XWiki.Translator.TranslatorGlossaryConfigurationClass_translatorGlossaryNamePrefix=Préfixe à ajouter au nom du glossaire
+XWiki.Translator.TranslatorGlossaryConfigurationClass_translatorGlossaryNamePrefix.hint=Préfixe à ajouter au nom du glossaire dans le service de traduction.</content>
 </xwikidoc>

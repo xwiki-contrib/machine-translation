@@ -77,8 +77,8 @@ XWiki.Translator.TranslatorConfigurationClass_apiKey=Translation service API key
 XWiki.Translator.TranslatorConfigurationClass_apiKey.hint=API key to be used when performing translation operations
 XWiki.Translator.TranslatorConfigurationClass_sameTranslationNameClasses=Documents whose translations must be at same location
 XWiki.Translator.TranslatorConfigurationClass_sameTranslationNameClasses.hint=List of classes for which the translations must be at the same location as their original document: this field overrides the default translation location strategy defined above.
-XWiki.Translator.TranslatorGlossaryConfigurationClass_translatorGlossaryNamePrefix=Glossary name prefix
-XWiki.Translator.TranslatorGlossaryConfigurationClass_translatorGlossaryNamePrefix.hint=Prefix of glossay name into the translator provider.</content>
+XWiki.Translator.TranslatorGlossaryConfigurationClass_translatorGlossaryNamePrefix=Préfixe à ajouter au nom du glossaire
+XWiki.Translator.TranslatorGlossaryConfigurationClass_translatorGlossaryNamePrefix.hint=Préfixe à ajouter au nom du glossaire dans le service de traduction.</content>
   <object>
     <name>XWiki.Translator.TranslatorTranslations</name>
     <number>0</number>
