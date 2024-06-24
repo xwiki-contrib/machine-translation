@@ -180,13 +180,13 @@
 {{/html}}
 
 #if ($request.translate == 'true' &amp;&amp; $services.csrf.isTokenValid($request.token) &amp;&amp; $request.targetLanguage != '')
-  {{code language="none"}}
+  {{info}}
     $services.translator.translate(
       $request.input,
       $services.localization.toLocale($request.sourceLanguage),
       $services.localization.toLocale($request.targetLanguage),
       true)
-  {{/code}}
+  {{/info}}
 #end
 {{/velocity}}</content>
   <object>
