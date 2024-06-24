@@ -31,7 +31,9 @@ import javax.inject.Singleton;
 
 import org.xwiki.component.annotation.Component;
 import org.xwiki.contrib.translator.TranslatorException;
+import org.xwiki.contrib.translator.Usage;
 import org.xwiki.contrib.translator.internal.AbstractTranslator;
+import org.xwiki.contrib.translator.internal.DefaultUsage;
 import org.xwiki.contrib.translator.model.Glossary;
 import org.xwiki.contrib.translator.model.GlossaryInfo;
 import org.xwiki.contrib.translator.model.LocalePair;
@@ -40,10 +42,8 @@ import org.xwiki.text.StringUtils;
 
 import com.deepl.api.DeepLException;
 import com.deepl.api.GlossaryEntries;
-import com.deepl.api.TextResult;
 import com.deepl.api.TextTranslationOptions;
 import com.deepl.api.Translator;
-import com.deepl.api.Usage;
 
 @Component
 @Named(DeeplTranslator.HINT)
@@ -67,6 +67,7 @@ public class DeeplTranslator extends AbstractTranslator
     }
 
     private Optional<com.deepl.api.GlossaryInfo> getGlossaryForLocales(Locale source, Locale destination)
+        throws TranslatorException
     {
         Translator translator = getTranslator();
         try {
@@ -91,17 +92,40 @@ public class DeeplTranslator extends AbstractTranslator
         TextTranslationOptions options = new TextTranslationOptions();
         if (html) {
             options.setTagHandling("html");
+            /**
+             * Deepl bug with HTML comments
+             * Example:
+             * <div>
+             *   reveals his deception and he is freed. He then eats an enormous amount of food at a
+             *   <!--startwikilink:true|-|url|-|https://en.wikipedia.org/wiki/Cafeteria-->
+             *   <span class="wikiexternallink">
+             * <a href="https://en.wikipedia.org/wiki/Cafeteria">cafeteria</a></span><!--stopwikilink-->
+             *   without paying to get arrested, and once again encounters Ellen in a
+             * </div>
+             *
+             * outputs:
+             * <div>
+             *   révèle sa supercherie et il est libéré. Il mange ensuite une énorme quantité de nourriture dans une<span
+             *         class="wikiexternallink"><a href="https://en.wikipedia.org/wiki/Cafeteria">cafétéria</a></span>
+             *   <!--startwikilink:true|-|url|-|https://en.wikipedia.org/wiki/Cafeteria--><!--stopwikilink--> sans payer pour se faire
+             *   arrêter, et rencontre à nouveau Ellen dans une salle d'attente.
+             * </div>
+             */
+            content = content.replaceAll("<!--", "<script class=\"notranslate\"><!--");
+            content = content.replaceAll("-->", "--></script>");
         }
         Optional<com.deepl.api.GlossaryInfo> glossaryId = getGlossaryForLocales(from, to);
         if (glossaryId.isPresent() && glossaryId.get().isReady()) {
             options.setGlossaryId(glossaryId.get().getGlossaryId());
         }
-        TextResult result = null;
+        String result = null;
         try {
             result = translator.translateText(content,
                 normalizeLocale(from, NormalisationType.SOURCE_LANG),
                 normalizeLocale(to, NormalisationType.TARGET_LANG),
-                options);
+                options).getText();
+            result = result.replaceAll("<script class=\"notranslate\">", "");
+            result = result.replaceAll("</script>", "");
         } catch (InterruptedException e) {
             String abbr = StringUtils.abbreviate(content, 100);
             logger.debug("Error when translating [{}]", abbr);
@@ -111,7 +135,7 @@ public class DeeplTranslator extends AbstractTranslator
             logger.debug("Error when translating [{}]", abbr);
             throw new TranslatorException(String.format("DeepL exception when translating [%s]", abbr), e);
         }
-        return result.getText();
+        return result;
     }
 
     /**
@@ -152,17 +176,34 @@ public class DeeplTranslator extends AbstractTranslator
         }
     }
 
-    public Translator getTranslator()
+    public Translator getTranslator() throws TranslatorException
     {
         String apiKey = translatorConfiguration.getApiKey();
-        return new Translator(apiKey);
+        try {
+            if (StringUtils.isNotEmpty(apiKey)) {
+                return new Translator(apiKey);
+            } else {
+                throw new TranslatorException("Invalid API key");
+            }
+        } catch (Exception e) {
+            throw new TranslatorException("Invalid API key");
+        }
     }
 
-    public Usage getUsage() throws DeepLException, InterruptedException
+    public Usage getUsage() throws TranslatorException
     {
         //TODO: check programming rights
         Translator translator = getTranslator();
-        return translator.getUsage();
+        try {
+            if (translator != null && translator.getUsage() != null && translator.getUsage().getCharacter() != null) {
+                com.deepl.api.Usage.Detail character = translator.getUsage().getCharacter();
+                return new DefaultUsage(character.getCount(), character.getLimit());
+            }
+        } catch (DeepLException | InterruptedException e) {
+            logger.error("Error while retrieving translator usage", e);
+            throw new TranslatorException("Error while retrieving translator usage", e);
+        }
+        return null;
     }
 
     /*

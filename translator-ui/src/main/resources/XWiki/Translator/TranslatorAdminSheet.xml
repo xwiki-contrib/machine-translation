@@ -62,7 +62,7 @@
       &lt;select name="XWiki.Translator.TranslatorConfigurationClass_0_translator" id="XWiki.Translator.TranslatorConfigurationClass_0_translator"&gt;
         #foreach ($translator in $services.translator.getAvailableTranslators())
           &lt;option value="${translator}" #if($translator == $configObj.getValue('translator'))selected='selected'#end&gt;
-            $services.translator.getName()
+            $services.translator.getName($translator)
           &lt;/option&gt;
         #end
       &lt;/select&gt;
@@ -102,6 +102,13 @@
     &lt;dd&gt;
       $configDoc.display('targetProperties', 'edit', $configObj)
     &lt;/dd&gt;
+    &lt;dt&gt;
+      &lt;label for="XWiki.Translator.TranslatorConfigurationClass_0_translatorGlossaryPrefix"&gt;$configDoc.displayPrettyName('translatorGlossaryNamePrefix', $configObj)&lt;/label&gt;
+      &lt;span class='xHint'&gt;$services.localization.render('XWiki.Translator.TranslatorGlossaryConfigurationClass_translatorGlossaryNamePrefix.hint')&lt;/span&gt;
+    &lt;/dt&gt;
+    &lt;dd&gt;
+    $configDoc.display('translatorGlossaryNamePrefix', 'edit', $configObj)
+    &lt;/dd&gt;
   &lt;/dl&gt;
   &lt;div class='buttonwrapper'&gt;
     &lt;input value="$services.localization.render('admin.save')" class='button' type='submit'&gt;
@@ -109,12 +116,14 @@
 &lt;/form&gt;
 {{/html}}
 
-#set ($usage = $services.translator.getUsage())
+#try()
+  #set ($usage = $services.translator.getUsage())
   #if ($usage != $NULL)
-    == Usage ==
+    == $services.localization.render('admin.translator.usage') ==
 
-    Character usage for current period: $usage.getCharacter().getCount() of $usage.getCharacter().getLimit()
+    $services.localization.render('admin.translator.usage.values', [$usage.getCount(),$usage.getLimit()])
   #end
+#end
 
 == $services.localization.render('admin.translator.test') ==
 
@@ -127,7 +136,7 @@
   &lt;dl&gt;
     &lt;dt&gt;
       &lt;label&gt;
-        $services.localization.render('admin.translator.textToTranslate')
+        $services.localization.render('admin.translator.test.textToTranslate')
       &lt;/label&gt;
     &lt;dd&gt;
       &lt;textarea rows="3" name="input"&gt;
@@ -135,17 +144,21 @@
       &lt;/textarea&gt;
     &lt;/dd&gt;
     &lt;dt&gt;
-      &lt;label&gt;$services.localization.render('admin.translator.sourceLanguage')&lt;/label&gt;
+      &lt;label&gt;$services.localization.render('admin.translator.test.sourceLanguage')&lt;/label&gt;
     &lt;/dt&gt;
     &lt;dd&gt;
+      #set ($fromLanguage = "$!request.sourceLanguage")
+      #if ($fromLanguage == '')
+        #set ($fromLanguage = $services.localization.getDefaultLocale().toString())
+      #end
       &lt;select name="sourceLanguage"&gt;
         #foreach ($locale in $xwiki.getAvailableLocales())
-          &lt;option value="$locale.toString()"#if($request.sourceLanguage == $locale.toString()) selected#end&gt;$locale.getDisplayName($xcontext.locale) &lt;/option&gt;
+          &lt;option value="$locale.toString()"#if($fromLanguage == $locale.toString()) selected#end&gt;$locale.getDisplayName($xcontext.locale)&lt;/option&gt;
         #end
       &lt;/select&gt;
     &lt;/dd&gt;
     &lt;dt&gt;
-      &lt;label&gt;$services.localization.render('admin.translator.targetLanguage')&lt;/label&gt;
+      &lt;label&gt;$services.localization.render('admin.translator.test.targetLanguage')&lt;/label&gt;
     &lt;/dt&gt;
     &lt;dd&gt;
       &lt;select name="targetLanguage"&gt;
@@ -157,7 +170,7 @@
   &lt;/dl&gt;
 
   &lt;button type="submit" class="btn btn-primary" style="margin: 1rem 0 2rem 0;"&gt;
-    $services.localization.render('admin.translator.translate')
+    $services.localization.render('admin.translator.test.translate')
   &lt;/button&gt;
   &lt;input name="translate" value="true" type="hidden"/&gt;
   &lt;input name="token" value="$services.csrf.getToken()" type="hidden"/&gt;
@@ -167,13 +180,13 @@
 {{/html}}
 
 #if ($request.translate == 'true' &amp;&amp; $services.csrf.isTokenValid($request.token) &amp;&amp; $request.targetLanguage != '')
-  {{info}}
+  {{code language="none"}}
     $services.translator.translate(
       $request.input,
       $services.localization.toLocale($request.sourceLanguage),
       $services.localization.toLocale($request.targetLanguage),
-      false)
-  {{/info}}
+      true)
+  {{/code}}
 #end
 {{/velocity}}</content>
   <object>

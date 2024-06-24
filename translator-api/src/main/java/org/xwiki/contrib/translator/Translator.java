@@ -27,19 +27,7 @@ import org.xwiki.component.annotation.Role;
 import org.xwiki.contrib.translator.model.Glossary;
 import org.xwiki.contrib.translator.model.GlossaryInfo;
 import org.xwiki.contrib.translator.model.LocalePair;
-import org.xwiki.model.reference.DocumentReference;
 import org.xwiki.model.reference.EntityReference;
-
-// TODO: AdminGroup view TranslatorConfiguration but this is local group -> check
-// TODO: check rights in Java
-// OK: Check that current user has edit right in the target space
-// TODO: Check what happens when language is not set (empty)
-// TODO: check if creating a Translator is time consuming (-> do not recreate) or not
-// TODO: maybe use same mechanism as shareinline to load the translate modal when the button is hit
-// TODO: later manage country specific : override keys in FR_CH from FR to have specific translations only
-// TODO: check what happens if the original page itself is translated natively (same name)
-// TODO: review TranslationSet
-// TODO: use glossary on translation when available
 
 /**
  * Represents a translation service.
@@ -70,7 +58,6 @@ public interface Translator
          * Target language for the glossary.
          */
         TARGET_LANG_GLOSSARY,
-
     }
 
     /**
@@ -100,7 +87,7 @@ public interface Translator
      * @return location of the translation page to be created or updated
      * @throws TranslatorException in case an error occurs
      */
-    DocumentReference computeTranslationReference(DocumentReference originalDocument, String translationTitle,
+    EntityReference computeTranslationReference(EntityReference originalDocument, String translationTitle,
         Locale translationLocale) throws TranslatorException;
 
     /**
@@ -122,7 +109,7 @@ public interface Translator
      * @return true if the page is meant to be translated
      * @throws TranslatorException in case an error occurs
      */
-    boolean isTranslatable(DocumentReference reference) throws TranslatorException;
+    boolean isTranslatable(EntityReference reference) throws TranslatorException;
 
     /**
      * Checks if the current user is allowed to create a translation of a given page in a given locale.
@@ -132,7 +119,7 @@ public interface Translator
      * @return true if the current user is allowed to create or update the page translation
      * @throws TranslatorException in case an error occurs
      */
-    boolean canTranslate(DocumentReference reference, Locale toLocale) throws TranslatorException;
+    boolean canTranslate(EntityReference reference, Locale toLocale) throws TranslatorException;
 
     /**
      * Checks if the current user is allowed to create a translation of a given page.
@@ -141,7 +128,7 @@ public interface Translator
      * @return true if user is allowed
      * @throws TranslatorException in case an error occurs
      */
-    boolean canTranslate(DocumentReference reference) throws TranslatorException;
+    boolean canTranslate(EntityReference reference) throws TranslatorException;
 
     /**
      * Returns list of existing translations of a given page.
@@ -177,6 +164,14 @@ public interface Translator
      * @throws TranslatorException in case an error occurs
      */
     boolean isSameNameTranslationNamingStrategy(EntityReference reference) throws TranslatorException;
+
+    /**
+     * Returns the current translator usage statistics.
+     *
+     * @return String representing the translator usage statistics
+     * @throws TranslatorException in case an error occurs
+     */
+    Usage getUsage() throws TranslatorException;
 
     /**
      * Get the glossary name for the specificed locales.

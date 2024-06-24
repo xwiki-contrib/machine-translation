@@ -52,14 +52,16 @@ translator.translate.modal.originalDocument=Document original :
 translator.translate.modal.translation.language=Langue
 translator.translate.modal.translation.title=Titre
 translator.translate.modal.translation.date=Date
-
-admin.translator.translate=Traduire
-admin.translator.textToTranslate=Texte
-admin.translator.sourceLanguage=Langue source
-admin.translator.targetLanguage=Langue cible
-admin.translator.test=Test de traduction
+translator.translate.returnToDocument=Retourner au document pour accéder aux traductions
 
 admin.translator=Traduction automatique
+admin.translator.usage=Usage
+admin.translator.usage.values=Nombre de caractères utilisés pour la période courante : {0} sur {1}
+admin.translator.test.textToTranslate=Text
+admin.translator.test.sourceLanguage=Langue source
+admin.translator.test.targetLanguage=Langue cible
+admin.translator.test=Test de traduction
+admin.translator.test.translate=Traduire
 
 XWiki.Translator.TranslatorConfigurationClass_enabled=Activer le service de traduction automatique
 XWiki.Translator.TranslatorConfigurationClass_enabled.hint=Activer la possibilité de traduire le contenu en utilisant un service de traduction automatique

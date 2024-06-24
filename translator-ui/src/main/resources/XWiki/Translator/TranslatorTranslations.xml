@@ -52,14 +52,16 @@ translator.translate.modal.originalDocument=Original document :
 translator.translate.modal.translation.language=Language
 translator.translate.modal.translation.title=Title
 translator.translate.modal.translation.date=Date
+translator.translate.returnToDocument=Return to document to access translations
 
-admin.translator.translate=Translate
-admin.translator.textToTranslate=Text
-admin.translator.sourceLanguage=Source language
-admin.translator.targetLanguage=Target language
+admin.translator=Translator
+admin.translator.usage=Usage
+admin.translator.usage.values=Character usage for current period: {0} of {1}
+admin.translator.test.textToTranslate=Text
+admin.translator.test.sourceLanguage=Source language
+admin.translator.test.targetLanguage=Target language
 admin.translator.test=Translation test
-
-admin.translator=Translation Service
+admin.translator.test.translate=Translate
 
 XWiki.Translator.TranslatorConfigurationClass_enabled=Enable the translation service
 XWiki.Translator.TranslatorConfigurationClass_enabled.hint=Activates the ability to translate content using a machine translation service
@@ -77,8 +79,10 @@ XWiki.Translator.TranslatorConfigurationClass_apiKey=Translation service API key
 XWiki.Translator.TranslatorConfigurationClass_apiKey.hint=API key to be used when performing translation operations
 XWiki.Translator.TranslatorConfigurationClass_sameTranslationNameClasses=Documents whose translations must be at same location
 XWiki.Translator.TranslatorConfigurationClass_sameTranslationNameClasses.hint=List of classes for which the translations must be at the same location as their original document: this field overrides the default translation location strategy defined above.
-XWiki.Translator.TranslatorGlossaryConfigurationClass_translatorGlossaryNamePrefix=Préfixe à ajouter au nom du glossaire
-XWiki.Translator.TranslatorGlossaryConfigurationClass_translatorGlossaryNamePrefix.hint=Préfixe à ajouter au nom du glossaire dans le service de traduction.</content>
+XWiki.Translator.TranslatorGlossaryConfigurationClass_translatorGlossaryNamePrefix=Prefix to be added to the translator glossary name
+XWiki.Translator.TranslatorGlossaryConfigurationClass_translatorGlossaryNamePrefix.hint=This option is useful in particular when using glossaries in multiple wikis.
+
+</content>
   <object>
     <name>XWiki.Translator.TranslatorTranslations</name>
     <number>0</number>

@@ -30,13 +30,13 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.slf4j.Logger;
 import org.xwiki.component.annotation.Component;
 import org.xwiki.contrib.translator.TranslationSet;
 import org.xwiki.contrib.translator.Translator;
 import org.xwiki.contrib.translator.TranslatorConfiguration;
 import org.xwiki.contrib.translator.TranslatorException;
 import org.xwiki.contrib.translator.TranslatorManager;
+import org.xwiki.contrib.translator.Usage;
 import org.xwiki.contrib.translator.model.GlossaryInfo;
 import org.xwiki.contrib.translator.model.LocalePair;
 import org.xwiki.model.reference.DocumentReference;
@@ -45,7 +45,8 @@ import org.xwiki.script.service.ScriptService;
 import org.xwiki.security.authorization.ContextualAuthorizationManager;
 import org.xwiki.security.authorization.Right;
 
-/** Script service used to access the Translator service.
+/**
+ * Script service used to access the Translator service.
  *
  * @version $Id$
  */
@@ -65,12 +66,6 @@ public class TranslatorScriptService implements ScriptService
      */
     @Inject
     private TranslatorManager translatorManager;
-
-    /**
-     * Logging helper.
-     */
-    @Inject
-    private Logger logger;
 
     /**
      * The authorization manager.
@@ -230,24 +225,34 @@ public class TranslatorScriptService implements ScriptService
      *
      * @return current translator name
      */
-    public String getName()
+    public String getName(String hint)
     {
-        Translator translator = translatorManager.getTranslator();
+        Translator translator = translatorManager.getTranslator(hint);
         if (translator == null) {
             return "";
         }
         return translator.getName();
     }
 
+    public Usage getUsage() throws TranslatorException
+    {
+        Translator translator = translatorManager.getTranslator();
+        if (translator == null) {
+            return null;
+        }
+        return translator.getUsage();
+    }
+
     /**
      * Computes the location of a translation based on the original document and the translation title.
+     *
      * @param originalDocument Reference of the original document
      * @param translationTitle Title of the translation
      * @param translationLocale Translation locale
      * @return reference of the translation page
      * @throws TranslatorException in case an error occurs
      */
-    public DocumentReference computeTranslationReference(DocumentReference originalDocument, String translationTitle,
+    public EntityReference computeTranslationReference(DocumentReference originalDocument, String translationTitle,
         Locale translationLocale) throws TranslatorException
     {
         Translator translator = translatorManager.getTranslator();
@@ -259,6 +264,7 @@ public class TranslatorScriptService implements ScriptService
 
     /**
      * Returns list of existing glossaries.
+     *
      * @return list of glossaries
      * @throws TranslatorException in case an error occurs
      */
@@ -273,7 +279,8 @@ public class TranslatorScriptService implements ScriptService
     }
 
     /**
-     *  Returns list of glossary entries for given glossary.
+     * Returns list of glossary entries for given glossary.
+     *
      * @param id A given glossary identifier
      * @return List of glossary entries
      * @throws TranslatorException in case an error occurs

@@ -189,13 +189,13 @@
       <targetClasses/>
     </property>
     <property>
-      <targetProperties>doc.content</targetProperties>
+      <targetProperties>doc.title,doc.content</targetProperties>
     </property>
     <property>
       <translationNamingStrategy>prefix</translationNamingStrategy>
     </property>
     <property>
-      <translator/>
+      <translator>deepl</translator>
     </property>
     <property>
       <translatorGlossaryNamePrefix/>

@@ -25,6 +25,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.xwiki.model.reference.DocumentReference;
+import org.xwiki.model.reference.EntityReference;
 
 /**
  * Inner class used to represent all translations of a given reference. The class contains: a document reference, the
@@ -37,7 +38,7 @@ public class TranslationSet
     /**
      * Original page reference.
      */
-    protected DocumentReference originalDocumentReference;
+    protected EntityReference originalDocumentReference;
 
     /**
      * Original page title.
@@ -56,12 +57,13 @@ public class TranslationSet
 
     /**
      * Constructs a TranslationSet.
+     *
      * @param originalDocumentReference Original document reference
      * @param originalDocumentTitle Original document title
      * @param originalDocumentLocale Original document locale
      * @param translations Map of translations
      */
-    public TranslationSet(DocumentReference originalDocumentReference, String originalDocumentTitle,
+    public TranslationSet(EntityReference originalDocumentReference, String originalDocumentTitle,
         Locale originalDocumentLocale, Map<Locale, List<Object>> translations)
     {
         this.originalDocumentReference = originalDocumentReference;
@@ -81,7 +83,7 @@ public class TranslationSet
     /**
      * @return original dpage reference
      */
-    public DocumentReference getOriginalDocumentReference()
+    public EntityReference getOriginalDocumentReference()
     {
         return originalDocumentReference;
     }
@@ -114,15 +116,17 @@ public class TranslationSet
 
     /**
      * Sets original document reference.
+     *
      * @param originalDocumentReference Original document reference
      */
-    public void setOriginalDocumentReference(DocumentReference originalDocumentReference)
+    public void setOriginalDocumentReference(EntityReference originalDocumentReference)
     {
         this.originalDocumentReference = originalDocumentReference;
     }
 
     /**
      * Sets original document title.
+     *
      * @param originalDocumentTitle Original document title
      */
     public void setOriginalDocumentTitle(String originalDocumentTitle)
@@ -132,6 +136,7 @@ public class TranslationSet
 
     /**
      * Sets original document locale.
+     *
      * @param originalDocumentLocale Original document locale
      */
     public void setOriginalDocumentLocale(Locale originalDocumentLocale)

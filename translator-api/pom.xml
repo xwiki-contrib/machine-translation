@@ -34,6 +34,7 @@
   <packaging>jar</packaging>
   <properties>
     <xwiki.extension.name>Translator API</xwiki.extension.name>
+    <xwiki.extension.namespaces>{root}</xwiki.extension.namespaces>
   </properties>
   <dependencies>
     <dependency>

@@ -69,6 +69,10 @@ public class DefaultTranslatorManager implements TranslatorManager
     @Override
     public Translator getTranslator(String hint)
     {
+        if (hint == null) {
+            return null;
+        }
+
         try {
             return this.componentManager.getInstance(Translator.class, hint);
         } catch (ComponentLookupException e) {

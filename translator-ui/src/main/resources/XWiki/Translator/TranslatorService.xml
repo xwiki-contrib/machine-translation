@@ -31,7 +31,7 @@
   <author>xwiki:XWiki.Admin</author>
   <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
   <version>1.1</version>
-  <title>Translation Service</title>
+  <title>$services.localization.render('admin.translator')</title>
   <comment/>
   <minorEdit>false</minorEdit>
   <syntaxId>xwiki/2.1</syntaxId>
@@ -54,7 +54,7 @@ $services.progress.popLevel()
 
 {{velocity}}
 #if ("$!request.jobId" !='')
-  [[(% class="btn btn-primary" %)Return to document to access translations(%%)&gt;&gt;doc:$request.documentName]]
+  [[(% class="btn btn-primary" %)$services.localization.render('translator.translate.returnToDocument')(%%)&gt;&gt;doc:$request.documentName]]
 #else
   $response.sendRedirect($xwiki.getURL($services.wiki.getCurrentWikiDescriptor().getMainPageReference()))
 #end

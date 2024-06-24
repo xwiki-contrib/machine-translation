@@ -134,13 +134,11 @@
 
   $('.translate-check').on('click', function(event) {
     $('.translate-all').removeAttr('checked');
+    $('.translate-submit').prop('disabled', true);
     $('.translate-check').each(function(number, item) {
-      console.log(item, );
       if ($(item).prop('checked')) {
         $('.translate-submit').prop('disabled', false);
-        return;
       }
-      $('.translate-submit').prop('disabled', true);
     });
   });
 
