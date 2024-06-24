@@ -35,14 +35,14 @@ Document title: $doc.title
 2. Run translator on all wiki languages
 3. Expected result: the page is correctly translated in all languages
 
-## Document with object
+## Document with object and attachments
 
 1. Make sure the Help extension is installed
 1. Edit class `MoviesClass` and add TextArea field named `summary`
 1. In administration translator section, set `Properties to be translated` to `XWiki.Movie.MovieClass^summary`'.
 1. In object mode, edit Movie `Modern Times` and fill in summary from some text from the [movie plot section on Wikipedia](https://en.wikipedia.org/wiki/Modern_Times_(film))
 1. Translate page to available wiki languages
-1. Expected result: when editing the translated pages in object mode, the field `summary` is translated correctly 
+1. Expected result: when editing the translated pages in object mode, the field `summary` is translated correctly, and all attachments have been copied to the translations (only in the case of distinct translation location strategy) 
 
 ## Translatable pages
 
