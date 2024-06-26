@@ -102,13 +102,15 @@
     &lt;dd&gt;
       $configDoc.display('targetProperties', 'edit', $configObj)
     &lt;/dd&gt;
-    &lt;dt&gt;
-      &lt;label for="XWiki.Translator.TranslatorConfigurationClass_0_translatorGlossaryPrefix"&gt;$configDoc.displayPrettyName('translatorGlossaryNamePrefix', $configObj)&lt;/label&gt;
-      &lt;span class='xHint'&gt;$services.localization.render('XWiki.Translator.TranslatorGlossaryConfigurationClass_translatorGlossaryNamePrefix.hint')&lt;/span&gt;
-    &lt;/dt&gt;
-    &lt;dd&gt;
-    $configDoc.display('translatorGlossaryNamePrefix', 'edit', $configObj)
-    &lt;/dd&gt;
+    #if ($xwiki.exists('Glossary.Code.MachineTranslation.GlossarySynchronizer'))
+      &lt;dt&gt;
+        &lt;label for="XWiki.Translator.TranslatorConfigurationClass_0_translatorGlossaryPrefix"&gt;$configDoc.displayPrettyName('translatorGlossaryNamePrefix', $configObj)&lt;/label&gt;
+        &lt;span class='xHint'&gt;$services.localization.render('XWiki.Translator.TranslatorGlossaryConfigurationClass_translatorGlossaryNamePrefix.hint')&lt;/span&gt;
+      &lt;/dt&gt;
+      &lt;dd&gt;
+      $configDoc.display('translatorGlossaryNamePrefix', 'edit', $configObj)
+      &lt;/dd&gt;
+    #end
   &lt;/dl&gt;
   &lt;div class='buttonwrapper'&gt;
     &lt;input value="$services.localization.render('admin.save')" class='button' type='submit'&gt;
@@ -123,6 +125,12 @@
 
     $services.localization.render('admin.translator.usage.values', [$usage.getCount(),$usage.getLimit()])
   #end
+#end
+
+#if ($xwiki.exists('Glossary.Code.MachineTranslation.GlossarySynchronizer'))
+  == $services.localization.render('admin.translator.glossary') ==
+  [[$services.localization.render('glossary.machineTranslation.explorer.forceSync')&gt;&gt;Scheduler.WebHome||class="btn button" queryString="do=trigger&amp;which=Glossary.Code.MachineTranslation.GlossarySynchronizer&amp;form_token=$services.csrf.getToken()"]]
+  [[$services.localization.render('glossary.machineTranslation.explorer.title')&gt;&gt;Glossary.TranslationGlossaries||class="btn button"]]
 #end
 
 == $services.localization.render('admin.translator.test') ==

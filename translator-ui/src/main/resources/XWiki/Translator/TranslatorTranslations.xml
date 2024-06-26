@@ -56,6 +56,7 @@ translator.translate.returnToDocument=Return to document to access translations
 
 admin.translator=Translator
 admin.translator.usage=Usage
+admin.translator.glossary=Glossary
 admin.translator.usage.values=Character usage for current period: {0} of {1}
 admin.translator.test.textToTranslate=Text
 admin.translator.test.sourceLanguage=Source language

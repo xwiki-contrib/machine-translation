@@ -56,6 +56,7 @@ translator.translate.returnToDocument=Retourner au document pour accéder aux tr
 
 admin.translator=Traduction automatique
 admin.translator.usage=Usage
+admin.translator.glossary=Glossaire
 admin.translator.usage.values=Nombre de caractères utilisés pour la période courante : {0} sur {1}
 admin.translator.test.textToTranslate=Text
 admin.translator.test.sourceLanguage=Langue source
@@ -80,5 +81,5 @@ XWiki.Translator.TranslatorConfigurationClass_apiKey.hint=Clé d'API à utiliser
 XWiki.Translator.TranslatorConfigurationClass_sameTranslationNameClasses=Documents dont les traductions doivent se trouver au même endroit
 XWiki.Translator.TranslatorConfigurationClass_sameTranslationNameClasses.hint=Liste de classes pour lesquelles les traductions doivent se trouver au même endroit que leur document original : ce champ remplace la stratégie d'emplacement de traduction par défaut définie ci-dessus.
 XWiki.Translator.TranslatorGlossaryConfigurationClass_translatorGlossaryNamePrefix=Préfixe à ajouter au nom du glossaire
-XWiki.Translator.TranslatorGlossaryConfigurationClass_translatorGlossaryNamePrefix.hint=Préfixe à ajouter au nom du glossaire dans le service de traduction.</content>
+XWiki.Translator.TranslatorGlossaryConfigurationClass_translatorGlossaryNamePrefix.hint=Cette option est particulièrement utile lors de l'utilisation de glossaires dans plusieurs wikis.</content>
 </xwikidoc>
