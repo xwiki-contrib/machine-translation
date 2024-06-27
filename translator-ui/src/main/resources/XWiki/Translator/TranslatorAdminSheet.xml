@@ -129,7 +129,7 @@
 
 #if ($xwiki.exists('Glossary.Code.MachineTranslation.GlossarySynchronizer'))
   == $services.localization.render('admin.translator.glossary') ==
-  [[$services.localization.render('glossary.machineTranslation.explorer.forceSync')&gt;&gt;Scheduler.WebHome||class="btn button" queryString="do=trigger&amp;which=Glossary.Code.MachineTranslation.GlossarySynchronizer&amp;form_token=$services.csrf.getToken()"]]
+  [[$services.localization.render('glossary.machineTranslation.explorer.forceSync')&gt;&gt;Glossary.GlossarySynchronizerJob||class="btn button" queryString="form_token=$services.csrf.getToken()&amp;jobId=$util.generateRandomString(6).toLowerCase()&amp;confirm=true"]]
   [[$services.localization.render('glossary.machineTranslation.explorer.title')&gt;&gt;Glossary.TranslationGlossaries||class="btn button"]]
 #end
 
