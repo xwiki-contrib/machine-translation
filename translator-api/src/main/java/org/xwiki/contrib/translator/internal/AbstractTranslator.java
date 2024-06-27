@@ -19,7 +19,6 @@
  */
 package org.xwiki.contrib.translator.internal;
 
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -28,6 +27,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -56,14 +57,8 @@ import org.xwiki.model.validation.EntityNameValidationManager;
 import org.xwiki.query.Query;
 import org.xwiki.query.QueryException;
 import org.xwiki.query.QueryManager;
-import org.xwiki.rendering.block.Block;
-import org.xwiki.rendering.block.MacroBlock;
 import org.xwiki.rendering.block.XDOM;
-import org.xwiki.rendering.block.match.ClassBlockMatcher;
 import org.xwiki.rendering.parser.ContentParser;
-import org.xwiki.rendering.parser.MissingParserException;
-import org.xwiki.rendering.parser.ParseException;
-import org.xwiki.rendering.parser.Parser;
 import org.xwiki.rendering.renderer.BlockRenderer;
 import org.xwiki.rendering.renderer.printer.DefaultWikiPrinter;
 import org.xwiki.rendering.renderer.printer.WikiPrinter;
@@ -201,7 +196,7 @@ public abstract class AbstractTranslator implements Translator
     private ContentParser parser;
 
     @Inject
-    @Named("xwiki/2.1")
+    @Named("annotatedxhtml/1.0")
     private BlockRenderer wikiBlockRenderer;
 
     @Inject
@@ -289,24 +284,23 @@ public abstract class AbstractTranslator implements Translator
             for (EntityReference property : getTargetProperties()) {
                 String propertyString = getModelScriptService().serialize(property);
                 if (propertyString.equals(CONTENT_REFERENCE)) {
-                    String html = toHTML(content, Syntax.XWIKI_2_1);
-                    String translatedContent = translate(html, from, to, true);
-                    String wikiSyntax = fromAnnotatedHTML(translatedContent, Syntax.XWIKI_2_1);
-                    XDOM xdom = parser.parse(wikiSyntax, Syntax.XWIKI_2_1);
-                    List<MacroBlock> macroBlocks =
-                        xdom.getBlocks(new ClassBlockMatcher(MacroBlock.class), Block.Axes.DESCENDANT);
-                    for (MacroBlock macroBlock : macroBlocks) {
-                        if (macroBlock.getId().equals("glossaryReference")) {
-                            String glossaryEntryLabel = macroBlock.getContent();
-                            String translatedGlossaryEntryLabel = this.translate(glossaryEntryLabel, from, to, false);
-                            MacroBlock newMacroBlock = new MacroBlock(macroBlock.getId(), macroBlock.getParameters(),
-                                translatedGlossaryEntryLabel, true);
-                            macroBlock.getParent().replaceChild(newMacroBlock, macroBlock);
-                        }
-                    }
+                    XDOM xdom = parser.parse(content, Syntax.XWIKI_2_1);
                     WikiPrinter printer = new DefaultWikiPrinter();
                     wikiBlockRenderer.render(xdom, printer);
-                    translation.setContent(printer.toString());
+
+                    Pattern pattern = Pattern.compile(
+                        "<!--startmacro:glossaryReference\\|-\\|glossaryId=\".+?\" entryId=\".+?\"\\|-\\|(.+?)--><!--stopmacro-->");
+                    StringBuilder builder = new StringBuilder();
+                    Matcher matcher = pattern.matcher(printer.toString());
+                    while (matcher.find()) {
+                        matcher.appendReplacement(builder, matcher.group(1));
+                    }
+                    matcher.appendTail(builder);
+                    String plainHtml = builder.toString();
+                    String translatedContent = translate(plainHtml, from, to, true);
+                    // TODO: We can convert directly without using fromAnnotatedHTML
+                    String wikiSyntax = fromAnnotatedHTML(translatedContent, Syntax.XWIKI_2_1);
+                    translation.setContent(wikiSyntax);
                 } else if (!isSameNameTranslationNamingStrategy(original.getDocumentReference())) {
                     List<BaseObject> objects = original.getXObjects(property.getParent());
                     for (BaseObject obj : objects) {
@@ -323,7 +317,7 @@ public abstract class AbstractTranslator implements Translator
                     }
                 }
             }
-        } catch (MissingParserException | ParseException e) {
+        } catch (Exception e) {
             logger.error("translate", e);
             throw new TranslatorException(e);
         }

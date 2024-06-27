@@ -29,7 +29,7 @@ This text is a Velocity block hence it is not translated.
 This is a comment
 *#
 Document title: $doc.title
-{{velocity}}
+{{/velocity}}
 ```
 
 2. Run translator on all wiki languages
