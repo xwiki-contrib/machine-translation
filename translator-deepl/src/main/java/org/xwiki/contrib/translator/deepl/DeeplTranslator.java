@@ -277,6 +277,7 @@ public class DeeplTranslator extends AbstractTranslator
                 String glossaryName = getGlossaryName(entry.getGlossaryInfo().getSourceLocale(),
                     entry.getGlossaryInfo().getTargetLocale(),
                     glossaryNamePrefix);
+                logger.info("Updating glossary: [{}]",   glossaryName);
 
                 // Check if the glossary exists. If it's the case, we need to delete it to re-create it
                 for (String glossaryId : getGlossariesByName(deeplGlossaries, glossaryName)) {
