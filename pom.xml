@@ -25,11 +25,11 @@
   <parent>
     <groupId>org.xwiki.contrib</groupId>
     <artifactId>parent-platform</artifactId>
-    <version>14.10</version>
+    <version>13.10</version>
   </parent>
   <groupId>org.xwiki.contrib.machinetranslation</groupId>
   <artifactId>machine-translation-parent</artifactId>
-  <version>1.2-SNAPSHOT</version>
+  <version>1.1.1-SNAPSHOT</version>
   <name>Machine Translation Extension - Parent POM</name>
   <packaging>pom</packaging>
   <scm>
@@ -56,7 +56,7 @@
     <xwiki.release.jira.skip>true</xwiki.release.jira.skip>
     <xwiki.issueManagement.jira.id>MT</xwiki.issueManagement.jira.id>
     <deepl.java.version>1.5.0</deepl.java.version>
-    <platform.version>14.10</platform.version>
+    <platform.version>13.10</platform.version>
     <jobmacro.version>2.1</jobmacro.version>
     <!-- deactivate checkstyle until we resolve the FanoutComplexity of AbstractTranslator -->
     <xwiki.spoon.skip>true</xwiki.spoon.skip>

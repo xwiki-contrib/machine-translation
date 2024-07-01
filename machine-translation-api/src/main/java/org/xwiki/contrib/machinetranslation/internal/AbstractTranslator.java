@@ -67,8 +67,6 @@ import org.xwiki.script.service.ScriptService;
 import org.xwiki.security.authorization.ContextualAuthorizationManager;
 import org.xwiki.security.authorization.Right;
 import org.xwiki.text.StringUtils;
-import org.xwiki.user.UserReference;
-import org.xwiki.user.UserReferenceResolver;
 import org.xwiki.wiki.descriptor.WikiDescriptorManager;
 import org.xwiki.wysiwyg.cleaner.HTMLCleaner;
 import org.xwiki.wysiwyg.converter.HTMLConverter;
@@ -138,13 +136,6 @@ public abstract class AbstractTranslator implements Translator
     @Inject
     @Named("local")
     private EntityReferenceSerializer<String> entityReferenceSerializer;
-
-    /**
-     * User reference resolver.
-     */
-    @Inject
-    @Named("document")
-    private UserReferenceResolver<DocumentReference> userReferenceResolver;
 
     /**
      * Authorization manager.
@@ -291,7 +282,7 @@ public abstract class AbstractTranslator implements Translator
                     Pattern pattern = Pattern.compile(
                         "<!--startmacro:glossaryReference\\|-\\|glossaryId=\".+?\" "
                             + "entryId=\".+?\"\\|-\\|(.+?)--><!--stopmacro-->");
-                    StringBuilder builder = new StringBuilder();
+                    StringBuffer builder = new StringBuffer();
                     Matcher matcher = pattern.matcher(printer.toString());
                     while (matcher.find()) {
                         matcher.appendReplacement(builder, matcher.group(1));
@@ -666,19 +657,18 @@ public abstract class AbstractTranslator implements Translator
         if (value == null) {
             return Collections.emptyList();
         }
-        return List.of(value.split(LIST_ITEM_SEPARATOR));
+        return Arrays.asList(value.split(LIST_ITEM_SEPARATOR));
     }
 
     protected void setAuthors(XWikiDocument page)
     {
         XWikiContext xcontext = xcontextProvider.get();
         DocumentReference currentUserDocumentReference = xcontext.getUserReference();
-        UserReference currentUserReference = userReferenceResolver.resolve(currentUserDocumentReference);
 
-        page.getAuthors().setCreator(currentUserReference);
-        page.getAuthors().setContentAuthor(currentUserReference);
-        page.getAuthors().setEffectiveMetadataAuthor(currentUserReference);
-        page.getAuthors().setOriginalMetadataAuthor(currentUserReference);
+        page.setCreatorReference(currentUserDocumentReference);
+        page.setContentAuthorReference(currentUserDocumentReference);
+        //page.getAuthors().setEffectiveMetadataAuthor(currentUserReference);
+        //page.getAuthors().setOriginalMetadataAuthor(currentUserReference);
     }
 
     /*
