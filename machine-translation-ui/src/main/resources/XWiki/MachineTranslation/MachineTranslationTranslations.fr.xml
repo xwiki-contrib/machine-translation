@@ -39,30 +39,30 @@
   <content># Champs de classe
 XWiki.MachineTranslation.TranslatorClass_title=Title
 
-translator.translate=Traduction
-translator.translations=Traductions
-translator.availableTranslations=Traduction disponibles
-translator.actions=Actions
-translator.actions.translate=Traduire
-translator.translate.modal.title=Traductions
-translator.translate.modal.translate=Traduire
-translator.translate.modal.translate.inProgress=Traduction...
-translator.translate.modal.close=Fermer
-translator.translate.modal.originalDocument=Document original :
-translator.translate.modal.translation.language=Langue
-translator.translate.modal.translation.title=Titre
-translator.translate.modal.translation.date=Date
-translator.translate.returnToDocument=Retourner au document pour accéder aux traductions
+machinetranslation.translate=Traduction
+machinetranslation.translations=Traductions
+machinetranslation.availableTranslations=Traduction disponibles
+machinetranslation.actions=Actions
+machinetranslation.actions.translate=Traduire
+machinetranslation.translate.modal.title=Traductions
+machinetranslation.translate.modal.translate=Traduire
+machinetranslation.translate.modal.translate.inProgress=Traduction...
+machinetranslation.translate.modal.close=Fermer
+machinetranslation.translate.modal.originalDocument=Document original :
+machinetranslation.translate.modal.translation.language=Langue
+machinetranslation.translate.modal.translation.title=Titre
+machinetranslation.translate.modal.translation.date=Date
+machinetranslation.translate.returnToDocument=Retourner au document pour accéder aux traductions
 
-admin.translator=Traduction automatique
-admin.translator.usage=Usage
-admin.translator.glossary=Glossaire
-admin.translator.usage.values=Nombre de caractères utilisés pour la période courante : {0} sur {1}
-admin.translator.test.textToTranslate=Text
-admin.translator.test.sourceLanguage=Langue source
-admin.translator.test.targetLanguage=Langue cible
-admin.translator.test=Test de traduction
-admin.translator.test.translate=Traduire
+admin.machinetranslation=Traduction automatique
+admin.machinetranslation.usage=Usage
+admin.machinetranslation.glossary=Glossaire
+admin.machinetranslation.usage.values=Nombre de caractères utilisés pour la période courante : {0} sur {1}
+admin.machinetranslation.test.textToTranslate=Text
+admin.machinetranslation.test.sourceLanguage=Langue source
+admin.machinetranslation.test.targetLanguage=Langue cible
+admin.machinetranslation.test=Test de traduction
+admin.machinetranslation.test.translate=Traduire
 
 XWiki.MachineTranslation.MachineTranslationConfigurationClass_enabled=Activer le service de traduction automatique
 XWiki.MachineTranslation.MachineTranslationConfigurationClass_enabled.hint=Activer la possibilité de traduire le contenu en utilisant un service de traduction automatique

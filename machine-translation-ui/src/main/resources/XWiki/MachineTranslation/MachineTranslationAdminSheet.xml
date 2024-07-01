@@ -121,19 +121,19 @@
 #try()
   #set ($usage = $services.machinetranslation.getUsage())
   #if ($usage != $NULL)
-    == $services.localization.render('admin.translator.usage') ==
+    == $services.localization.render('admin.machinetranslation.usage') ==
 
-    $services.localization.render('admin.translator.usage.values', [$usage.getCount(),$usage.getLimit()])
+    $services.localization.render('admin.machinetranslation.usage.values', [$usage.getCount(),$usage.getLimit()])
   #end
 #end
 
 #if ($xwiki.exists('Glossary.Code.MachineTranslation.GlossarySynchronizer'))
-  == $services.localization.render('admin.translator.glossary') ==
+  == $services.localization.render('admin.machinetranslation.glossary') ==
   [[$services.localization.render('glossary.machineTranslation.explorer.forceSync')&gt;&gt;Glossary.GlossarySynchronizerJob||class="btn button" queryString="form_token=$services.csrf.getToken()&amp;jobId=$util.generateRandomString(6).toLowerCase()&amp;confirm=true"]]
   [[$services.localization.render('glossary.machineTranslation.explorer.title')&gt;&gt;Glossary.TranslationGlossaries||class="btn button"]]
 #end
 
-== $services.localization.render('admin.translator.test') ==
+== $services.localization.render('admin.machinetranslation.test') ==
 
 #set ($input = "$!request.input")
 #if ($input.trim() == '')
@@ -144,7 +144,7 @@
   &lt;dl&gt;
     &lt;dt&gt;
       &lt;label&gt;
-        $services.localization.render('admin.translator.test.textToTranslate')
+        $services.localization.render('admin.machinetranslation.test.textToTranslate')
       &lt;/label&gt;
     &lt;dd&gt;
       &lt;textarea rows="3" name="input"&gt;
@@ -152,7 +152,7 @@
       &lt;/textarea&gt;
     &lt;/dd&gt;
     &lt;dt&gt;
-      &lt;label&gt;$services.localization.render('admin.translator.test.sourceLanguage')&lt;/label&gt;
+      &lt;label&gt;$services.localization.render('admin.machinetranslation.test.sourceLanguage')&lt;/label&gt;
     &lt;/dt&gt;
     &lt;dd&gt;
       #set ($fromLanguage = "$!request.sourceLanguage")
@@ -166,7 +166,7 @@
       &lt;/select&gt;
     &lt;/dd&gt;
     &lt;dt&gt;
-      &lt;label&gt;$services.localization.render('admin.translator.test.targetLanguage')&lt;/label&gt;
+      &lt;label&gt;$services.localization.render('admin.machinetranslation.test.targetLanguage')&lt;/label&gt;
     &lt;/dt&gt;
     &lt;dd&gt;
       &lt;select name="targetLanguage"&gt;
@@ -178,7 +178,7 @@
   &lt;/dl&gt;
 
   &lt;button type="submit" class="btn btn-primary" style="margin: 1rem 0 2rem 0;"&gt;
-    $services.localization.render('admin.translator.test.translate')
+    $services.localization.render('admin.machinetranslation.test.translate')
   &lt;/button&gt;
   &lt;input name="translate" value="true" type="hidden"/&gt;
   &lt;input name="token" value="$services.csrf.getToken()" type="hidden"/&gt;
@@ -435,7 +435,7 @@
       <displayInCategory>content</displayInCategory>
     </property>
     <property>
-      <displayInSection>translator</displayInSection>
+      <displayInSection>machinetranslation</displayInSection>
     </property>
     <property>
       <heading>Translator</heading>

@@ -19,6 +19,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 -->
+
 <xwikidoc version="1.5" reference="XWiki.MachineTranslation.MachineTranslationTranslations" locale="">
   <web>XWiki.MachineTranslation</web>
   <name>MachineTranslationTranslations</name>
@@ -38,30 +39,30 @@
   <content># Class fields
 XWiki.MachineTranslation.TranslatorClass_title=Title
 
-translator.translate=Translate
-translator.translations=Translations
-translator.availableTranslations=Available translations
-translator.actions=Actions
-translator.actions.translate=Translate
-translator.translate.modal.title=Translations
-translator.translate.modal.translate=Translate
-translator.translate.modal.translate.inProgress=Translating...
-translator.translate.modal.close=Close
-translator.translate.modal.originalDocument=Original document :
-translator.translate.modal.translation.language=Language
-translator.translate.modal.translation.title=Title
-translator.translate.modal.translation.date=Date
-translator.translate.returnToDocument=Return to document to access translations
+machinetranslation.translate=Translate
+machinetranslation.translations=Translations
+machinetranslation.availableTranslations=Available translations
+machinetranslation.actions=Actions
+machinetranslation.actions.translate=Translate
+machinetranslation.translate.modal.title=Translations
+machinetranslation.translate.modal.translate=Translate
+machinetranslation.translate.modal.translate.inProgress=Translating...
+machinetranslation.translate.modal.close=Close
+machinetranslation.translate.modal.originalDocument=Original document :
+machinetranslation.translate.modal.translation.language=Language
+machinetranslation.translate.modal.translation.title=Title
+machinetranslation.translate.modal.translation.date=Date
+machinetranslation.translate.returnToDocument=Return to document to access translations
 
-admin.translator=Machine Translation
-admin.translator.usage=Usage
-admin.translator.glossary=Glossary
-admin.translator.usage.values=Character usage for current period: {0} of {1}
-admin.translator.test.textToTranslate=Text
-admin.translator.test.sourceLanguage=Source language
-admin.translator.test.targetLanguage=Target language
-admin.translator.test=Translation test
-admin.translator.test.translate=Translate
+admin.machinetranslation=Machine Translation
+admin.machinetranslation.usage=Usage
+admin.machinetranslation.glossary=Glossary
+admin.machinetranslation.usage.values=Character usage for current period: {0} of {1}
+admin.machinetranslation.test.textToTranslate=Text
+admin.machinetranslation.test.sourceLanguage=Source language
+admin.machinetranslation.test.targetLanguage=Target language
+admin.machinetranslation.test=Translation test
+admin.machinetranslation.test.translate=Translate
 
 XWiki.MachineTranslation.MachineTranslationConfigurationClass_enabled=Enable the Machine Translation service
 XWiki.MachineTranslation.MachineTranslationConfigurationClass_enabled.hint=Activates the ability to translate content using a machine translation service
