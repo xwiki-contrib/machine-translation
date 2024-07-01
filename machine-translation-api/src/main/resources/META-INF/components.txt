@@ -1,0 +1,4 @@
+org.xwiki.contrib.machinetranslation.script.MachineTranslationScriptService
+org.xwiki.contrib.machinetranslation.internal.DefaultMachineTranslationConfiguration
+org.xwiki.contrib.machinetranslation.internal.DefaultTranslatorManager
+org.xwiki.contrib.machinetranslation.internal.MachineTranslationConfigurationSource

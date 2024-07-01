@@ -27,21 +27,25 @@
     <artifactId>parent-platform</artifactId>
     <version>14.10</version>
   </parent>
-  <groupId>org.xwiki.contrib.translator</groupId>
-  <artifactId>translator-parent</artifactId>
+  <groupId>org.xwiki.contrib.machinetranslation</groupId>
+  <artifactId>machine-translation-parent</artifactId>
   <version>1.0-SNAPSHOT</version>
-  <name>Translator Extension - Parent POM</name>
+  <name>Machine Translation Extension - Parent POM</name>
   <packaging>pom</packaging>
   <scm>
-    <connection>scm:git:git://github.com/xwiki-contrib/translator.git</connection>
-    <developerConnection>scm:git:git@github.com:xwiki-contrib/translator.git</developerConnection>
-    <url>https://github.com/xwiki-contrib/translator</url>
+    <connection>scm:git:git://github.com/xwiki-contrib/machinetranslation.git</connection>
+    <developerConnection>scm:git:git@github.com:xwiki-contrib/machinetranslation.git</developerConnection>
+    <url>https://github.com/xwiki-contrib/machinetranslation</url>
     <tag>HEAD</tag>
   </scm>
   <developers>
     <developer>
       <id>slauriere</id>
       <name>slauriere</name>
+    </developer>
+    <developer>
+      <id>jtille</id>
+      <name>jtille</name>
     </developer>
   </developers>
   <organization>
@@ -50,19 +54,18 @@
   </organization>
   <properties>
     <xwiki.release.jira.skip>true</xwiki.release.jira.skip>
-    <xwiki.issueManagement.jira.id>TRANSLATOR</xwiki.issueManagement.jira.id>
+    <xwiki.issueManagement.jira.id>MT</xwiki.issueManagement.jira.id>
     <deepl.java.version>1.5.0</deepl.java.version>
     <platform.version>14.10</platform.version>
     <jobmacro.version>2.1</jobmacro.version>
     <!-- deactivate checkstyle until we resolve the FanoutComplexity of AbstractTranslator -->
-    <xwiki.checkstyle.skip>true</xwiki.checkstyle.skip>
     <xwiki.spoon.skip>true</xwiki.spoon.skip>
     <xwiki.revapi.skip>true</xwiki.revapi.skip>
   </properties>
   <modules>
-    <module>translator-api</module>
-    <module>translator-ui</module>
-    <module>translator-deepl</module>
+    <module>machine-translation-api</module>
+    <module>machine-translation-ui</module>
+    <module>machine-translation-deepl</module>
   </modules>
   <dependencyManagement>
     <dependencies>

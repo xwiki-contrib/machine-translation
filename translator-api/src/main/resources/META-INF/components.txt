@@ -1,4 +1,0 @@
-org.xwiki.contrib.translator.script.TranslatorScriptService
-org.xwiki.contrib.translator.internal.DefaultTranslatorConfiguration
-org.xwiki.contrib.translator.internal.DefaultTranslatorManager
-org.xwiki.contrib.translator.internal.TranslatorConfigurationSource
