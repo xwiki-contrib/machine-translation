@@ -34,9 +34,9 @@
   <name>Machine Translation Extension - Parent POM</name>
   <packaging>pom</packaging>
   <scm>
-    <connection>scm:git:git://github.com/xwiki-contrib/machinetranslation.git</connection>
-    <developerConnection>scm:git:git@github.com:xwiki-contrib/machinetranslation.git</developerConnection>
-    <url>https://github.com/xwiki-contrib/machinetranslation</url>
+    <connection>scm:git:git://github.com/xwiki-contrib/machine-translation.git</connection>
+    <developerConnection>scm:git:git@github.com:xwiki-contrib/machine-translation.git</developerConnection>
+    <url>https://github.com/xwiki-contrib/machine-translation</url>
     <tag>HEAD</tag>
   </scm>
   <developers>
