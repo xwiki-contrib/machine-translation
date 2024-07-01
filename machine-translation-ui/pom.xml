@@ -25,7 +25,7 @@
   <parent>
     <groupId>org.xwiki.contrib.machinetranslation</groupId>
     <artifactId>machine-translation-parent</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.1</version>
   </parent>
   <artifactId>machine-translation-ui</artifactId>
   <name>Machine Translation Extension</name>
@@ -55,13 +55,13 @@
       <groupId>org.xwiki.contrib.machinetranslation</groupId>
       <artifactId>machine-translation-api</artifactId>
       <type>jar</type>
-      <version>1.1-SNAPSHOT</version>
+      <version>1.1</version>
     </dependency>
     <dependency>
       <groupId>org.xwiki.contrib.machinetranslation</groupId>
       <artifactId>machine-translation-deepl</artifactId>
       <type>jar</type>
-      <version>1.1-SNAPSHOT</version>
+      <version>1.1</version>
     </dependency>
     <dependency>
       <groupId>org.xwiki.contrib</groupId>
