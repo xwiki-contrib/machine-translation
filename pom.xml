@@ -29,14 +29,14 @@
   </parent>
   <groupId>org.xwiki.contrib.machinetranslation</groupId>
   <artifactId>machine-translation-parent</artifactId>
-  <version>1.1.1</version>
+  <version>1.1.2-SNAPSHOT</version>
   <name>Machine Translation Extension - Parent POM</name>
   <packaging>pom</packaging>
   <scm>
     <connection>scm:git:git://github.com/xwiki-contrib/machine-translation.git</connection>
     <developerConnection>scm:git:git@github.com:xwiki-contrib/machine-translation.git</developerConnection>
     <url>https://github.com/xwiki-contrib/machine-translation</url>
-    <tag>machine-translation-parent-1.1.1</tag>
+    <tag>HEAD</tag>
   </scm>
   <developers>
     <developer>
