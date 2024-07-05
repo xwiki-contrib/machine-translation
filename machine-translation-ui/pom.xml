@@ -32,7 +32,7 @@
   <description>Allows to translate content using an external Machine Translation service</description>
   <packaging>xar</packaging>
   <properties>
-    <xwiki.extension.name>Machine Translation</xwiki.extension.name>
+    <xwiki.extension.name>Machine Translation Application</xwiki.extension.name>
   </properties>
   <build>
     <plugins>
