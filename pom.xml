@@ -35,7 +35,7 @@
   <scm>
     <connection>scm:git:git://github.com/xwiki-contrib/machine-translation.git</connection>
     <developerConnection>scm:git:git@github.com:xwiki-contrib/machine-translation.git</developerConnection>
-    <url>https://github.com/xwiki-contrib/machine-translation/tree/master</url>
+    <url>https://github.com/xwiki-contrib/machine-translation/tree/master/</url>
     <tag>HEAD</tag>
   </scm>
   <developers>
