@@ -5,7 +5,12 @@ The tests below have to be executed with all possible strategies available in Tr
 1. Set wiki to multilingual with supported languages:FR, FR_CA, ES, AR, ZH, DE, RU
 1. Create English page with some text
 1. Run translator on all wiki languages
-1. Expected result: each page is correctly translated and lists the other available translations in the `Translations` content menu
+
+### Expected result
+
+* Each page is translated
+* The original page and its translations contain the other available translations in the `Translations` content menu
+* In page history, the last author of each translation is the user who performed the translations
 
 ## Document with macros and images
 
@@ -33,7 +38,10 @@ Document title: $doc.title
 ```
 
 2. Run translator on all wiki languages
-3. Expected result: the page is correctly translated in all languages
+
+### Expected result
+
+The page is correctly translated in all languages
 
 ## Document with object and attachments
 
@@ -42,7 +50,10 @@ Document title: $doc.title
 1. In administration translator section, set `Properties to be translated` to `XWiki.Movie.MovieClass^summary`'.
 1. In object mode, edit Movie `Modern Times` and fill in summary from some text from the [movie plot section on Wikipedia](https://en.wikipedia.org/wiki/Modern_Times_(film))
 1. Translate page to available wiki languages
-1. Expected result: when editing the translated pages in object mode, the field `summary` is translated correctly, and all attachments have been copied to the translations (only in the case of distinct translation location strategy) 
+
+### Expected result
+
+When editing the translated pages in object mode, the field `summary` is translated correctly, and all attachments have been copied to the translations (only in the case of distinct translation location strategy) 
 
 ## Translatable pages
 
@@ -72,21 +83,31 @@ In other side for DeepL, it doesn't support the translation to country specific 
 1. In Glossary Machine Translation app, go to page `Translation glossary explorer` and hit `Launch glossary synchronization`
 1. Create page containing Glossary entries
 1. Translate page to all available wiki locales
-1. Expected result: the translated documents contain the word translations set in the local Glossary, not the ones provided by the automated translator
 
-### Glossary entries
+Glossary entries:
+
 | EN_US   | FR         | FR_CA  | DE         | ES         |
 |---------|------------|--------|------------|------------|
 | bicycle | bicyclette | biclou | Veloziped  | velocípedo |
 
 
+### Expected result
+
+The translated documents contain the word translations set in the local Glossary, not the ones provided by the automated translator
+
+
 ## Glossary translations in subwikis
 
 1. Run the same scenario as above in a subwiki, with the following Glossary entries and translations, and using also the word "bicycle".
-1. Expected result: the glossary entries should be translated as defined in the glossary, instead of the translation provided by the translator. The entries present in the other subwiki glossary should have a standard translation instead of the custom ones defined in the other subwiki. 
 
-### Glossary entries
+Glossary entries:
 
 |EN_US  | FR            | FR_CA | DE        | ES    |
 |-------|---------------|-------|-----------|-------|
 |car    | carosse       | auto  | Automobil | carro |
+
+
+### Expected result
+
+The glossary entries should be translated as defined in the glossary, instead of the translation provided by the translator. The entries present in the other subwiki glossary should have a standard translation instead of the custom ones defined in the other subwiki. 
+
