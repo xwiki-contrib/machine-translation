@@ -67,6 +67,8 @@ import org.xwiki.script.service.ScriptService;
 import org.xwiki.security.authorization.ContextualAuthorizationManager;
 import org.xwiki.security.authorization.Right;
 import org.xwiki.text.StringUtils;
+import org.xwiki.user.UserReference;
+import org.xwiki.user.UserReferenceResolver;
 import org.xwiki.wiki.descriptor.WikiDescriptorManager;
 import org.xwiki.wysiwyg.cleaner.HTMLCleaner;
 import org.xwiki.wysiwyg.converter.HTMLConverter;
@@ -136,6 +138,13 @@ public abstract class AbstractTranslator implements Translator
     @Inject
     @Named("local")
     private EntityReferenceSerializer<String> entityReferenceSerializer;
+
+    /**
+     * UserReference resolver.
+     */
+    @Inject
+    @Named("document")
+    private UserReferenceResolver<DocumentReference> userReferenceResolver;
 
     /**
      * Authorization manager.
@@ -663,12 +672,12 @@ public abstract class AbstractTranslator implements Translator
     protected void setAuthors(XWikiDocument page)
     {
         XWikiContext xcontext = xcontextProvider.get();
-        DocumentReference currentUserDocumentReference = xcontext.getUserReference();
-
-        page.setCreatorReference(currentUserDocumentReference);
-        page.setContentAuthorReference(currentUserDocumentReference);
-        //page.getAuthors().setEffectiveMetadataAuthor(currentUserReference);
-        //page.getAuthors().setOriginalMetadataAuthor(currentUserReference);
+        DocumentReference userDocumentReference = xcontext.getUserReference();
+        UserReference resolvedUserReference = this.userReferenceResolver.resolve(userDocumentReference);
+        page.getAuthors().setCreator(resolvedUserReference);
+        page.getAuthors().setContentAuthor(resolvedUserReference);
+        page.getAuthors().setEffectiveMetadataAuthor(resolvedUserReference);
+        page.getAuthors().setOriginalMetadataAuthor(resolvedUserReference);
     }
 
     /*
