@@ -90,7 +90,7 @@ public abstract class AbstractTranslator implements Translator
      * Translation class reference.
      */
     static final LocalDocumentReference TRANSLATION_CLASS_REFERENCE =
-        new LocalDocumentReference(Arrays.asList("XWiki", "MachineTranslation", "Translation"), "TranslationClass");
+        new LocalDocumentReference(Arrays.asList("XWiki", "MachineTranslation"), "MachineTranslationClass");
 
     static final String ORIGINAL_PAGE_PROPERTY = "originalPage";
 
@@ -328,33 +328,59 @@ public abstract class AbstractTranslator implements Translator
     public DocumentReference computeTranslationReference(EntityReference reference, String translationTitle,
         Locale translationLocale) throws MachineTranslationException
     {
-        EntityReference originalDocument = getOriginalDocumentReference(reference);
-        LocalDocumentReference localReference = new LocalDocumentReference(new DocumentReference(originalDocument));
-        String translationName = translationTitle;
-        if (StringUtils.isNotEmpty(translationTitle)) {
-            translationName = entityNameValidationManager.getEntityReferenceNameStrategy().transform(translationTitle);
-        }
-        if (!isSameNameTranslationNamingStrategy(originalDocument)) {
-            SpaceReference localeSpaceReference =
-                new SpaceReference(translationLocale.toString(), getCurrentWikiReference());
-
-            EntityReference target = localReference.appendParent(localeSpaceReference);
-            if (StringUtils.isEmpty(translationName)) {
-                return new DocumentReference(target).setWikiReference(getCurrentWikiReference());
+        try {
+            EntityReference originalDocumentReference = getOriginalDocumentReference(reference);
+            String translationPageName = translationTitle;
+            if (StringUtils.isNotEmpty(translationTitle)) {
+                translationPageName =
+                    entityNameValidationManager.getEntityReferenceNameStrategy().transform(translationTitle);
             }
+            if (!isSameNameTranslationNamingStrategy(originalDocumentReference)) {
+                SpaceReference localeSpaceReference =
+                    new SpaceReference(translationLocale.toString(), getCurrentWikiReference());
+                LocalDocumentReference localOriginalDocumentReference =
+                    new LocalDocumentReference(new DocumentReference(originalDocumentReference));
 
-            String defaultDocumentName =
-                this.defaultEntityReferenceProvider.getDefaultReference(EntityType.DOCUMENT).getName();
+                EntityReference translationPageReference = new EntityReference(localOriginalDocumentReference);
 
-            if (!target.getName().equals(defaultDocumentName)) {
-                return new DocumentReference(translationName, target.getParent(), null);
+                // In case the original document top level parent is the document language code,
+                // remove this space when computing the translation reference. For example: "/en/my-page/" will
+                // become "/fr/ma-page/", not "/fr/en/my-page/".
+                EntityReference topLevelSpace = localOriginalDocumentReference.extractFirstReference(EntityType.SPACE);
+                String topLevelSpaceName = entityReferenceSerializer.serialize(topLevelSpace);
+                XWikiContext xcontext = xcontextProvider.get();
+                XWiki xwiki = xcontext.getWiki();
+                XWikiDocument originalDocument = xwiki.getDocument(originalDocumentReference, xcontext);
+                Locale originalDocumentLocale = originalDocument.getDefaultLocale();
+                if (originalDocumentLocale.getLanguage().equals(topLevelSpaceName)) {
+                    translationPageReference = translationPageReference.removeParent(topLevelSpace);
+                }
+
+                // Append language code as root space of the translation
+                translationPageReference = translationPageReference.appendParent(localeSpaceReference);
+
+                if (StringUtils.isEmpty(translationPageName)) {
+                    return new DocumentReference(translationPageReference).setWikiReference(getCurrentWikiReference());
+                }
+
+                String defaultDocumentName =
+                    this.defaultEntityReferenceProvider.getDefaultReference(EntityType.DOCUMENT).getName();
+
+                if (!translationPageReference.getName().equals(defaultDocumentName)) {
+                    return new DocumentReference(translationPageName, translationPageReference.getParent(), null);
+                } else {
+                    // TODO: make it work for terminal pages
+                    translationPageReference =
+                        translationPageReference.replaceParent(translationPageReference.getParent(),
+                            new SpaceReference(translationPageName, translationPageReference.getParent().getParent()));
+                    return new DocumentReference(translationPageReference).setWikiReference(getCurrentWikiReference());
+                }
             } else {
-                target = target.replaceParent(target.getParent(),
-                    new SpaceReference(translationName, target.getParent().getParent()));
-                return new DocumentReference(target).setWikiReference(getCurrentWikiReference());
+                return new DocumentReference(originalDocumentReference).setWikiReference(getCurrentWikiReference());
             }
-        } else {
-            return new DocumentReference(originalDocument).setWikiReference(getCurrentWikiReference());
+        } catch (XWikiException e) {
+            logger.error("Error while computing a translation reference for [{}]", reference);
+            throw new MachineTranslationException("Error when computing a translation reference", e);
         }
     }
 
@@ -443,8 +469,8 @@ public abstract class AbstractTranslator implements Translator
             translationSet.setOriginalDocumentLocale(originalPage.getDefaultLocale());
             return translationSet;
         } catch (XWikiException | QueryException e) {
-            logger.error("retrieveTranslations", e);
-            throw new MachineTranslationException("Error when retrieving translations", e);
+            logger.error("Error while retrieving translation pages of [{}]", reference, e);
+            throw new MachineTranslationException("Error when retrieving translation pages", e);
         }
     }
 
@@ -466,8 +492,8 @@ public abstract class AbstractTranslator implements Translator
                 return reference;
             }
         } catch (XWikiException e) {
-            logger.error("getOriginalDocument", e);
-            throw new MachineTranslationException("Error when computing a translation references", e);
+            logger.error("Error while retrieving original document reference for [{}]", reference, e);
+            throw new MachineTranslationException("Error while retrieving original document reference", e);
         }
     }
 
