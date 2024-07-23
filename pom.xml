@@ -20,16 +20,17 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.xwiki.contrib</groupId>
     <artifactId>parent-platform</artifactId>
-    <version>13.10</version>
+    <version>14.10</version>
   </parent>
   <groupId>org.xwiki.contrib.machinetranslation</groupId>
   <artifactId>machine-translation-parent</artifactId>
-  <version>1.1.2-SNAPSHOT</version>
+  <version>1.2-SNAPSHOT</version>
   <name>Machine Translation Extension - Parent POM</name>
   <packaging>pom</packaging>
   <scm>
@@ -56,7 +57,7 @@
     <xwiki.release.jira.skip>true</xwiki.release.jira.skip>
     <xwiki.issueManagement.jira.id>MT</xwiki.issueManagement.jira.id>
     <deepl.java.version>1.5.0</deepl.java.version>
-    <platform.version>13.10</platform.version>
+    <platform.version>14.10</platform.version>
     <jobmacro.version>2.1</jobmacro.version>
     <!-- deactivate checkstyle until we resolve the FanoutComplexity of AbstractTranslator -->
     <xwiki.spoon.skip>true</xwiki.spoon.skip>
