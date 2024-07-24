@@ -31,10 +31,10 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.xwiki.component.annotation.Component;
-import org.xwiki.contrib.machinetranslation.TranslationSet;
-import org.xwiki.contrib.machinetranslation.Translator;
+import org.xwiki.contrib.machinetranslation.MachineTranslation;
 import org.xwiki.contrib.machinetranslation.MachineTranslationConfiguration;
 import org.xwiki.contrib.machinetranslation.MachineTranslationException;
+import org.xwiki.contrib.machinetranslation.Translator;
 import org.xwiki.contrib.machinetranslation.TranslatorManager;
 import org.xwiki.contrib.machinetranslation.Usage;
 import org.xwiki.contrib.machinetranslation.model.GlossaryInfo;
@@ -74,19 +74,52 @@ public class MachineTranslationScriptService implements ScriptService
     private ContextualAuthorizationManager authorizationManager;
 
     /**
+     * Returns the original document reference and locale of a given document.
+     *
+     * @param reference a given reference
+     * @return reference to original document
+     * @throws MachineTranslationException in case an error occurs
+     */
+    public DocumentReference getOriginalDocumentReference(DocumentReference reference)
+        throws MachineTranslationException
+    {
+        Translator translator = translatorManager.getTranslator();
+        if (translator == null) {
+            return null;
+        }
+        return translator.getOriginalDocumentReference(reference);
+    }
+
+    /**
      * Retrieves existing translation pages of a page with a given reference.
      *
      * @param reference Reference of a page
      * @return set of existing translations for that page
      * @throws MachineTranslationException in case an error occurs
      */
-    public TranslationSet getTranslations(DocumentReference reference) throws MachineTranslationException
+    public List<MachineTranslation> getTranslations(DocumentReference reference) throws MachineTranslationException
     {
         Translator translator = translatorManager.getTranslator();
         if (translator == null) {
             return null;
         }
         return translator.getTranslations(reference);
+    }
+
+    /**
+     * @param reference a document reference
+     * @param locale a locale
+     * @return translation of the given reference in given locale, if it exists, null otherwise
+     * @throws MachineTranslationException in cas an error occurs
+     */
+    public MachineTranslation getTranslation(DocumentReference reference, Locale locale)
+        throws MachineTranslationException
+    {
+        Translator translator = translatorManager.getTranslator();
+        if (translator == null) {
+            return null;
+        }
+        return translator.getTranslation(reference, locale);
     }
 
     /**

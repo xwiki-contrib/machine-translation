@@ -38,14 +38,20 @@
   <hidden>true</hidden>
   <content>{{job id="{{velocity}}$!request.jobId{{/velocity}}" start="{{velocity}}$!request.confirm{{/velocity}}"}}
 {{velocity}}
-#set ($languages = $request.getParameterValues('languages'))
-##jobId = request.jobId;
-$services.progress.pushLevel(1)
-$services.progress.startStep('First step')
-#foreach ($language in $languages)
-  #if ("$!language" != '')
-    $services.machinetranslation.translate($services.model.resolveDocument($request.documentName), $services.localization.toLocale($language))
+#set ($originalDocumentReference = $services.model.resolveDocument($request.documentName))
+#set ($logger = $services.logging.getLogger('MachineTranslation'))
+#if ($services.machinetranslation.canTranslate($originalDocumentReference))
+  #set ($languages = $request.getParameterValues('languages'))
+  $services.progress.pushLevel(1)
+  $services.progress.startStep('First step')
+  #foreach ($language in $languages)
+    #set ($locale = $services.localization.toLocale($language))
+    #if ("$!locale" != '')
+      $services.machinetranslation.translate($originalDocumentReference, $locale))
+    #end
   #end
+#else
+  $logger.error("Document is not translatable or current user is not allowed to translate [{}]", $originalDocumentReference)
 #end
 $services.progress.endStep()
 $services.progress.popLevel()

@@ -27,6 +27,7 @@ import org.xwiki.component.annotation.Role;
 import org.xwiki.contrib.machinetranslation.model.Glossary;
 import org.xwiki.contrib.machinetranslation.model.GlossaryInfo;
 import org.xwiki.contrib.machinetranslation.model.LocalePair;
+import org.xwiki.model.reference.DocumentReference;
 import org.xwiki.model.reference.EntityReference;
 import org.xwiki.stability.Unstable;
 
@@ -137,11 +138,26 @@ public interface Translator
     /**
      * Returns list of existing translations of a given page.
      *
-     * @param reference A page reference
+     * @param reference a document reference (containing the document locale, if any)
      * @return list of page translations
      * @throws MachineTranslationException in case an error occurs
      */
-    TranslationSet getTranslations(EntityReference reference) throws MachineTranslationException;
+    List<MachineTranslation> getTranslations(DocumentReference reference) throws MachineTranslationException;
+
+    /**
+     * @param reference a page reference
+     * @param locale a locale
+     * @return reference to a translation with given locale if any, null otherwise
+     * @throws MachineTranslationException in case an error occurs
+     */
+    MachineTranslation getTranslation(DocumentReference reference, Locale locale) throws MachineTranslationException;
+
+    /**
+     * @param reference an entity reference
+     * @return DocumentReference of the original document, with its locale
+     * @throws MachineTranslationException in case an error occurs
+     */
+    DocumentReference getOriginalDocumentReference(EntityReference reference) throws MachineTranslationException;
 
     /**
      * Normalizes the string representation of a given locale. Useful for instance for some translators supporting only

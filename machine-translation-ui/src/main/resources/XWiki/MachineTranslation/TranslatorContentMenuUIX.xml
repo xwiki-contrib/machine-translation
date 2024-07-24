@@ -305,34 +305,24 @@
     &lt;span class="sr-only"&gt;Toggle dropdown&lt;/span&gt;
   &lt;/button&gt;
   &lt;ul class="dropdown-menu dropdown-menu-right"&gt;
-    #set ($translationSet = $services.machinetranslation.getTranslations($doc.documentReference))
-    #set ($discard = $translationSet.getTranslations().remove($tdoc.getRealLocale()))
-    #if ($translationSet.getTranslations().size() &gt; 0)
+    #set ($translations = $services.machinetranslation.getTranslations($tdoc.getDocumentReferenceWithLocale()))
+    #if ($translations.size() &gt; 0)
       &lt;li class="dropdown-header"&gt;$services.localization.render('machinetranslation.availableTranslations')&lt;/li&gt;
-      #foreach ($entry in $translationSet.getTranslations())
+      #foreach ($translation in $translations)
         &lt;li class="translationtranslator-menu-item"&gt;
-          #set ($entryName = $entry[0])
-          #set ($entryTitle = $entry[1])
-          #set ($entryLocale = $entry[2])
-          #set ($parameterMap = $request.getParameterMap())
           #set ($queryString = '')
           #if ($services.machinetranslation.isSameNameTranslationNamingStrategy($doc.documentReference))
-            #set ($queryString = "language=${entryLocale.toString()}")
+            #set ($queryString = "language=${translation.getLocale().toString()}")
           #end
-          #foreach ($mapEntry in $parameterMap.entrySet())
-            #if ($mapEntry.key != 'language')
-              #set ($queryString = "$queryString&amp;${mapEntry.key}=${mapEntry.value[0]}")
-            #end
-          #end
-          &lt;a href="$xwiki.getURL($entryName, $xcontext.action, "$!queryString")" title="$escapetool.xml($entryTitle)"&gt;
-            $entryLocale.toString().toUpperCase(): $stringtool.abbreviate($entryTitle, 50)
+          &lt;a href="$xwiki.getURL($translation.getDocumentReference(), $xcontext.action, "$!queryString")" title="$escapetool.xml($translation.getTitle())"&gt;
+            $translation.getLocale().toString().toUpperCase(): $escapetool.xml($stringtool.abbreviate($translation.getTitle(), 50))
           &lt;/a&gt;
         &lt;/li&gt;
       #end
     #end
     ## Check that current user has edit right at least on one target translation location
     #if ($services.machinetranslation.canTranslate($doc.documentReference))
-      #if ($translationSet.getTranslations().size() &gt; 0)
+      #if ($translations.size() &gt; 0)
         &lt;li class="divider" role="separator"&gt;&lt;/li&gt;
       #end
       &lt;li class="dropdown-header"&gt;$services.localization.render('machinetranslation.actions')&lt;/li&gt;

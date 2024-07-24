@@ -1,6 +1,4 @@
-<?xml version="1.1" encoding="UTF-8"?>
-
-<!--
+/*
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  *
@@ -18,23 +16,32 @@
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
--->
+ */
+package org.xwiki.contrib.machinetranslation;
 
-<xwikidoc version="1.5" reference="XWiki.MachineTranslation.Translation.WebHome" locale="">
-  <web>XWiki.MachineTranslation.Translation</web>
-  <name>WebHome</name>
-  <language/>
-  <defaultLanguage/>
-  <translation>0</translation>
-  <creator>xwiki:XWiki.Admin</creator>
-  <parent>XWiki.WebHome</parent>
-  <author>xwiki:XWiki.Admin</author>
-  <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
-  <version>1.1</version>
-  <title>Translation</title>
-  <comment/>
-  <minorEdit>false</minorEdit>
-  <syntaxId>xwiki/2.1</syntaxId>
-  <hidden>true</hidden>
-  <content>{{children/}}</content>
-</xwikidoc>
+import java.util.Locale;
+
+import org.xwiki.model.reference.DocumentReference;
+
+/**
+ * Represents a machine-translated page.
+ *
+ * @version $Id$
+ */
+public interface MachineTranslation
+{
+    /**
+     * @return translation reference
+     */
+    DocumentReference getDocumentReference();
+
+    /**
+     * @return translation locale
+     */
+    Locale getLocale();
+
+    /**
+     * @return translation title
+     */
+    String getTitle();
+}

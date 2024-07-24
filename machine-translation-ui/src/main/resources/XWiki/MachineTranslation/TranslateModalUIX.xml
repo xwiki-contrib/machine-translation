@@ -433,12 +433,19 @@
             $services.localization.render('machinetranslation.translate.modal.title')&lt;/h4&gt;
         &lt;/div&gt;
         &lt;div class="modal-body xform"&gt;
-          #set ($translationSet = $services.machinetranslation.getTranslations($doc.fullName))
-          &lt;div class="plainmessage"&gt;$services.localization.render('machinetranslation.translate.modal.originalDocument')
+          #set ($originalDocumentReference = $services.machinetranslation.getOriginalDocumentReference($doc.fullName))
+          #set ($originalDocument = $xwiki.getDocument($originalDocumentReference))
+          #set ($originalLocale = $originalDocument.getRealLocale())
+          &lt;div class="plainmessage"&gt;
+            $services.localization.render('machinetranslation.translate.modal.originalDocument')
             #if ($services.machinetranslation.isSameNameTranslationNamingStrategy($doc.getDocumentReference()))
-              &lt;a href="$xwiki.getURL($translationSet.getOriginalDocumentReference(), 'view', "language=$doc.getRealLocale()")"&gt;$translationSet.getOriginalDocumentTitle()&lt;/a&gt;
+              &lt;a href="$xwiki.getURL($originalDocumentReference, 'view', "language=$originalLocale")"&gt;
+                $escapetool.xml($originalDocument.displayTitle)
+              &lt;/a&gt;
             #else
-              &lt;a href="$xwiki.getURL($translationSet.getOriginalDocumentReference())"&gt;$translationSet.getOriginalDocumentTitle()&lt;/a&gt;
+              &lt;a href="$xwiki.getURL($originalDocumentReference)"&gt;
+                $escapetool.xml($originalDocument.displayTitle)
+              &lt;/a&gt;
             #end
           &lt;/div&gt;
           &lt;table class="translations"&gt;
@@ -454,8 +461,8 @@
                 &lt;th&gt;$services.localization.render('machinetranslation.translate.modal.translation.date')&lt;/th&gt;
             &lt;/thead&gt;
             &lt;tbody&gt;
-              #foreach($locale in $$xwiki.getAvailableLocales())
-                #if ($locale != $translationSet.getOriginalDocumentLocale())
+              #foreach ($locale in $$xwiki.getAvailableLocales())
+                #if ($locale != $originalLocale)
                   #set ($checked = '')
                   &lt;tr class="translation"&gt;
                     &lt;td class="translate-check-td"&gt;
@@ -468,23 +475,23 @@
                         $locale.toString()
                       &lt;/label&gt;
                     &lt;/td&gt;
-                    #set ($translation = $translationSet.getTranslations().get($locale))
+                    #set ($translation = $services.machinetranslation.getTranslation($doc.getDocumentReferenceWithLocale(), $locale))
                     #if ($translation != $NULL)
                       #if ($services.machinetranslation.isSameNameTranslationNamingStrategy($doc.getDocumentReference()))
                         &lt;td class="translation-doc"&gt;
-                          &lt;a href="$xwiki.getURL($translation[0], 'view', "language=$locale")"&gt;$translation[1]&lt;/a&gt;
+                          &lt;a href="$xwiki.getURL($translation.getDocumentReference(), 'view', "language=$locale")"&gt;$translation.getTitle()&lt;/a&gt;
                         &lt;/td&gt;
                       #else
                         &lt;td class="translation-doc"&gt;
-                          &lt;a href="$xwiki.getURL($translation[0])"&gt;$translation[1]&lt;/a&gt;
+                          &lt;a href="$xwiki.getURL($translation.getDocumentReference())"&gt;$translation.getTitle()&lt;/a&gt;
                         &lt;/td&gt;
                       #end
                       #if ($services.machinetranslation.isSameNameTranslationNamingStrategy($doc.getDocumentReference()))
                         #set ($date = $tdoc.date)
                         &lt;td class="translation-date"&gt;$xwiki.formatDate($date)&lt;/td&gt;
                       #else
-                        #set ($translationDoc = $xwiki.getDocument($translation[0]))
-                        #set ($translationObj = $translationDoc.getObject('XWiki.MachineTranslation.Translation.TranslationClass'))
+                        #set ($translationDoc = $xwiki.getDocument($translation.getDocumentReference()))
+                        #set ($translationObj = $translationDoc.getObject('XWiki.MachineTranslation.MachineTranslationClass'))
                         #set ($date = $translationObj.getValue('automatedTranslationDate'))
                         &lt;td class="translation-date"&gt;$xwiki.formatDate($date)&lt;/td&gt;
                       #end

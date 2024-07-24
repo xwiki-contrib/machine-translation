@@ -20,9 +20,9 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 -->
 
-<xwikidoc version="1.5" reference="XWiki.MachineTranslation.Translation.TranslationClass" locale="">
-  <web>XWiki.MachineTranslation.Translation</web>
-  <name>TranslationClass</name>
+<xwikidoc version="1.5" reference="XWiki.MachineTranslation.MachineTranslationClass" locale="">
+  <web>XWiki.MachineTranslation</web>
+  <name>MachineTranslationClass</name>
   <language/>
   <defaultLanguage/>
   <translation>0</translation>
@@ -31,14 +31,14 @@
   <author>xwiki:XWiki.Admin</author>
   <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
   <version>1.1</version>
-  <title>TranslationClass</title>
+  <title/>
   <comment/>
   <minorEdit>false</minorEdit>
   <syntaxId>xwiki/2.1</syntaxId>
   <hidden>true</hidden>
   <content/>
   <class>
-    <name>XWiki.MachineTranslation.Translation.TranslationClass</name>
+    <name>XWiki.MachineTranslation.MachineTranslationClass</name>
     <customClass/>
     <customMapping/>
     <defaultViewSheet/>
@@ -135,10 +135,10 @@
     </translator>
   </class>
   <object>
-    <name>XWiki.MachineTranslation.Translation.TranslationClass</name>
+    <name>XWiki.MachineTranslation.MachineTranslationClass</name>
     <number>0</number>
     <className>XWiki.DocumentSheetBinding</className>
-    <guid>dbef6142-b2ca-48b4-9523-186bcbf5ff8f</guid>
+    <guid>8c825e0c-d0d9-47e9-8b16-f15686b4b471</guid>
     <class>
       <name>XWiki.DocumentSheetBinding</name>
       <customClass/>
