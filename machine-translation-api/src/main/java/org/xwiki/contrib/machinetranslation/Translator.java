@@ -68,9 +68,10 @@ public interface Translator
      *
      * @param reference A page reference
      * @param locale Destination language
+     * @return Reference to the translated page
      * @throws MachineTranslationException in case an error occurs
      */
-    void translate(EntityReference reference, Locale locale) throws MachineTranslationException;
+    EntityReference translate(EntityReference reference, Locale locale) throws MachineTranslationException;
 
     /**
      * Translates a given page to a set of locales.

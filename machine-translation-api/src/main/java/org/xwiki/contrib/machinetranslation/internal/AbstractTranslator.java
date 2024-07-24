@@ -203,7 +203,7 @@ public abstract class AbstractTranslator implements Translator
     private WikiDescriptorManager wikiDescriptorManager;
 
     @Override
-    public void translate(EntityReference reference, Locale toLocale) throws MachineTranslationException
+    public EntityReference translate(EntityReference reference, Locale toLocale) throws MachineTranslationException
     {
         try {
             if (!authorizationManager.hasAccess(Right.VIEW, reference)) {
@@ -216,10 +216,16 @@ public abstract class AbstractTranslator implements Translator
             XWikiDocument doc = xwiki.getDocument(originalDocumentReference, xcontext).clone();
 
             Locale fromLocale = doc.getDefaultLocale();
+            if (fromLocale.equals(toLocale)) {
+                logger.info("Skipping translation of [{}] to same locale as original locale [{}]",
+                    doc.getDocumentReference(), toLocale);
+                return null;
+            }
+
             logger.info("Translating [{}] [{}] to locale [{}]", doc.getDocumentReference(), fromLocale, toLocale);
 
             String translationTitle = translate(doc.getTitle(), fromLocale, toLocale, false);
-            // TODO: use reference resolver
+
             EntityReference translationReference =
                 computeTranslationReference(doc.getDocumentReference(), translationTitle, toLocale);
 
@@ -245,6 +251,7 @@ public abstract class AbstractTranslator implements Translator
 
             setAuthors(translationPage);
             xwiki.saveDocument(translationPage, "Translation from " + fromLocale.getLanguage(), xcontext);
+            return translationPage.getDocumentReference();
         } catch (XWikiException e) {
             logger.error("Translator error {[]}", e);
             throw new MachineTranslationException(e);
@@ -581,8 +588,11 @@ public abstract class AbstractTranslator implements Translator
             return false;
         }
 
-        EntityReference translationReference = computeTranslationReference(reference, null, toLocale);
-        return authorizationManager.hasAccess(Right.EDIT, translationReference);
+        if (authorizationManager.hasAccess(Right.VIEW, reference)) {
+            EntityReference translationReference = computeTranslationReference(reference, null, toLocale);
+            return authorizationManager.hasAccess(Right.EDIT, translationReference);
+        }
+        return false;
     }
 
     @Override

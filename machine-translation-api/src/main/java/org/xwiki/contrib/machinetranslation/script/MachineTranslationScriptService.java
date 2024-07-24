@@ -159,11 +159,12 @@ public class MachineTranslationScriptService implements ScriptService
      *
      * @param reference A page reference
      * @param toLocale A locale
+     * @return Translation page reference
      * @throws MachineTranslationException in case an error occurs
      */
-    public void translate(EntityReference reference, Locale toLocale) throws MachineTranslationException
+    public EntityReference translate(EntityReference reference, Locale toLocale) throws MachineTranslationException
     {
-        translatorManager.getTranslator().translate(reference, toLocale);
+        return translatorManager.getTranslator().translate(reference, toLocale);
     }
 
     /**
@@ -222,8 +223,8 @@ public class MachineTranslationScriptService implements ScriptService
 
     /**
      * Returns current translator name.
-     * @param hint Component name
      *
+     * @param hint Component name
      * @return current translator name
      */
     public String getName(String hint)
@@ -237,6 +238,7 @@ public class MachineTranslationScriptService implements ScriptService
 
     /**
      * Returns Usage statistics in current period.
+     *
      * @return Usage in current period
      * @throws MachineTranslationException in case an error occurs
      */
