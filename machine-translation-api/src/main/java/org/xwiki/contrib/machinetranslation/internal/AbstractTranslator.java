@@ -196,7 +196,7 @@ public abstract class AbstractTranslator implements Translator
     private ContentParser parser;
 
     @Inject
-    @Named("annotatedxhtml/1.0")
+    @Named("annotatedhtml/5.0")
     private BlockRenderer wikiBlockRenderer;
 
     @Inject
