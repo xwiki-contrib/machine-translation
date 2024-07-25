@@ -75,47 +75,41 @@
       <validationRegExp/>
       <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
     </enabled>
-    <sameTranslationNameClasses>
-      <customDisplay/>
-      <disabled>0</disabled>
-      <hint/>
-      <name>sameTranslationNameClasses</name>
-      <number>7</number>
-      <picker>0</picker>
-      <prettyName>Same translation name classes</prettyName>
-      <size>30</size>
-      <unmodifiable>0</unmodifiable>
-      <validationMessage/>
-      <validationRegExp/>
-      <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
-    </sameTranslationNameClasses>
     <targetClasses>
+      <contenttype>PureText</contenttype>
       <customDisplay/>
       <disabled>0</disabled>
+      <editor>PureText</editor>
       <hint/>
       <name>targetClasses</name>
-      <number>5</number>
-      <picker>0</picker>
+      <number>7</number>
+      <picker>1</picker>
       <prettyName>Target classes</prettyName>
-      <size>30</size>
+      <restricted>0</restricted>
+      <rows>2</rows>
+      <size>40</size>
       <unmodifiable>0</unmodifiable>
       <validationMessage/>
       <validationRegExp/>
-      <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
     </targetClasses>
     <targetProperties>
+      <contenttype>PureText</contenttype>
       <customDisplay/>
       <disabled>0</disabled>
+      <editor>PureText</editor>
       <hint/>
       <name>targetProperties</name>
-      <number>6</number>
-      <picker>0</picker>
+      <number>7</number>
+      <picker>1</picker>
       <prettyName>Target properties</prettyName>
-      <size>30</size>
+      <restricted>0</restricted>
+      <rows>2</rows>
+      <size>40</size>
       <unmodifiable>0</unmodifiable>
       <validationMessage/>
       <validationRegExp/>
-      <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
     </targetProperties>
     <translationNamingStrategy>
       <cache>0</cache>
