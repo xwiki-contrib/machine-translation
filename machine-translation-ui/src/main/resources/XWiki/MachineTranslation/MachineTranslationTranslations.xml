@@ -54,6 +54,9 @@ machinetranslation.translate.modal.translation.title=Title
 machinetranslation.translate.modal.translation.date=Date
 machinetranslation.translate.returnToDocument=Return to document to access translations
 
+machinetranslation.review.warning=This article was published originally in {0} as //[[{1}&gt;&gt;{2}]]//. This translation was generated automatically and has not been reviewed yet.
+machinetranslation.review.info=This article was published originally in {0} as //[[{1}&gt;&gt;{2}]]//.
+
 admin.machinetranslation=Machine Translation
 admin.machinetranslation.usage=Usage
 admin.machinetranslation.glossary=Glossary
