@@ -80,7 +80,7 @@ public class MachineTranslationScriptService implements ScriptService
      * @return reference to original document
      * @throws MachineTranslationException in case an error occurs
      */
-    public DocumentReference getOriginalDocumentReference(DocumentReference reference)
+    public DocumentReference getOriginalDocumentReference(EntityReference reference)
         throws MachineTranslationException
     {
         Translator translator = translatorManager.getTranslator();
@@ -88,6 +88,21 @@ public class MachineTranslationScriptService implements ScriptService
             return null;
         }
         return translator.getOriginalDocumentReference(reference);
+    }
+
+    /**
+     *
+     * @param reference a document reference
+     * @return Locale the real locale of the original document
+     * @throws MachineTranslationException in case an error occurs
+     */
+    public Locale getOriginalDocumentLocale(EntityReference reference) throws MachineTranslationException
+    {
+        Translator translator = translatorManager.getTranslator();
+        if (translator == null) {
+            return null;
+        }
+        return translator.getOriginalDocumentLocale(reference);
     }
 
     /**

@@ -160,6 +160,14 @@ public interface Translator
     DocumentReference getOriginalDocumentReference(EntityReference reference) throws MachineTranslationException;
 
     /**
+     *
+     * @param reference an entity reference
+     * @return Locale of the original document
+     * @throws MachineTranslationException in case an error occurs
+     */
+    Locale getOriginalDocumentLocale(EntityReference reference) throws MachineTranslationException;
+
+    /**
      * Normalizes the string representation of a given locale. Useful for instance for some translators supporting only
      * language representation without the country, e.g "en" vs "en-GB".
      *

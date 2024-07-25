@@ -420,7 +420,7 @@ public abstract class AbstractTranslator implements Translator
                                 translatedDocument.getTitle()));
                     }
                 }
-                if (reference.getLocale() != null && !reference.getLocale().equals(Locale.ROOT)) {
+                if (reference.getLocale() != null) {
                     // Retrieve original document (ie document with empty locale) and add it as a translation
                     DocumentReference originalDocumentReference = getOriginalDocumentReference(reference);
                     XWikiDocument originalDocument = xwiki.getDocument(originalDocumentReference, xcontext);
@@ -494,8 +494,7 @@ public abstract class AbstractTranslator implements Translator
         }
     }
 
-    @Override
-    public DocumentReference getOriginalDocumentReference(EntityReference reference) throws MachineTranslationException
+    private XWikiDocument getOriginalDocument(EntityReference reference) throws MachineTranslationException
     {
         try {
             /* Either the current page is already a translation or it is the original document */
@@ -507,15 +506,28 @@ public abstract class AbstractTranslator implements Translator
                 // 1) First case: the current page is a translation
                 // -> retrieve original document and add it to the entry list
                 String originalPageName = translationObj.getStringValue(ORIGINAL_PAGE_PROPERTY);
-                return new DocumentReference(referenceResolver.resolve(originalPageName), Locale.ROOT);
+                return xwiki.getDocument(referenceResolver.resolve(originalPageName), xcontext);
             } else {
-                // 2) Second case: the current page is the original one
-                return new DocumentReference(reference, Locale.ROOT);
+                // 2) Second case: the current reference is the original one
+                // return document in original language
+                return xwiki.getDocument(reference, xcontext);
             }
         } catch (XWikiException e) {
             logger.error("Error while retrieving original document reference for [{}]", reference, e);
             throw new MachineTranslationException("Error while retrieving original document reference", e);
         }
+    }
+
+    @Override
+    public DocumentReference getOriginalDocumentReference(EntityReference reference) throws MachineTranslationException
+    {
+        return getOriginalDocument(reference).getDocumentReference();
+    }
+
+    @Override
+    public Locale getOriginalDocumentLocale(EntityReference reference) throws MachineTranslationException
+    {
+        return getOriginalDocument(reference).getRealLocale();
     }
 
     /**
@@ -551,7 +563,7 @@ public abstract class AbstractTranslator implements Translator
 
         try {
             XWikiDocument doc = xwiki.getDocument(reference, xcontext);
-            if (doc.getRealLocale() == Locale.ROOT) {
+            if (doc.getRealLocale().equals(Locale.ROOT)) {
                 return false;
             }
 
