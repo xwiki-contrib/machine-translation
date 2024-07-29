@@ -20,9 +20,9 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 -->
 
-<xwikidoc version="1.5" reference="XWiki.MachineTranslation.TranslatorContentMenuUIX" locale="">
+<xwikidoc version="1.5" reference="XWiki.MachineTranslation.MachineTranslationContentMenuUIX" locale="">
   <web>XWiki.MachineTranslation</web>
-  <name>TranslatorContentMenuUIX</name>
+  <name>MachineTranslationContentMenuUIX</name>
   <language/>
   <defaultLanguage/>
   <translation>0</translation>
@@ -31,14 +31,14 @@
   <author>xwiki:XWiki.Admin</author>
   <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
   <version>1.1</version>
-  <title/>
+  <title>MachineTranslationContentMenuUIX</title>
   <comment/>
   <minorEdit>false</minorEdit>
   <syntaxId>xwiki/2.1</syntaxId>
   <hidden>true</hidden>
   <content/>
   <object>
-    <name>XWiki.MachineTranslation.TranslatorContentMenuUIX</name>
+    <name>XWiki.MachineTranslation.MachineTranslationContentMenuUIX</name>
     <number>0</number>
     <className>XWiki.StyleSheetExtension</className>
     <guid>ce29fcf8-a053-4b62-985e-6c2bb6cb348d</guid>
@@ -162,7 +162,7 @@
     </property>
   </object>
   <object>
-    <name>XWiki.MachineTranslation.TranslatorContentMenuUIX</name>
+    <name>XWiki.MachineTranslation.MachineTranslationContentMenuUIX</name>
     <number>0</number>
     <className>XWiki.UIExtensionClass</className>
     <guid>e407cac8-cee8-400f-a51c-5d6e286150d7</guid>
@@ -305,19 +305,33 @@
     &lt;span class="sr-only"&gt;Toggle dropdown&lt;/span&gt;
   &lt;/button&gt;
   &lt;ul class="dropdown-menu dropdown-menu-right"&gt;
-    #set ($translations = $services.machinetranslation.getTranslations($tdoc.getDocumentReferenceWithLocale()))
+    #set ($translations = $services.machinetranslation.getTranslations($doc.getDocumentReference()))
+    #set ($originalDocumentReference = $services.machinetranslation.getOriginalDocumentReference($doc.getDocumentReference()))
+    #set ($originalDocument = $xwiki.getDocument($originalDocumentReference))
     #if ($translations.size() &gt; 0)
       &lt;li class="dropdown-header"&gt;$services.localization.render('machinetranslation.availableTranslations')&lt;/li&gt;
+      ## Display original document in case the current document is not the original one
+      #if (!$services.machinetranslation.isOriginalDocument($tdoc))
+        #if ($services.machinetranslation.isSameNameTranslationNamingStrategy($doc.documentReference))
+          #set ($queryString = "language=${originalDocument.getRealLocale().toString()}")
+        #end
+        &lt;li class="machine-translation"&gt;
+          &lt;a href="$xwiki.getURL($originalDocument.getDocumentReference(), $xcontext.action, "$!queryString")" title="$escapetool.xml($originalDocument.getTitle())"&gt;
+            $originalDocument.getRealLocale().toString().toUpperCase(): $escapetool.xml($stringtool.abbreviate($originalDocument.getTitle(), 50))
+          &lt;/a&gt;
+        &lt;/li&gt;
+      #end
       #foreach ($translation in $translations)
-        &lt;li class="translationtranslator-menu-item"&gt;
-          #set ($queryString = '')
+        #if (!$services.machinetranslation.isCurrentDocument($translation))
           #if ($services.machinetranslation.isSameNameTranslationNamingStrategy($doc.documentReference))
             #set ($queryString = "language=${translation.getLocale().toString()}")
           #end
-          &lt;a href="$xwiki.getURL($translation.getDocumentReference(), $xcontext.action, "$!queryString")" title="$escapetool.xml($translation.getTitle())"&gt;
-            $translation.getLocale().toString().toUpperCase(): $escapetool.xml($stringtool.abbreviate($translation.getTitle(), 50))
-          &lt;/a&gt;
-        &lt;/li&gt;
+          &lt;li class="machine-translation"&gt;
+            &lt;a href="$xwiki.getURL($translation.getDocumentReference(), $xcontext.action, "$!queryString")" title="$escapetool.xml($translation.getTitle())"&gt;
+              $translation.getLocale().toString().toUpperCase(): $escapetool.xml($stringtool.abbreviate($translation.getTitle(), 50))
+            &lt;/a&gt;
+          &lt;/li&gt;
+        #end
       #end
     #end
     ## Check that current user has edit right at least on one target translation location
@@ -326,10 +340,10 @@
         &lt;li class="divider" role="separator"&gt;&lt;/li&gt;
       #end
       &lt;li class="dropdown-header"&gt;$services.localization.render('machinetranslation.actions')&lt;/li&gt;
-      &lt;li class="translator-menu-item"&gt;
-        &lt;a href="#translator-translate-modal"
+      &lt;li class="machine-translation-action-modal"&gt;
+        &lt;a href="#machine-translation-modal"
           title="$services.localization.render('machinetranslation.actions.translate')"
-          data-toggle="modal" data-target="#translator-translate-modal"&gt;
+          data-toggle="modal" data-target="#machine-translation-modal"&gt;
           &lt;span&gt;
             $services.localization.render('machinetranslation.actions.translate')
           &lt;/span&gt;

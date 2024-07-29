@@ -20,9 +20,9 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 -->
 
-<xwikidoc version="1.5" reference="XWiki.MachineTranslation.TranslateModalUIX" locale="">
+<xwikidoc version="1.5" reference="XWiki.MachineTranslation.MachineTranslationModalUIX" locale="">
   <web>XWiki.MachineTranslation</web>
-  <name>TranslateModalUIX</name>
+  <name>MachineTranslationModalUIX</name>
   <language/>
   <defaultLanguage/>
   <translation>0</translation>
@@ -31,14 +31,14 @@
   <author>xwiki:XWiki.Admin</author>
   <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
   <version>1.1</version>
-  <title>TranslateModalUIX</title>
+  <title>MachineTranslationModalUIX</title>
   <comment/>
   <minorEdit>false</minorEdit>
   <syntaxId>xwiki/2.1</syntaxId>
   <hidden>true</hidden>
   <content/>
   <object>
-    <name>XWiki.MachineTranslation.TranslateModalUIX</name>
+    <name>XWiki.MachineTranslation.MachineTranslationModalUIX</name>
     <number>0</number>
     <className>XWiki.JavaScriptExtension</className>
     <guid>221d8939-ff31-4961-a800-c3b7a882fa18</guid>
@@ -166,7 +166,7 @@
     </property>
   </object>
   <object>
-    <name>XWiki.MachineTranslation.TranslateModalUIX</name>
+    <name>XWiki.MachineTranslation.MachineTranslationModalUIX</name>
     <number>0</number>
     <className>XWiki.StyleSheetExtension</className>
     <guid>aef7bba8-89f5-4233-9bd9-db3eb582111e</guid>
@@ -289,7 +289,7 @@
     </property>
   </object>
   <object>
-    <name>XWiki.MachineTranslation.TranslateModalUIX</name>
+    <name>XWiki.MachineTranslation.MachineTranslationModalUIX</name>
     <number>0</number>
     <className>XWiki.UIExtensionClass</className>
     <guid>6b0a0b1e-a17a-4bb1-b262-670212f10f4a</guid>
@@ -422,7 +422,7 @@
 #set ($discard = $xwiki.ssx.use($uix.doc.fullName))
 #set ($discard = $xwiki.jsx.use($uix.doc.fullName))
 {{html clean="false"}}
-&lt;div class="modal fade text-left translator-translate-modal" id="translator-translate-modal" tabindex="-1" role="dialog"&gt;
+&lt;div class="modal fade text-left machine-translation-modal" id="machine-translation-modal" tabindex="-1" role="dialog"&gt;
   &lt;div class="modal-dialog" role="document"&gt;
     &lt;div class="modal-content"&gt;
       &lt;form method="GET" action="$xwiki.getURL('XWiki.MachineTranslation.MachineTranslationService')"&gt;
@@ -433,17 +433,16 @@
             $services.localization.render('machinetranslation.translate.modal.title')&lt;/h4&gt;
         &lt;/div&gt;
         &lt;div class="modal-body xform"&gt;
-          #set ($originalDocumentReference = $services.machinetranslation.getOriginalDocumentReference($doc.fullName))
-          #set ($originalDocument = $xwiki.getDocument($originalDocumentReference))
+          #set ($originalDocument = $services.machinetranslation.getOriginalDocument($doc.fullName))
           #set ($originalLocale = $originalDocument.getRealLocale())
           &lt;div class="plainmessage"&gt;
             $services.localization.render('machinetranslation.translate.modal.originalDocument')
             #if ($services.machinetranslation.isSameNameTranslationNamingStrategy($doc.getDocumentReference()))
-              &lt;a href="$xwiki.getURL($originalDocumentReference, 'view', "language=$originalLocale")"&gt;
+              &lt;a href="$xwiki.getURL($originalDocument.getDocumentReference(), 'view', "language=$originalLocale")"&gt;
                 $escapetool.xml($originalDocument.displayTitle)
               &lt;/a&gt;
             #else
-              &lt;a href="$xwiki.getURL($originalDocumentReference)"&gt;
+              &lt;a href="$xwiki.getURL($originalDocument.getDocumentReference())"&gt;
                 $escapetool.xml($originalDocument.displayTitle)
               &lt;/a&gt;
             #end
@@ -475,7 +474,7 @@
                         $locale.toString()
                       &lt;/label&gt;
                     &lt;/td&gt;
-                    #set ($translation = $services.machinetranslation.getTranslation($doc.getDocumentReferenceWithLocale(), $locale))
+                    #set ($translation = $services.machinetranslation.getTranslation($doc.getDocumentReference(), $locale))
                     #if ($translation != $NULL)
                       #if ($services.machinetranslation.isSameNameTranslationNamingStrategy($doc.getDocumentReference()))
                         &lt;td class="translation-doc"&gt;
