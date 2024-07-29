@@ -28,6 +28,7 @@ import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 import javax.inject.Singleton;
 
 import org.xwiki.component.annotation.Component;
@@ -44,6 +45,9 @@ import org.xwiki.model.reference.EntityReference;
 import org.xwiki.script.service.ScriptService;
 import org.xwiki.security.authorization.ContextualAuthorizationManager;
 import org.xwiki.security.authorization.Right;
+
+import com.xpn.xwiki.XWikiContext;
+import com.xpn.xwiki.api.Document;
 
 /**
  * Script service used to access the Translator service.
@@ -73,6 +77,9 @@ public class MachineTranslationScriptService implements ScriptService
     @Inject
     private ContextualAuthorizationManager authorizationManager;
 
+    @Inject
+    private Provider<XWikiContext> xwikiContextProvider;
+
     /**
      * Returns the original document reference and locale of a given document.
      *
@@ -91,18 +98,59 @@ public class MachineTranslationScriptService implements ScriptService
     }
 
     /**
-     *
-     * @param reference a document reference
-     * @return Locale the real locale of the original document
+     * @param reference a given reference
+     * @return original Document
      * @throws MachineTranslationException in case an error occurs
      */
-    public Locale getOriginalDocumentLocale(EntityReference reference) throws MachineTranslationException
+    public Document getOriginalDocument(EntityReference reference) throws MachineTranslationException
     {
         Translator translator = translatorManager.getTranslator();
         if (translator == null) {
             return null;
         }
-        return translator.getOriginalDocumentLocale(reference);
+        return new Document(translator.getOriginalDocument(reference), xwikiContextProvider.get());
+    }
+
+    /**
+     * @param doc a given Document
+     * @return true if the passed Document is the original one
+     * @throws MachineTranslationException in case an error occurs
+     */
+    public boolean isOriginalDocument(Document doc) throws MachineTranslationException
+    {
+        Translator translator = translatorManager.getTranslator();
+        if (translator == null) {
+            return false;
+        }
+        return translator.isOriginalDocument(doc);
+    }
+
+    /**
+     * @param translation a given MachineTranslation
+     * @return true if the translation is the current document
+     * @throws MachineTranslationException in case an error occurs
+     */
+    public boolean isCurrentDocument(MachineTranslation translation) throws MachineTranslationException
+    {
+        Translator translator = translatorManager.getTranslator();
+        if (translator == null) {
+            return false;
+        }
+        return translator.isCurrentDocument(translation);
+    }
+
+    /**
+     * @param reference a document reference
+     * @return Locale the real locale of the original document
+     * @throws MachineTranslationException in case an error occurs
+     */
+    public Locale getOriginalDocumentRealLocale(EntityReference reference) throws MachineTranslationException
+    {
+        Translator translator = translatorManager.getTranslator();
+        if (translator == null) {
+            return null;
+        }
+        return translator.getOriginalDocumentRealLocale(reference);
     }
 
     /**
@@ -240,20 +288,6 @@ public class MachineTranslationScriptService implements ScriptService
     {
         if (this.authorizationManager.hasAccess(Right.PROGRAM)) {
             return this.translatorManager;
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Return the translator configuration if the user has programming rights only.
-     *
-     * @return the configuration for translator or null.
-     */
-    public MachineTranslationConfiguration getConfiguration()
-    {
-        if (this.authorizationManager.hasAccess(Right.PROGRAM)) {
-            return this.translatorConfiguration;
         } else {
             return null;
         }

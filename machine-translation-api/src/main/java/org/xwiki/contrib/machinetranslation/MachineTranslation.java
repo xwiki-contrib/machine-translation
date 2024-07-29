@@ -44,4 +44,5 @@ public interface MachineTranslation
      * @return translation title
      */
     String getTitle();
+
 }

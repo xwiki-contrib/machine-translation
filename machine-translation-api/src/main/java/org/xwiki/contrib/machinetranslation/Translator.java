@@ -31,6 +31,9 @@ import org.xwiki.model.reference.DocumentReference;
 import org.xwiki.model.reference.EntityReference;
 import org.xwiki.stability.Unstable;
 
+import com.xpn.xwiki.api.Document;
+import com.xpn.xwiki.doc.XWikiDocument;
+
 /**
  * Represents a translation service.
  *
@@ -160,12 +163,18 @@ public interface Translator
     DocumentReference getOriginalDocumentReference(EntityReference reference) throws MachineTranslationException;
 
     /**
-     *
+     * @param reference an entity reference
+     * @return the original document for that reference
+     * @throws MachineTranslationException in case an error occurs
+     */
+    XWikiDocument getOriginalDocument(EntityReference reference) throws MachineTranslationException;
+
+    /**
      * @param reference an entity reference
      * @return Locale of the original document
      * @throws MachineTranslationException in case an error occurs
      */
-    Locale getOriginalDocumentLocale(EntityReference reference) throws MachineTranslationException;
+    Locale getOriginalDocumentRealLocale(EntityReference reference) throws MachineTranslationException;
 
     /**
      * Normalizes the string representation of a given locale. Useful for instance for some translators supporting only
@@ -192,6 +201,23 @@ public interface Translator
      * @throws MachineTranslationException in case an error occurs
      */
     boolean isSameNameTranslationNamingStrategy(EntityReference reference) throws MachineTranslationException;
+
+    /**
+     * Checks if a given document is the original document.
+     *
+     * @param document a document
+     * @return true if the document is the original one
+     * @throws MachineTranslationException in case an error occurs
+     */
+    boolean isOriginalDocument(Document document) throws MachineTranslationException;
+
+    /**
+     *
+     * @param translation a given MachineTranslation
+     * @return true if the passed MachineTranslation is the current document
+     * @throws MachineTranslationException in case an error occurs
+     */
+    boolean isCurrentDocument(MachineTranslation translation) throws MachineTranslationException;
 
     /**
      * Returns the current translator usage statistics.
