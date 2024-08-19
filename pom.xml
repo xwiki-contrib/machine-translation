@@ -20,8 +20,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.xwiki.contrib</groupId>
@@ -30,14 +29,14 @@
   </parent>
   <groupId>org.xwiki.contrib.machinetranslation</groupId>
   <artifactId>machine-translation-parent</artifactId>
-  <version>1.2-SNAPSHOT</version>
+  <version>1.2</version>
   <name>Machine Translation Extension - Parent POM</name>
   <packaging>pom</packaging>
   <scm>
     <connection>scm:git:git://github.com/xwiki-contrib/machine-translation.git</connection>
     <developerConnection>scm:git:git@github.com:xwiki-contrib/machine-translation.git</developerConnection>
     <url>https://github.com/xwiki-contrib/machine-translation/tree/master/</url>
-    <tag>HEAD</tag>
+    <tag>machine-translation-parent-1.2</tag>
   </scm>
   <developers>
     <developer>
