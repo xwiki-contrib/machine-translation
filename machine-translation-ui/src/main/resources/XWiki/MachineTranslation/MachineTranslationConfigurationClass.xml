@@ -75,6 +75,24 @@
       <validationRegExp/>
       <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
     </enabled>
+    <sameTranslationNameClasses>
+      <contenttype>---</contenttype>
+      <customDisplay/>
+      <disabled>0</disabled>
+      <editor>PureText</editor>
+      <hint/>
+      <name>sameTranslationNameClasses</name>
+      <number>8</number>
+      <picker>0</picker>
+      <prettyName>Same translation name classes</prettyName>
+      <restricted>0</restricted>
+      <rows>2</rows>
+      <size>40</size>
+      <unmodifiable>0</unmodifiable>
+      <validationMessage/>
+      <validationRegExp/>
+      <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+    </sameTranslationNameClasses>
     <targetClasses>
       <contenttype>PureText</contenttype>
       <customDisplay/>
