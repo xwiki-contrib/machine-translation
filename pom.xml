@@ -57,7 +57,7 @@
     <xwiki.issueManagement.jira.id>MT</xwiki.issueManagement.jira.id>
     <deepl.java.version>1.5.0</deepl.java.version>
     <platform.version>14.10</platform.version>
-    <jobmacro.version>2.1</jobmacro.version>
+    <jobmacro.version>2.2.2</jobmacro.version>
     <!-- deactivate checkstyle until we resolve the FanoutComplexity of AbstractTranslator -->
     <xwiki.spoon.skip>true</xwiki.spoon.skip>
     <xwiki.revapi.skip>true</xwiki.revapi.skip>
